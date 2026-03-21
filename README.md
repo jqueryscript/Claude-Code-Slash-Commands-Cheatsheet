@@ -437,10 +437,8 @@ Please do not add unofficial community commands to the built-in tables — keep 
 ## Sources
 
 - [Slash Commands in the Agent SDK — Anthropic Docs](https://platform.claude.com/docs/en/agent-sdk/slash-commands)
-- [SmartScope Claude Code Reference Guide 2026](https://smartscope.blog/en/generative-ai/claude/claude-code-reference-guide/)
-- [prg.sh — Claude Code Slash Commands (Jan 2026)](https://prg.sh/notes/Claude-Code-Slash-Commands)
-- [awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)
+- [awesome-claude-code](https://github.com/jqueryscript/awesome-claude-code)
 
 ---
 
-*Last audited: March 2026 · Verified against Claude Code v2.1.63+*
+*Last audited: March 2026*
