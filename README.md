@@ -396,4 +396,12 @@ claude -p "review this diff and list risks"
 
 ---
 
+## Related Resources
+
+- [awesome-claude-code](https://github.com/jqueryscript/awesome-claude-code) — curated tools, workflows, integrations, and resources for Claude Code users
+- [Anthropic Agent SDK Slash Commands Docs](https://platform.claude.com/docs/en/agent-sdk/slash-commands) — official slash command documentation
+- [Claude Code Commands Cheat Sheet (Full Article)](https://www.scriptbyai.com/claude-code-commands-cheat-sheet/) — expanded version with explanations and workflows
+- [Best Agent Skills](https://www.scriptbyai.com/best-agent-skills/) — useful skills for Claude Code and other AI coding workflows
+- [AI Coding Agents](https://www.scriptbyai.com/best-cli-ai-coding-agents/) — comparison of Claude Code and other CLI coding agents
+
 *Last audited: April 2026*
