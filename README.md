@@ -48,7 +48,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/branch [name]` | Branch or fork the current conversation/workflow |
 | `/clear` | Clear the current conversation context |
 | `/compact [focus]` | Compact context with optional focus instructions |
-| `/context` | Show context usage breakdown |
+| `/context` | Show context usage breakdown; also works from Remote Control clients |
 | `/copy [N]` | Copy the latest or selected response |
 | `/cost` | Show token and cost breakdown |
 | `/diff` | Open the diff viewer |
@@ -67,7 +67,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/agents` | Manage subagents |
 | `/color [color]` | Change UI color |
 | `/config` | Open settings |
-| `/doctor` | Run environment diagnostics |
+| `/doctor` | Run environment diagnostics; also warns about MCP servers defined in multiple config scopes with different endpoints |
 | `/effort [level]` | Set reasoning effort |
 | `/fast [on\|off]` | Toggle fast mode |
 | `/help` | Show help and available commands |
@@ -81,13 +81,14 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/model [model]` | Switch models |
 | `/output-style [style]` | Change response style |
 | `/permissions` | Manage permission rules |
-| `/plugin` | Manage plugins |
-| `/reload-plugins` | Reload plugins |
+| `/plugin` | Manage plugins; Installed tab now surfaces favorites and items needing attention more clearly |
+| `/reload-plugins` | Reload plugins; also works from Remote Control clients |
 | `/sandbox` | Open sandbox controls |
 | `/skills` | List available skills |
 | `/team-onboarding` | Generate a teammate ramp-up guide from local Claude Code usage |
 | `/terminal-setup` | Configure terminal integration |
 | `/theme` | Change theme |
+| `/tui` | Switches the terminal UI mode. Run `/tui fullscreen` to enable flicker-free fullscreen rendering without leaving the current conversation. |
 
 ### Coding and Review
 
@@ -98,6 +99,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/claude-api` | Load Claude API / SDK helper workflow |
 | `/debug [desc]` | Run a debugging workflow |
 | `/feedback` | Send feedback |
+| `/focus` | Toggle Focus view |
 | `/insights` | Show usage/session insights |
 | `/loop [interval]` | Run a recurring workflow |
 | `/plan [desc]` | Enter plan mode |
@@ -362,6 +364,14 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 /remote-control
 /remote-env
 /teleport
+```
+
+### Switch to Focused Fullscreen Work
+
+```text
+/tui fullscreen
+/focus
+/context
 ```
 
 ### Check Usage and Limits
