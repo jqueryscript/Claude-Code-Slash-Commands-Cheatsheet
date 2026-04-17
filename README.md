@@ -34,6 +34,7 @@ This README focuses on commands people are actually likely to search for or use.
 - **MCP commands**: generated from connected MCP servers
 - **Internal/leaked commands**: found in source-based references, not guaranteed in public builds
 - **Community commands**: custom team or repo commands, not built in
+- **Built-in skill commands**: public commands such as `/claude-api` and `/less-permission-prompts`
 
 Removed commands such as `/vim` and `/tag` are listed in notes instead of the main tables.
 
@@ -68,9 +69,10 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/color [color]` | Change UI color |
 | `/config` | Open settings |
 | `/doctor` | Run environment diagnostics; also warns about MCP servers defined in multiple config scopes with different endpoints |
-| `/effort [level]` | Set reasoning effort |
+| `/effort [low\|medium\|high\|xhigh\|max\|auto]` | Set reasoning effort; no-arg `/effort` now opens an interactive slider |
 | `/fast [on\|off]` | Toggle fast mode |
 | `/help` | Show help and available commands |
+| `/less-permission-prompts` | Scan transcripts for common read-only Bash and MCP calls and propose an allowlist for `.claude/settings.json` |
 | `/hooks` | Manage hooks |
 | `/init` | Generate `CLAUDE.md` |
 | `/keybindings` | Edit keybindings |
@@ -87,7 +89,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/skills` | List available skills |
 | `/team-onboarding` | Generate a teammate ramp-up guide from local Claude Code usage |
 | `/terminal-setup` | Configure terminal integration |
-| `/theme` | Change theme |
+| `/theme` | Change theme; includes an `Auto (match terminal)` option |
 | `/tui` | Switches the terminal UI mode. Run `/tui fullscreen` to enable flicker-free fullscreen rendering without leaving the current conversation. |
 
 ### Coding and Review
@@ -199,6 +201,7 @@ These command names appear in source-based references. They are useful for resea
 | `/thinkback` | Replay/analyze thinking |
 | `/thinkback-play` | Animated thinking replay |
 | `/ultraplan` | Detailed planning workflow |
+| `/ultrareview [PR#]` | Run a comprehensive cloud code review with parallel multi-agent analysis and critique |
 | `/upgrade` | Upgrade flow |
 | `/version` | Show version |
 | `/x402` | x402 integration |
@@ -272,6 +275,7 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | `CLAUDE_CODE_PERFORCE_MODE=1` | Fail writes on read-only Perforce files with a `p4 edit` hint |
 | `CLAUDE_CODE_SCRIPT_CAPS` | Limit per-session script invocations |
 | `CLAUDE_CODE_USE_MANTLE=1` | Enable Amazon Bedrock powered by Mantle |
+| `CLAUDE_CODE_USE_POWERSHELL_TOOL` | Opt into or out of the PowerShell tool rollout; on Linux/macOS, set to `1` to enable it when `pwsh` is available |
 
 ---
 
@@ -386,6 +390,22 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 
 ```text
 claude -p "review this diff and list risks"
+```
+
+### Run a Deep Cloud Review
+
+```text
+/review
+/ultrareview
+/pr-comments
+```
+
+### Reduce Repetitive Permission Prompts
+
+```text
+/less-permission-prompts
+/permissions
+/hooks
 ```
 
 ---
