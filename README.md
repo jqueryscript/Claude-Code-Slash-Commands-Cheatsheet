@@ -51,7 +51,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/compact [focus]` | Compact context with optional focus instructions |
 | `/context` | Show context usage breakdown; also works from Remote Control clients |
 | `/copy [N]` | Copy the latest or selected response |
-| `/cost` | Show token and cost breakdown |
+| `/cost` | Shortcut to the cost tab inside `/usage` |
 | `/diff` | Open the diff viewer |
 | `/export [filename]` | Export the conversation |
 | `/rename [name]` | Rename the current session |
@@ -66,14 +66,14 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 |---|---|
 | `/add-dir <path>` | Add another directory to the working scope |
 | `/agents` | Manage subagents |
-| `/color [color]` | Change UI color |
+| `/color [color]` | Change session accent color; syncs to Remote Control when connected |
 | `/config` | Open settings |
 | `/doctor` | Run environment diagnostics; also warns about MCP servers defined in multiple config scopes with different endpoints |
 | `/effort [low\|medium\|high\|xhigh\|max\|auto]` | Set reasoning effort; no-arg `/effort` now opens an interactive slider |
 | `/fast [on\|off]` | Toggle fast mode |
 | `/help` | Show help and available commands |
 | `/less-permission-prompts` | Scan transcripts for common read-only Bash and MCP calls and propose an allowlist for `.claude/settings.json` |
-| `/hooks` | Manage hooks |
+| `/hooks` | Manage hooks; hooks can invoke MCP tools with `type: "mcp_tool"` |
 | `/init` | Generate `CLAUDE.md` |
 | `/keybindings` | Edit keybindings |
 | `/login` | Sign in |
@@ -89,7 +89,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/skills` | List available skills |
 | `/team-onboarding` | Generate a teammate ramp-up guide from local Claude Code usage |
 | `/terminal-setup` | Configure terminal integration |
-| `/theme` | Change theme; includes an `Auto (match terminal)` option |
+| `/theme` | Change or create themes; supports custom JSON themes and plugin-shipped themes |
 | `/tui` | Switches the terminal UI mode. Run `/tui fullscreen` to enable flicker-free fullscreen rendering without leaving the current conversation. |
 
 ### Coding and Review
@@ -111,8 +111,8 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/review` | Review current code changes |
 | `/security-review` | Run a security-focused review |
 | `/simplify` | Run a multi-agent refactor workflow |
-| `/stats` | Show usage stats |
-| `/usage` | Show plan limits and quota usage |
+| `/stats` | Shortcut to the stats tab inside `/usage` |
+| `/usage` | Show plan limits, quota usage, cost, and stats |
 
 ### Integrations and Remote
 
@@ -238,6 +238,7 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | `claude update` | Update Claude Code |
 | `claude mcp list` | List MCP servers |
 | `claude mcp serve` | Run Claude Code as an MCP server |
+| `claude plugin tag` | Create release git tags for plugins with version validation |
 
 ### Important Flags
 
@@ -276,6 +277,7 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | `CLAUDE_CODE_SCRIPT_CAPS` | Limit per-session script invocations |
 | `CLAUDE_CODE_USE_MANTLE=1` | Enable Amazon Bedrock powered by Mantle |
 | `CLAUDE_CODE_USE_POWERSHELL_TOOL` | Opt into or out of the PowerShell tool rollout; on Linux/macOS, set to `1` to enable it when `pwsh` is available |
+| `DISABLE_UPDATES` | Completely block all update paths, including manual `claude update` |
 
 ---
 
@@ -381,9 +383,9 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 ### Check Usage and Limits
 
 ```text
-/stats
 /usage
 /cost
+/stats
 ```
 
 ### Run a Headless One-Off Task
@@ -416,6 +418,8 @@ claude -p "review this diff and list risks"
 - `/tag` was removed in `v2.1.92`.
 - Internal/leaked commands are listed for completeness, not as guaranteed public commands.
 - Community commands are custom workflows, not built-in Claude Code commands.
+- As of `v2.1.118`, `/cost` and `/stats` are merged into `/usage`; both still work as shortcuts.
+- `/vim` as a slash command was removed earlier, but Vim mode now supports visual mode (`v`) and visual-line mode (`V`) through editor mode settings.
 
 ---
 
