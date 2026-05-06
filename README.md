@@ -80,10 +80,10 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/logout` | Sign out |
 | `/mcp` | Manage MCP servers |
 | `/memory` | Open memory files |
-| `/model [model]` | Switch models |
+| `/model [model]` | Switch models; gateway model discovery is opt-in via `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` |
 | `/output-style [style]` | Change response style |
 | `/permissions` | Manage permission rules |
-| `/plugin` | Manage plugins; Installed tab now surfaces favorites and items needing attention more clearly |
+| `/plugin` | Manage plugins; plugin themes and monitors should now be declared under `experimental` in plugin manifests |
 | `/reload-plugins` | Reload plugins; also works from Remote Control clients |
 | `/sandbox` | Open sandbox controls |
 | `/skills` | List available skills |
@@ -267,6 +267,7 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | `--transport http\|stdio\|sse` | Select MCP transport |
 | `--verbose` | Enable verbose output |
 | `-w`, `--worktree` | Use a git worktree |
+| `--plugin-url <url>` | Fetch a plugin `.zip` archive from a URL for the current session |
 
 ### Useful Environment Variables
 
@@ -278,6 +279,9 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | `CLAUDE_CODE_USE_MANTLE=1` | Enable Amazon Bedrock powered by Mantle |
 | `CLAUDE_CODE_USE_POWERSHELL_TOOL` | Opt into or out of the PowerShell tool rollout; on Linux/macOS, set to `1` to enable it when `pwsh` is available |
 | `DISABLE_UPDATES` | Completely block all update paths, including manual `claude update` |
+| `CLAUDE_CODE_FORCE_SYNC_OUTPUT=1` | Force synchronized output on terminals where auto-detection misses it |
+| `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE` | Run Homebrew or WinGet upgrades in the background and prompt for restart |
+| `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` | Enable gateway `/v1/models` discovery for the `/model` picker |
 
 ---
 
