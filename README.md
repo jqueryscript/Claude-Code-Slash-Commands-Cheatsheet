@@ -271,17 +271,20 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 
 ### Useful Environment Variables
 
-| Variable | Purpose |
-|---|---|
-| `CLAUDE_CODE_CERT_STORE=bundled` | Use bundled CAs only instead of the OS certificate store |
-| `CLAUDE_CODE_PERFORCE_MODE=1` | Fail writes on read-only Perforce files with a `p4 edit` hint |
-| `CLAUDE_CODE_SCRIPT_CAPS` | Limit per-session script invocations |
-| `CLAUDE_CODE_USE_MANTLE=1` | Enable Amazon Bedrock powered by Mantle |
-| `CLAUDE_CODE_USE_POWERSHELL_TOOL` | Opt into or out of the PowerShell tool rollout; on Linux/macOS, set to `1` to enable it when `pwsh` is available |
-| `DISABLE_UPDATES` | Completely block all update paths, including manual `claude update` |
-| `CLAUDE_CODE_FORCE_SYNC_OUTPUT=1` | Force synchronized output on terminals where auto-detection misses it |
-| `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE` | Run Homebrew or WinGet upgrades in the background and prompt for restart |
-| `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` | Enable gateway `/v1/models` discovery for the `/model` picker |
+| Variable | What it does |
+| --- | --- |
+| `CLAUDE_CODE_CERT_STORE=bundled` | Uses bundled CAs only instead of the OS certificate store. |
+| `CLAUDE_CODE_ENABLE_FEEDBACK_SURVEY_FOR_OTEL` | Re-enables the session quality survey for enterprises capturing responses through OpenTelemetry |
+| `CLAUDE_CODE_PERFORCE_MODE=1` | Makes Edit/Write/NotebookEdit fail on read-only Perforce files with a p4 edit hint. |
+| `CLAUDE_CODE_SCRIPT_CAPS` | Limits per-session script invocations. |
+| `CLAUDE_CODE_USE_MANTLE=1` | Enables Amazon Bedrock powered by Mantle. |
+| `DISABLE_UPDATES` | Completely blocks all update paths, including manual `claude update`. Stricter than `DISABLE_AUTOUPDATER`. |
+| `CLAUDE_CODE_SESSION_ID` | Session ID. |
+| `CLAUDE_CODE_USE_POWERSHELL_TOOL` | Opts into or out of the PowerShell tool rollout. On Linux and macOS, set it to `1` to enable the PowerShell tool when `pwsh` is available. |
+| `CLAUDE_CODE_FORCE_SYNC_OUTPUT=1` | Forces synchronized output on terminals where auto-detection misses it, such as Emacs eat. |
+| `CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1` | Opts out of the fullscreen alternate-screen renderer and keep the conversation in the terminal's native scrollback |
+| `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE` | Lets Homebrew or WinGet installations run package-manager upgrades in the background, then prompt for restart. |
+| `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` | Enables gateway `/v1/models` discovery for the `/model` picker. This is now opt-in. |
 
 ---
 
