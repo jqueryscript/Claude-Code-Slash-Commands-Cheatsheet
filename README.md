@@ -49,7 +49,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/branch [name]` | Branch or fork the current conversation/workflow |
 | `/clear` | Clear the current conversation context |
 | `/compact [focus]` | Compact context with optional focus instructions |
-| `/context` | Show context usage breakdown; also works from Remote Control clients |
+| `/context` | Show context usage breakdown, model-aware skill token estimates, and plugin-sourced skill names |
 | `/copy [N]` | Copy the latest or selected response |
 | `/cost` | Shortcut to the cost tab inside `/usage` |
 | `/diff` | Open the diff viewer |
@@ -57,6 +57,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/rename [name]` | Rename the current session |
 | `/resume [session]` | Resume a previous session |
 | `/rewind` | Rewind to an earlier checkpoint |
+| `/goal` | Set a completion condition and keep Claude working across turns until it is met |
 | `/status` | Show current session status |
 | `/exit` | Exit Claude Code |
 
@@ -65,7 +66,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | Command | Purpose |
 |---|---|
 | `/add-dir <path>` | Add another directory to the working scope |
-| `/agents` | Manage subagents |
+| `/agents` | Manage subagents; use `claude agents` for the new agent view |
 | `/color [color]` | Change session accent color; syncs to Remote Control when connected |
 | `/config` | Open settings |
 | `/doctor` | Run environment diagnostics; also warns about MCP servers defined in multiple config scopes with different endpoints |
@@ -73,23 +74,24 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/fast [on\|off]` | Toggle fast mode |
 | `/help` | Show help and available commands |
 | `/less-permission-prompts` | Scan transcripts for common read-only Bash and MCP calls and propose an allowlist for `.claude/settings.json` |
-| `/hooks` | Manage hooks; hooks can invoke MCP tools with `type: "mcp_tool"` |
+| `/hooks` | Manage hooks; supports MCP tool hooks, exec-form `args`, and `PostToolUse continueOnBlock` |
 | `/init` | Generate `CLAUDE.md` |
 | `/keybindings` | Edit keybindings |
 | `/login` | Sign in |
 | `/logout` | Sign out |
-| `/mcp` | Manage MCP servers |
+| `/mcp` | Manage MCP servers; Reconnect picks up `.mcp.json` edits without restart |
 | `/memory` | Open memory files |
 | `/model [model]` | Switch models; gateway model discovery is opt-in via `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` |
 | `/output-style [style]` | Change response style |
 | `/permissions` | Manage permission rules |
-| `/plugin` | Manage plugins; plugin themes and monitors should now be declared under `experimental` in plugin manifests |
+| `/plugin` | Manage plugins; details show component inventory, hook events, MCP servers, and projected token cost |
 | `/reload-plugins` | Reload plugins; also works from Remote Control clients |
 | `/sandbox` | Open sandbox controls |
 | `/skills` | List available skills |
 | `/team-onboarding` | Generate a teammate ramp-up guide from local Claude Code usage |
 | `/terminal-setup` | Configure terminal integration |
 | `/theme` | Change or create themes; supports custom JSON themes and plugin-shipped themes |
+| `/scroll-speed` | Tune mouse wheel scroll speed with live preview |
 | `/tui` | Switches the terminal UI mode. Run `/tui fullscreen` to enable flicker-free fullscreen rendering without leaving the current conversation. |
 
 ### Coding and Review
@@ -112,6 +114,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/security-review` | Run a security-focused review |
 | `/simplify` | Run a multi-agent refactor workflow |
 | `/stats` | Shortcut to the stats tab inside `/usage` |
+| `/ultrareview [PR#]` | Run a comprehensive cloud code review with parallel multi-agent analysis and critique |
 | `/usage` | Show plan limits, quota usage, cost, and stats |
 
 ### Integrations and Remote
@@ -151,6 +154,8 @@ Examples:
 ```
 
 Use `/mcp` to connect servers and inspect the commands they expose.
+
+`/mcp` Reconnect picks up `.mcp.json` edits without restarting Claude Code.
 
 ---
 
@@ -231,6 +236,7 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | Command | Purpose |
 |---|---|
 | `claude` | Start interactive Claude Code |
+| `claude agents` | Open agent view: running, blocked, and completed Claude Code sessions |
 | `claude "prompt"` | Start with an initial prompt |
 | `claude -p "prompt"` | Run a non-interactive single prompt |
 | `claude -c` | Continue the last conversation |
@@ -238,6 +244,7 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | `claude update` | Update Claude Code |
 | `claude mcp list` | List MCP servers |
 | `claude mcp serve` | Run Claude Code as an MCP server |
+| `claude plugin details <name>` | Show plugin components and projected per-session token cost |
 | `claude plugin tag` | Create release git tags for plugins with version validation |
 
 ### Important Flags
@@ -312,6 +319,14 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 /status
 /context
 /plan map the project structure and main entry points
+```
+
+### Work Toward a Clear Goal
+
+```text
+/goal fix the failing checkout test and stop after tests pass
+/context
+/review
 ```
 
 ### Review a Pull Request
@@ -395,6 +410,14 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 /stats
 ```
 
+### Inspect Plugin Cost and Components
+
+```text
+claude plugin details plugin-name
+/plugin
+/context
+```
+
 ### Run a Headless One-Off Task
 
 ```text
@@ -427,12 +450,13 @@ claude -p "review this diff and list risks"
 - Community commands are custom workflows, not built-in Claude Code commands.
 - As of `v2.1.118`, `/cost` and `/stats` are merged into `/usage`; both still work as shortcuts.
 - `/vim` as a slash command was removed earlier, but Vim mode now supports visual mode (`v`) and visual-line mode (`V`) through editor mode settings.
+- Remote Control, `/schedule`, Claude.ai MCP connectors, and notification preferences are disabled when `ANTHROPIC_API_KEY`, `apiKeyHelper`, or `ANTHROPIC_AUTH_TOKEN` is set.
 
 ---
 
 ## Sources
 
-- Claude Code changelogs through `v2.1.101`
+- Claude Code changelogs through `v2.1.139`
 - Local command reference notes and leak-based command lists
 
 ---
@@ -445,4 +469,4 @@ claude -p "review this diff and list risks"
 - [Best Agent Skills](https://www.scriptbyai.com/best-agent-skills/) — useful skills for Claude Code and other AI coding workflows
 - [AI Coding Agents](https://www.scriptbyai.com/best-cli-ai-coding-agents/) — comparison of Claude Code and other CLI coding agents
 
-*Last audited: April 2026*
+*Last audited: May 2026*
