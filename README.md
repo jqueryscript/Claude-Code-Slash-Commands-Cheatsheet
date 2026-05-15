@@ -71,7 +71,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/config` | Open settings |
 | `/doctor` | Run environment diagnostics; also warns about MCP servers defined in multiple config scopes with different endpoints |
 | `/effort [low\|medium\|high\|xhigh\|max\|auto]` | Set reasoning effort; no-arg `/effort` now opens an interactive slider |
-| `/fast [on\|off]` | Toggle fast mode |
+| `/fast [on\|off]` | Fast mode now defaults to Opus 4.7. Set CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE=1 to pin Opus 4.6 |
 | `/help` | Show help and available commands |
 | `/less-permission-prompts` | Scan transcripts for common read-only Bash and MCP calls and propose an allowlist for `.claude/settings.json` |
 | `/hooks` | Manage hooks; supports MCP tool hooks, exec-form `args`, and `PostToolUse continueOnBlock` |
@@ -84,7 +84,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/model [model]` | Switch models; gateway model discovery is opt-in via `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` |
 | `/output-style [style]` | Change response style |
 | `/permissions` | Manage permission rules |
-| `/plugin` | Manage plugins; details show component inventory, hook events, MCP servers, and projected token cost |
+| `/plugin` | Plugin details show component inventory, hook event names, MCP server names, LSP servers, and projected per-session token cost. |
 | `/reload-plugins` | Reload plugins; also works from Remote Control clients |
 | `/sandbox` | Open sandbox controls |
 | `/skills` | List available skills |
@@ -244,6 +244,7 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | `claude update` | Update Claude Code |
 | `claude mcp list` | List MCP servers |
 | `claude mcp serve` | Run Claude Code as an MCP server |
+| `claude agents` | Opens the agent view and manages dispatched background sessions. | Supports --add-dir, --settings, --mcp-config, --plugin-dir, --permission-mode, --model, --effort, and --dangerously-skip-permissions. |
 | `claude plugin details <name>` | Show plugin components and projected per-session token cost |
 | `claude plugin tag` | Create release git tags for plugins with version validation |
 
@@ -252,6 +253,9 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | Flag | Purpose |
 |---|---|
 | `--add-dir` | Add an extra directory to scope |
+| `--settings` | Loads settings for dispatched background sessions |
+| `--mcp-config` | Uses a specific MCP config for dispatched background sessions |
+| `--plugin-dir` | Uses a plugin directory for dispatched background sessions |
 | `--agent` | Select an agent |
 | `--allowedTools` | Pre-approve tools |
 | `--bare` | Minimal headless mode |
@@ -456,7 +460,7 @@ claude -p "review this diff and list risks"
 
 ## Sources
 
-- Claude Code changelogs through `v2.1.139`
+- Claude Code changelogs through `v2.1.142`
 - Local command reference notes and leak-based command lists
 
 ---
