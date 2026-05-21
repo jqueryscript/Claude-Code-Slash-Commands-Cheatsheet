@@ -112,7 +112,7 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/release-notes` | View release notes |
 | `/review` | Review current code changes |
 | `/security-review` | Run a security-focused review |
-| `/simplify` | Run a multi-agent refactor workflow |
+| `/code-review` | Run a multi-agent refactor workflow |
 | `/stats` | Shortcut to the stats tab inside `/usage` |
 | `/ultrareview [PR#]` | Run a comprehensive cloud code review with parallel multi-agent analysis and critique |
 | `/usage` | Show plan limits, quota usage, cost, and stats |
