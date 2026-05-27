@@ -4,7 +4,7 @@
 
 [![Status](https://img.shields.io/badge/status-updated-brightgreen)](#)
 [![Commands](https://img.shields.io/badge/commands-70%2B-blue)](#)
-[![Updated](https://img.shields.io/badge/updated-April%202026-orange)](#)
+[![Updated](https://img.shields.io/badge/updated-May%202026-orange)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -34,7 +34,7 @@ This README focuses on commands people are actually likely to search for or use.
 - **MCP commands**: generated from connected MCP servers
 - **Internal/leaked commands**: found in source-based references, not guaranteed in public builds
 - **Community commands**: custom team or repo commands, not built in
-- **Built-in skill commands**: public commands such as `/claude-api` and `/less-permission-prompts`
+- **Built-in skill commands**: public commands such as `/claude-api`, `/less-permission-prompts`, and `/reload-skills`
 
 Removed commands such as `/vim` and `/tag` are listed in notes instead of the main tables.
 
@@ -52,10 +52,10 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/context` | Show context usage breakdown, model-aware skill token estimates, and plugin-sourced skill names |
 | `/copy [N]` | Copy the latest or selected response |
 | `/cost` | Shortcut to the cost tab inside `/usage` |
-| `/diff` | Open the diff viewer |
+| `/diff` | Open the diff viewer; its detail view supports keyboard scrolling |
 | `/export [filename]` | Export the conversation |
 | `/rename [name]` | Rename the current session |
-| `/resume [session]` | Resume a previous session |
+| `/resume [session]` | Resume a previous session, including background sessions |
 | `/rewind` | Rewind to an earlier checkpoint |
 | `/goal` | Set a completion condition and keep Claude working across turns until it is met |
 | `/status` | Show current session status |
@@ -74,18 +74,19 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/fast [on\|off]` | Fast mode now defaults to Opus 4.7. Set CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE=1 to pin Opus 4.6 |
 | `/help` | Show help and available commands |
 | `/less-permission-prompts` | Scan transcripts for common read-only Bash and MCP calls and propose an allowlist for `.claude/settings.json` |
-| `/hooks` | Manage hooks; supports MCP tool hooks, exec-form `args`, and `PostToolUse continueOnBlock` |
+| `/hooks` | Manage hooks; `SessionStart` can reload skills or set the session title, and `MessageDisplay` can transform displayed assistant text |
 | `/init` | Generate `CLAUDE.md` |
 | `/keybindings` | Edit keybindings |
 | `/login` | Sign in |
 | `/logout` | Sign out |
 | `/mcp` | Manage MCP servers; Reconnect picks up `.mcp.json` edits without restart |
 | `/memory` | Open memory files |
-| `/model [model]` | Switch models; gateway model discovery is opt-in via `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` |
+| `/model [model]` | Switch models for the current session; press `d` to set a default for new sessions; gateway discovery is opt-in via `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` |
 | `/output-style [style]` | Change response style |
 | `/permissions` | Manage permission rules |
 | `/plugin` | Plugin details show component inventory, hook event names, MCP server names, LSP servers, and projected per-session token cost. |
 | `/reload-plugins` | Reload plugins; also works from Remote Control clients |
+| `/reload-skills` | Re-scan skill directories without restarting Claude Code |
 | `/sandbox` | Open sandbox controls |
 | `/skills` | List available skills |
 | `/team-onboarding` | Generate a teammate ramp-up guide from local Claude Code usage |
@@ -93,6 +94,8 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/theme` | Change or create themes; supports custom JSON themes and plugin-shipped themes |
 | `/scroll-speed` | Tune mouse wheel scroll speed with live preview |
 | `/tui` | Switches the terminal UI mode. Run `/tui fullscreen` to enable flicker-free fullscreen rendering without leaving the current conversation. |
+
+Skills and slash commands can set `disallowed-tools` in frontmatter to remove tools while the workflow is active.
 
 ### Coding and Review
 
@@ -112,10 +115,11 @@ Removed commands such as `/vim` and `/tag` are listed in notes instead of the ma
 | `/release-notes` | View release notes |
 | `/review` | Review current code changes |
 | `/security-review` | Run a security-focused review |
-| `/code-review` | Run a multi-agent refactor workflow |
+| `/code-review [effort]` | Review for correctness issues; add `--fix` to apply findings to the working tree or `--comment` to post inline PR comments |
 | `/stats` | Shortcut to the stats tab inside `/usage` |
 | `/ultrareview [PR#]` | Run a comprehensive cloud code review with parallel multi-agent analysis and critique |
-| `/usage` | Show plan limits, quota usage, cost, and stats |
+| `/usage` | Show limits usage by category, including skills, subagents, plugins, MCP servers, and large session files |
+| `/usage-credits` | Open usage credits information; replaces `/extra-usage`, which remains an alias |
 
 ### Integrations and Remote
 
@@ -178,7 +182,6 @@ These command names appear in source-based references. They are useful for resea
 | `/ctx_viz` | Debug context visualization |
 | `/debug-tool-call` | Debug a tool call |
 | `/env` | Environment inspection |
-| `/extra-usage` | Extended usage view |
 | `/files` | List files in current context |
 | `/good-claude` | Easter egg command |
 | `/heapdump` | Dump heap for memory analysis |
@@ -237,6 +240,7 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 |---|---|
 | `claude` | Start interactive Claude Code |
 | `claude agents` | Open agent view: running, blocked, and completed Claude Code sessions |
+| `claude agents --json` | List live Claude Code sessions as JSON for scripts and status displays |
 | `claude "prompt"` | Start with an initial prompt |
 | `claude -p "prompt"` | Run a non-interactive single prompt |
 | `claude -c` | Continue the last conversation |
@@ -244,9 +248,9 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | `claude update` | Update Claude Code |
 | `claude mcp list` | List MCP servers |
 | `claude mcp serve` | Run Claude Code as an MCP server |
-| `claude agents` | Opens the agent view and manages dispatched background sessions. | Supports --add-dir, --settings, --mcp-config, --plugin-dir, --permission-mode, --model, --effort, and --dangerously-skip-permissions. |
 | `claude plugin details <name>` | Show plugin components and projected per-session token cost |
 | `claude plugin tag` | Create release git tags for plugins with version validation |
+| `claude plugin marketplace remove <name> --scope user\|project\|local` | Remove a marketplace from a selected configuration scope |
 
 ### Important Flags
 
@@ -264,6 +268,7 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 | `--console` | Use Anthropic Console auth |
 | `--dangerously-skip-permissions` | Skip permission prompts |
 | `--effort` | Set reasoning effort |
+| `--fallback-model` | Continue the session with a configured fallback when the primary model is unavailable |
 | `--exclude-dynamic-system-prompt-sections` | Improve print-mode cross-user prompt caching |
 | `--json-schema` | Request structured output |
 | `--max-budget-usd` | Cap spend |
@@ -362,7 +367,7 @@ These are common custom commands from blogs, repos, or team setups. They are **n
 
 ```text
 /review
-/simplify
+/code-review --fix
 /batch rename OldThing NewThing
 ```
 
@@ -453,14 +458,16 @@ claude -p "review this diff and list risks"
 - Internal/leaked commands are listed for completeness, not as guaranteed public commands.
 - Community commands are custom workflows, not built-in Claude Code commands.
 - As of `v2.1.118`, `/cost` and `/stats` are merged into `/usage`; both still work as shortcuts.
-- `/vim` as a slash command was removed earlier, but Vim mode now supports visual mode (`v`) and visual-line mode (`V`) through editor mode settings.
+- `/simplify` now invokes `/code-review --fix`; use `/code-review` for current review workflows.
+- `/extra-usage` was renamed `/usage-credits`; the old command remains an alias.
+- `/vim` as a slash command was removed earlier, but Vim mode supports visual modes through editor settings and `/` in NORMAL mode opens reverse history search.
 - Remote Control, `/schedule`, Claude.ai MCP connectors, and notification preferences are disabled when `ANTHROPIC_API_KEY`, `apiKeyHelper`, or `ANTHROPIC_AUTH_TOKEN` is set.
 
 ---
 
 ## Sources
 
-- Claude Code changelogs through `v2.1.142`
+- Claude Code changelogs through `v2.1.152`
 - Local command reference notes and leak-based command lists
 
 ---
@@ -473,4 +480,4 @@ claude -p "review this diff and list risks"
 - [Best Agent Skills](https://www.scriptbyai.com/best-agent-skills/) — useful skills for Claude Code and other AI coding workflows
 - [AI Coding Agents](https://www.scriptbyai.com/best-cli-ai-coding-agents/) — comparison of Claude Code and other CLI coding agents
 
-*Last audited: May 2026*
+*Last audited: May 27, 2026*
