@@ -1,83 +1,13 @@
-# Claude Code Slash Commands Cheatsheet
+# Claude Code Commands Cheatsheet
 
-> A comprehensive reference for Claude Code slash commands, MCP command patterns, internal and leak-based command names, community commands, CLI commands, flags, environment variables, and practical workflows.
+> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: May 30, 2026.
 
 [![Status](https://img.shields.io/badge/status-updated-brightgreen)](#)
 [![Commands](https://img.shields.io/badge/commands-70%2B-blue)](#)
 [![Updated](https://img.shields.io/badge/updated-May%2030%202026-orange)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
----
-
-## Table of Contents
-
-- [What This Covers](#what-this-covers)
-- [How to Use This Cheat Sheet](#how-to-use-this-cheat-sheet)
-- [Command Entry Points](#command-entry-points)
-- [Commands by Task](#commands-by-task)
-  - [Start and Configure Claude Code](#start-and-configure-claude-code)
-  - [Manage Context and Sessions](#manage-context-and-sessions)
-  - [Review, Debug, and Change Code](#review-debug-and-change-code)
-  - [Use GitHub, PR, and Release Workflows](#use-github-pr-and-release-workflows)
-  - [Use MCP, Plugins, Skills, and Agents](#use-mcp-plugins-skills-and-agents)
-  - [Work Remotely or Across Devices](#work-remotely-or-across-devices)
-  - [Check Usage, Costs, Diagnostics, and UI State](#check-usage-costs-diagnostics-and-ui-state)
-- [A-Z Slash Command Index](#a-z-slash-command-index)
-- [MCP Commands](#mcp-commands)
-- [CLI Commands and Flags](#cli-commands-and-flags)
-- [Environment Variables](#environment-variables)
-- [Real Workflows](#real-workflows)
-- [Internal, Experimental, Removed, and Community Commands](#internal-experimental-removed-and-community-commands)
-- [Notes](#notes)
-- [Sources](#sources)
-- [Related Resources](#related-resources)
-
----
-
-## What This Covers
-
-This README is a comprehensive Claude Code command reference, not a short list of favorites.
-
-- **Public slash commands**: commands visible in normal Claude Code builds
-- **MCP commands**: dynamic commands generated from connected MCP servers
-- **Built-in skill commands**: commands such as `/claude-api`, `/less-permission-prompts`, and `/reload-skills`
-- **CLI commands and flags**: headless, background, MCP, plugin, model, and permission controls
-- **Environment variables**: useful variables for auth, telemetry, model discovery, terminal behavior, and enterprise setups
-- **Internal or leak-based commands**: source-based names that may not appear in public builds
-- **Community commands**: common custom commands used by teams and repositories
-
-Removed commands such as `/vim` and `/tag` remain documented in notes so older guides and screenshots are easier to interpret.
-
----
-
-## How to Use This Cheat Sheet
-
-Use **Commands by Task** when you know what you want to do but do not know the command name. Use the **A-Z Slash Command Index** when you already know the command name and want a fast definition. Use **CLI Commands and Flags** for terminal invocation, automation, background sessions, and non-interactive usage.
-
-The index is intentionally complete. Commands marked as internal, leak-based, removed, or community are documented for research and compatibility, but they are not guaranteed to work in a current public Claude Code build.
-
----
-
-## Command Entry Points
-
-These are not the only important commands. They are the fastest entry points into the main command families.
-
-| Need | Start with |
-|---|---|
-| First project setup | `/init`, `/status`, `/model` |
-| Session and context control | `/context`, `/compact`, `/clear`, `/resume` |
-| Code review | `/review`, `/security-review`, `/code-review`, `/diff` |
-| Debugging | `/debug`, `/plan`, `/diff` |
-| MCP setup | `/mcp`, `/mcp__[server]__[prompt]` |
-| Plugins and skills | `/plugin`, `/skills`, `/reload-skills`, `/reload-plugins` |
-| Agents and background work | `/agents`, `/workflows`, `claude agents`, `claude --bg --exec` |
-| GitHub workflows | `/install-github-app`, `/pr-comments`, `/ultrareview` |
-| Usage and costs | `/usage`, `/cost`, `/stats`, `/usage-credits` |
-| Troubleshooting | `/doctor`, `/permissions`, `/terminal-setup`, `/release-notes` |
-
----
-
-## Commands by Task
+## Slash Commands by Task
 
 ### Start and Configure Claude Code
 
