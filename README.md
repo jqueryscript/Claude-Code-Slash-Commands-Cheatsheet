@@ -7,6 +7,26 @@
 [![Updated](https://img.shields.io/badge/updated-May%2030%202026-orange)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+## Table of Contents
+
+- [Slash Commands by Task](#slash-commands-by-task)
+  - [Start and Configure Claude Code](#start-and-configure-claude-code)
+  - [Manage Context and Sessions](#manage-context-and-sessions)
+  - [Review, Debug, and Change Code](#review-debug-and-change-code)
+  - [Use GitHub, PR, and Release Workflows](#use-github-pr-and-release-workflows)
+  - [Use MCP, Plugins, Skills, and Agents](#use-mcp-plugins-skills-and-agents)
+  - [Work Remotely or Across Devices](#work-remotely-or-across-devices)
+  - [Check Usage, Costs, Diagnostics, and UI State](#check-usage-costs-diagnostics-and-ui-state)
+- [A-Z Slash Command Index](#a-z-slash-command-index)
+- [MCP Commands](#mcp-commands)
+- [CLI Commands and Flags](#cli-commands-and-flags)
+- [Environment Variables](#environment-variables)
+- [Real Workflows](#real-workflows)
+- [Internal, Experimental, Removed, and Community Commands](#internal-experimental-removed-and-community-commands)
+- [Notes](#notes)
+- [Sources](#sources)
+- [Related Resources](#related-resources)
+
 ## Slash Commands by Task
 
 ### Start and Configure Claude Code
