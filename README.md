@@ -1,10 +1,10 @@
 # Claude Code Commands Cheatsheet
 
-> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: June 5, 2026.
+> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: June 9, 2026.
 
 [![Status](https://img.shields.io/badge/status-updated-brightgreen)](#)
 [![Commands](https://img.shields.io/badge/commands-70%2B-blue)](#)
-[![Updated](https://img.shields.io/badge/updated-June%205%202026-orange)](#)
+[![Updated](https://img.shields.io/badge/updated-June%209%202026-orange)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Table of Contents
@@ -61,6 +61,7 @@
 | Command | Purpose | Status |
 |---|---|---|
 | `/branch [name]` | Branch or fork the current conversation or workflow | Public; `/fork` appears as an alias in some references |
+| `/cd <path>` | Move the current session to a new working directory without breaking the prompt cache | Public |
 | `/clear` | Clear the current conversation context | Public |
 | `/compact [focus]` | Compact context with optional focus instructions | Public |
 | `/context` | Show context usage breakdown, skill token estimates, and plugin-sourced skill names | Public |
@@ -209,6 +210,7 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/btw <question>` | Ask a side question with minimal context | Public |
 | `/buddy` | Temporary April 1st command | Limited / non-essential |
 | `/bughunter` | Bug-finding workflow | Leak-based |
+| `/cd <path>` | Move the session to a new working directory | Public |
 | `/chrome` | Open Chrome integration | Public |
 | `/claude-api` | Load Claude API / SDK helper workflow | Built-in skill |
 | `/clear` | Clear conversation context | Public |
@@ -358,7 +360,8 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 |---|---|
 | `claude` | Start interactive Claude Code |
 | `claude agents` | Open agent view: running, blocked, and completed Claude Code sessions |
-| `claude agents --json` | List live Claude Code sessions as JSON, including `waitingFor` when a session is blocked |
+| `claude agents --json` | List active Claude Code sessions as JSON, including blocked and just-dispatched sessions, with `id` and `state` fields |
+| `claude agents --json --all` | Include completed sessions in the JSON agent list |
 | `claude agents` then `! <command>` | Start a shell command as a background session you can attach to or detach from |
 | `claude "prompt"` | Start with an initial prompt |
 | `claude -p "prompt"` | Run a non-interactive single prompt |
@@ -401,6 +404,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `-r` | Resume a session |
 | `--remote` | Start a remote/web-backed session |
 | `--remote-control-session-name-prefix` | Prefix Remote Control session names |
+| `--safe-mode` | Start Claude Code with customizations disabled for troubleshooting |
 | `--settings` | Load settings for dispatched background sessions |
 | `--tools` | Explicitly allow tools; `Grep` and `Glob` now map to the dedicated native search tools on builds that include embedded search |
 | `--transport http\|stdio\|sse` | Select MCP transport |
@@ -414,9 +418,11 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | Variable | What it does |
 |---|---|
 | `CLAUDE_CODE_CERT_STORE=bundled` | Uses bundled CAs only instead of the OS certificate store |
+| `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS` | Hides bundled skills, workflows, and built-in slash commands from the model |
 | `CLAUDE_CODE_ENABLE_AUTO_MODE=1` | Enables Auto mode on Bedrock, Vertex, and Foundry for supported Opus 4.7 and Opus 4.8 setups |
 | `CLAUDE_CODE_ENABLE_FEEDBACK_SURVEY_FOR_OTEL` | Re-enables the session quality survey for enterprises capturing responses through OpenTelemetry |
 | `CLAUDE_CODE_PERFORCE_MODE=1` | Makes Edit/Write/NotebookEdit fail on read-only Perforce files with a `p4 edit` hint |
+| `CLAUDE_CODE_SAFE_MODE` | Starts Claude Code with customizations disabled for troubleshooting |
 | `CLAUDE_CODE_SCRIPT_CAPS` | Limits per-session script invocations |
 | `CLAUDE_CODE_USE_MANTLE=1` | Enables Amazon Bedrock powered by Mantle |
 | `DISABLE_UPDATES` | Completely blocks all update paths, including manual `claude update`; stricter than `DISABLE_AUTOUPDATER` |
@@ -660,12 +666,13 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - If you customized the old `modelPicker:setAsDefault` keybinding, rename it to `modelPicker:thisSessionOnly`; the `d` action was replaced by `s`.
 - The dynamic workflow trigger keyword was renamed from `workflow` to `ultracode`; use `/workflows` to view larger background runs.
 - Managed settings can now set `requiredMinimumVersion` and `requiredMaximumVersion` so Claude Code refuses to start outside an approved version range.
+- `disableBundledSkills` and `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS` can hide bundled skills, workflows, and built-in slash commands from the model.
 
 ---
 
 ## Sources
 
-- Claude Code changelogs through `v2.1.163`
+- Claude Code changelogs through `v2.1.169`
 - Local command reference notes and leak-based command lists
 
 ---
@@ -678,4 +685,4 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - [Best Agent Skills](https://www.scriptbyai.com/best-agent-skills/): useful skills for Claude Code and other AI coding workflows
 - [AI Coding Agents](https://www.scriptbyai.com/best-cli-ai-coding-agents/): comparison of Claude Code and other CLI coding agents
 
-*Last audited: June 5, 2026*
+*Last audited: June 9, 2026*
