@@ -1,10 +1,10 @@
 # Claude Code Commands Cheatsheet
 
-> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: June 9, 2026.
+> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: June 26, 2026.
 
 [![Status](https://img.shields.io/badge/status-updated-brightgreen)](#)
 [![Commands](https://img.shields.io/badge/commands-70%2B-blue)](#)
-[![Updated](https://img.shields.io/badge/updated-June%209%202026-orange)](#)
+[![Updated](https://img.shields.io/badge/updated-June%2026%202026-orange)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Table of Contents
@@ -34,7 +34,7 @@
 | Command | Purpose | Status |
 |---|---|---|
 | `/add-dir <path>` | Add another directory to the working scope | Public |
-| `/config` | Open settings, including editor mode and ultracode keyword trigger settings | Public |
+| `/config` | Open settings, including editor mode and ultracode keyword trigger settings; `/config key=value` sets a setting from the prompt | Public |
 | `/doctor` | Run environment diagnostics and show recent update status | Public |
 | `/effort [low\|medium\|high\|xhigh\|max\|auto]` | Set reasoning effort; no-arg `/effort` opens an interactive slider and confirms when the level becomes the default for new sessions | Public |
 | `/fast [on\|off]` | Toggle fast mode for supported Opus models | Public |
@@ -47,8 +47,8 @@
 | `/memory` | Open memory files | Public |
 | `/model [model]` | Switch models; the picker saves the default for new sessions, and `s` switches only the current session | Public |
 | `/output-style [style]` | Change response style | Public |
-| `/permissions` | Manage permission rules | Public |
-| `/sandbox` | Open sandbox controls | Public |
+| `/permissions` | Manage permission rules and review recent auto-mode denial reasons | Public |
+| `/sandbox` | Open sandbox controls; newer builds can block credential reads and remember approved network hosts for the session | Public |
 | `/team-onboarding` | Generate a teammate ramp-up guide from local Claude Code usage | Public |
 | `/terminal-setup` | Configure terminal integration and fix terminal rendering issues | Public |
 | `/theme` | Change or create themes, including custom JSON and plugin-shipped themes | Public |
@@ -70,7 +70,7 @@
 | `/goal` | Set a completion condition and keep Claude working across turns until it is met | Public |
 | `/rename [name]` | Rename the current session | Public |
 | `/resume [session]` | Resume a previous session, including background sessions | Public |
-| `/rewind` | Rewind to an earlier checkpoint; `/undo` appears as an alias | Public |
+| `/rewind` | Rewind to an earlier checkpoint, including checkpoints before `/clear`; `/undo` appears as an alias | Public |
 | `/session` | Open session management UI | Leak-based |
 | `/share` | Share a session | Leak-based |
 | `/status` | Show current session status | Public |
@@ -84,7 +84,7 @@
 | `/advisor` | Architecture or design advice workflow | Leak-based |
 | `/batch` | Apply one change across many files or worktrees | Public / workflow command |
 | `/brief` | Brief output mode | Leak-based |
-| `/btw <question>` | Ask a side question with minimal context; press `c` to copy the raw Markdown answer | Public |
+| `/btw <question>` | Ask a side question with minimal context; use arrow navigation for earlier answers and press `c` to copy raw Markdown | Public |
 | `/bughunter` | Bug-finding workflow | Leak-based |
 | `/code-review [effort]` | Review for correctness issues; add `--fix` or `--comment` | Public |
 | `/debug [desc]` | Run a debugging workflow | Public |
@@ -101,7 +101,7 @@
 | `/pr_comments` | Internal underscore form of `/pr-comments` | Internal |
 | `/rate-limit-options` | Open rate-limit options | Leak-based |
 | `/release-notes` | View release notes | Public |
-| `/review` | Review current code changes | Public |
+| `/review` | Review current code changes; PR review mode now uses the same engine as `/code-review medium` | Public |
 | `/security-review` | Run a security-focused review | Public |
 | `/simplify` | Run a cleanup-only review and apply simplification, reuse, efficiency, and structure fixes | Public |
 | `/tasks` | Manage background tasks | Leak-based |
@@ -116,7 +116,7 @@
 | `/commit` | Generate a commit message and commit changes | Community |
 | `/commit-push-pr` | Commit, push, and create a PR | Leak-based / community |
 | `/fix-pipeline` | Repair failing CI pipelines | Community |
-| `/install-github-app` | Set up GitHub app integration | Public |
+| `/install-github-app` | Set up GitHub app integration; GitHub Actions workflow setup is optional | Public |
 | `/issue` | File a GitHub issue | Leak-based |
 | `/lint` | Run linting commands | Community |
 | `/merge-to-main` | Merge to main | Community |
@@ -133,7 +133,7 @@
 | `/bridge-kick` | Force-restart a bridge connection | Leak-based |
 | `/claude-api` | Load Claude API / SDK helper workflow | Built-in skill command |
 | `/less-permission-prompts` | Scan transcripts for safe read-only Bash and MCP allowlist candidates | Built-in skill command |
-| `/mcp` | Manage MCP servers and dynamic MCP commands | Public |
+| `/mcp` | Manage MCP servers, authentication, and dynamic MCP commands | Public |
 | `/mcp__[server]__[prompt] [args]` | Run a dynamic MCP prompt command | Generated by connected MCP servers |
 | `/plugin` | Manage plugins and inspect plugin components | Public |
 | `/plugin list` | List installed plugins; supports `--enabled` and `--disabled` filters | Public |
@@ -219,7 +219,7 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/commit` | Generate a commit message and commit changes | Community |
 | `/commit-push-pr` | Commit, push, and create a PR | Leak-based / community |
 | `/compact [focus]` | Compact context with optional focus instructions | Public |
-| `/config` | Open settings | Public |
+| `/config` | Open settings; supports `/config key=value` | Public |
 | `/context` | Show context usage breakdown | Public |
 | `/copy [N]` | Copy latest or selected response | Public |
 | `/cost` | Open cost information inside `/usage` | Public alias / shortcut |
@@ -268,7 +268,7 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/output-style [style]` | Change response style | Public |
 | `/passes` | Multi-pass workflow | Leak-based |
 | `/perf-issue` | Report performance issue | Internal / leak-based |
-| `/permissions` | Manage permission rules | Public |
+| `/permissions` | Manage permission rules and recent denials | Public |
 | `/plan [desc]` | Enter plan mode | Public |
 | `/plugin` | Manage plugins | Public |
 | `/plugin list` | List installed plugins | Public |
@@ -289,9 +289,9 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/rename [name]` | Rename current session | Public |
 | `/reset-limits` | Reset rate limits | Internal / leak-based |
 | `/resume [session]` | Resume previous session | Public |
-| `/review` | Review current code changes | Public |
-| `/rewind` | Rewind to an earlier checkpoint | Public |
-| `/sandbox` | Open sandbox controls | Public |
+| `/review` | Review current code changes; PR reviews use the `/code-review medium` engine | Public |
+| `/rewind` | Rewind to an earlier checkpoint, including before `/clear` | Public |
+| `/sandbox` | Open sandbox controls and credential/network protections | Public |
 | `/sandbox-toggle` | Internal sandbox toggle | Internal |
 | `/schedule` | Manage scheduled tasks | Public |
 | `/scroll-speed` | Tune mouse wheel scroll speed | Public |
@@ -348,7 +348,7 @@ Examples:
 /mcp__linear__get_sprint
 ```
 
-Use `/mcp` to connect servers and inspect the commands they expose. Reconnect picks up `.mcp.json` edits without restarting Claude Code.
+Use `/mcp` to connect servers and inspect the commands they expose. Reconnect picks up `.mcp.json` edits without restarting Claude Code. Newer builds also show startup notices when MCP servers need authentication.
 
 ---
 
@@ -370,6 +370,8 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `claude -r "name"` | Resume a named session |
 | `claude update` | Update Claude Code |
 | `claude mcp list` | List MCP servers |
+| `claude mcp login <name>` | Authenticate an MCP server from the CLI; supports `--no-browser` for SSH or headless use |
+| `claude mcp logout <name>` | Sign out an MCP server from the CLI |
 | `claude mcp serve` | Run Claude Code as an MCP server |
 | `claude plugin init <name>` | Scaffold a new plugin in `.claude/skills` |
 | `claude plugin details <name>` | Show plugin components and projected per-session token cost |
@@ -391,7 +393,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `--effort` | Set reasoning effort |
 | `--exclude-dynamic-system-prompt-sections` | Improve print-mode cross-user prompt caching |
 | `--fallback-model` | Continue the session with a configured fallback when the primary model is unavailable |
-| `--json-schema` | Request structured output |
+| `--json-schema` | Request structured output; recent builds avoid repeat `StructuredOutput` calls after a valid result |
 | `--max-budget-usd` | Cap spend |
 | `--max-turns` | Limit turns |
 | `--mcp-config` | Use a specific MCP config for dispatched background sessions |
@@ -421,6 +423,9 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS` | Hides bundled skills, workflows, and built-in slash commands from the model |
 | `CLAUDE_CODE_ENABLE_AUTO_MODE=1` | Enables Auto mode on Bedrock, Vertex, and Foundry for supported Opus 4.7 and Opus 4.8 setups |
 | `CLAUDE_CODE_ENABLE_FEEDBACK_SURVEY_FOR_OTEL` | Re-enables the session quality survey for enterprises capturing responses through OpenTelemetry |
+| `CLAUDE_CODE_DISABLE_BG_SHELL_PRESSURE_REAP=1` | Disables automatic memory-pressure cleanup for idle background shell commands |
+| `CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT` | Overrides the idle timeout for remote MCP tool calls that stop responding |
+| `CLAUDE_CLIENT_PRESENCE_FILE` | Points to a local marker file that suppresses mobile push notifications while you are at the machine |
 | `CLAUDE_CODE_PERFORCE_MODE=1` | Makes Edit/Write/NotebookEdit fail on read-only Perforce files with a `p4 edit` hint |
 | `CLAUDE_CODE_SAFE_MODE` | Starts Claude Code with customizations disabled for troubleshooting |
 | `CLAUDE_CODE_SCRIPT_CAPS` | Limits per-session script invocations |
@@ -432,6 +437,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1` | Opts out of the fullscreen alternate-screen renderer and keeps the conversation in the terminal's native scrollback |
 | `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE` | Lets Homebrew or WinGet installations run package-manager upgrades in the background, then prompt for restart |
 | `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` | Enables gateway `/v1/models` discovery for the `/model` picker |
+| `OTEL_LOG_ASSISTANT_RESPONSES=1` | Adds assistant response text to `claude_code.assistant_response` OpenTelemetry logs; set `0` to keep response content out |
 | `OTEL_LOG_TOOL_DETAILS=1` | Adds tool parameters such as Bash commands and MCP or skill names to tool decision telemetry events |
 | `OTEL_RESOURCE_ATTRIBUTES` | Adds custom labels to OpenTelemetry metric datapoints, such as team or repository labels |
 
@@ -667,12 +673,16 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - The dynamic workflow trigger keyword was renamed from `workflow` to `ultracode`; use `/workflows` to view larger background runs.
 - Managed settings can now set `requiredMinimumVersion` and `requiredMaximumVersion` so Claude Code refuses to start outside an approved version range.
 - `disableBundledSkills` and `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS` can hide bundled skills, workflows, and built-in slash commands from the model.
+- `!` bash commands now prompt Claude to respond to the command output automatically. Set `respondToBashCommands` to `false` in settings to keep the older context-only behavior.
+- `autoMode.classifyAllShell` routes all Bash and PowerShell commands through the auto-mode classifier instead of only arbitrary-code-execution patterns.
+- `sandbox.credentials` can block sandboxed commands from reading credential files and secret environment variables.
+- `CLAUDE_CODE_MAX_RETRIES` is capped at 15. Use `CLAUDE_CODE_RETRY_WATCHDOG` for unattended retry monitoring.
 
 ---
 
 ## Sources
 
-- Claude Code changelogs through `v2.1.169`
+- Claude Code changelogs through `v2.1.193`
 - Local command reference notes and leak-based command lists
 
 ---
@@ -685,4 +695,5 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - [Best Agent Skills](https://www.scriptbyai.com/best-agent-skills/): useful skills for Claude Code and other AI coding workflows
 - [AI Coding Agents](https://www.scriptbyai.com/best-cli-ai-coding-agents/): comparison of Claude Code and other CLI coding agents
 
-*Last audited: June 9, 2026*
+*Last audited: June 26, 2026*
+
