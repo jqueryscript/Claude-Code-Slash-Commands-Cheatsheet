@@ -1,10 +1,10 @@
 # Claude Code Commands Cheatsheet
 
-> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: July 21, 2026.
+> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: August 15, 2026.
 
 [![Status](https://img.shields.io/badge/status-updated-brightgreen)](#)
 [![Commands](https://img.shields.io/badge/commands-70%2B-blue)](#)
-[![Updated](https://img.shields.io/badge/updated-June%2026%202026-orange)](#)
+[![Updated](https://img.shields.io/badge/updated-August%2015%202026-orange)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Table of Contents
@@ -34,12 +34,12 @@
 | Command | Purpose | Status |
 |---|---|---|
 | `/add-dir <path>` | Add another directory to the working scope | Public |
-| `/config` | Open settings, including editor mode and ultracode keyword trigger settings; `/config key=value` sets a setting from the prompt | Public |
-| `/doctor` | Run environment diagnostics and show recent update status | Public |
+| `/config` | Open settings, including editor mode, cross-session message handling, dialog expiry, and ultracode keyword trigger settings; `/config key=value` sets a setting from the prompt | Public |
+| `/doctor` | Run a full setup checkup, diagnose problems, and offer fixes; `/checkup` is an alias | Public |
 | `/effort [low\|medium\|high\|xhigh\|max\|auto]` | Set reasoning effort; no-arg `/effort` opens an interactive slider and confirms when the level becomes the default for new sessions | Public |
-| `/fast [on\|off]` | Toggle fast mode for supported Opus models | Public |
+| `/fast [on\|off]` | Toggle fast mode for Opus 5 and Opus 4.8 | Public |
 | `/help` | Show help and available commands | Public |
-| `/hooks` | Manage hooks; `SessionStart` and `MessageDisplay` support newer workflows | Public |
+| `/hooks` | Manage hooks, including `SessionStart`, `MessageDisplay`, and `DirectoryAdded` | Public |
 | `/init` | Generate `CLAUDE.md` | Public |
 | `/keybindings` | Edit keybindings | Public |
 | `/login` | Sign in | Public |
@@ -47,7 +47,7 @@
 | `/memory` | Open memory files | Public |
 | `/model [model]` | Switch models; the picker saves the default for new sessions, and `s` switches only the current session | Public |
 | `/output-style [style]` | Change response style | Public |
-| `/permissions` | Manage permission rules and review recent auto-mode denial reasons | Public |
+| `/permissions` | Manage permission rules and review recent auto-mode denial reasons; Manual is the default permission mode | Public |
 | `/sandbox` | Open sandbox controls; newer builds can block credential reads and remember approved network hosts for the session | Public |
 | `/team-onboarding` | Generate a teammate ramp-up guide from local Claude Code usage | Public |
 | `/terminal-setup` | Configure terminal integration and fix terminal rendering issues | Public |
@@ -60,20 +60,21 @@
 
 | Command | Purpose | Status |
 |---|---|---|
-| `/branch [name]` | Branch or fork the current conversation or workflow | Public; `/fork` appears as an alias in some references |
+| `/branch [name]` | Branch the current conversation or workflow | Public |
 | `/cd <path>` | Move the current session to a new working directory without breaking the prompt cache | Public |
 | `/clear` | Clear the current conversation context | Public |
 | `/compact [focus]` | Compact context with optional focus instructions | Public |
 | `/context` | Show context usage breakdown, skill token estimates, and plugin-sourced skill names | Public |
 | `/copy [N]` | Copy the latest or selected response | Public |
 | `/export [filename]` | Export the conversation | Public |
+| `/fork` | Copy the conversation into a new background session and its own worktree | Public |
 | `/goal` | Set a completion condition and keep Claude working across turns until it is met | Public |
 | `/rename [name]` | Rename the current session | Public |
 | `/resume [session]` | Resume a previous session, including background sessions | Public |
 | `/rewind` | Rewind to an earlier checkpoint, including checkpoints before `/clear`; `/undo` appears as an alias | Public |
 | `/session` | Open session management UI | Leak-based |
-| `/share` | Share a session | Leak-based |
-| `/status` | Show current session status | Public |
+| `/share` | Share the conversation; alias of `/feedback` | Public alias |
+| `/status` | Show current session status and whether it is interactive, attached, or unattended | Public |
 | `/summary` | Generate a session summary | Leak-based |
 | `/exit` | Exit Claude Code | Public |
 
@@ -86,10 +87,11 @@
 | `/brief` | Brief output mode | Leak-based |
 | `/btw <question>` | Ask a side question with minimal context; use arrow navigation for earlier answers and press `c` to copy raw Markdown | Public |
 | `/bughunter` | Bug-finding workflow | Leak-based |
-| `/code-review [effort]` | Review for correctness issues; add `--fix` or `--comment` | Public |
+| `/bug [report]` | Report a bug with optional session context; alias of `/feedback` | Public alias |
+| `/code-review [level] [PR#]` | Review the current diff or a PR in a background subagent; use `ultra` for a deep cloud review | Public |
 | `/debug [desc]` | Run a debugging workflow | Public |
 | `/diff` | Open the diff viewer; detail view supports keyboard scrolling | Public |
-| `/feedback` | Send feedback | Public |
+| `/feedback [report]` | Send feedback, report a bug, or share the conversation | Public |
 | `/files` | List files in current context | Leak-based |
 | `/focus` | Toggle Focus view | Public |
 | `/insights` | Show usage/session insights | Public |
@@ -101,12 +103,12 @@
 | `/pr_comments` | Internal underscore form of `/pr-comments` | Internal |
 | `/rate-limit-options` | Open rate-limit options | Leak-based |
 | `/release-notes` | View release notes | Public |
-| `/review` | Review current code changes; PR review mode now uses the same engine as `/code-review medium` | Public |
+| `/review` | Alias of `/code-review`; reviews the current diff or a PR | Public alias |
 | `/security-review` | Run a security-focused review | Public |
 | `/simplify` | Run a cleanup-only review and apply simplification, reuse, efficiency, and structure fixes | Public |
-| `/tasks` | Manage background tasks | Leak-based |
-| `/ultraplan` | Run a detailed planning workflow | Leak-based |
-| `/ultrareview [PR#]` | Run a comprehensive cloud code review with parallel multi-agent analysis and critique | Public / workflow command |
+| `/tasks` | List and manage background tasks; `/bashes` is an alias | Public |
+| `/ultraplan` | Old detailed planning workflow | Removed in `v2.1.222` |
+| `/ultrareview [PR#]` | Run the established deep cloud review workflow; `/code-review ultra` is the current form | Public / workflow command |
 | `/workflows` | View dynamic workflow runs | Public |
 
 ### Use GitHub, PR, and Release Workflows
@@ -128,20 +130,24 @@
 
 | Command | Purpose | Status |
 |---|---|---|
-| `/agents` | Manage subagents; `claude agents` opens the agent view | Public |
+| `/agents` | Open the in-session subagent manager and custom-agent library | Public |
 | `/bridge` | Manage IDE or bridge sessions | Leak-based |
 | `/bridge-kick` | Force-restart a bridge connection | Leak-based |
 | `/claude-api` | Load Claude API / SDK helper workflow | Built-in skill command |
+| `/dataviz` | Load chart and dashboard design guidance | Built-in skill command |
 | `/less-permission-prompts` | Scan transcripts for safe read-only Bash and MCP allowlist candidates | Built-in skill command |
 | `/mcp` | Manage MCP servers, authentication, and dynamic MCP commands | Public |
 | `/mcp__[server]__[prompt] [args]` | Run a dynamic MCP prompt command | Generated by connected MCP servers |
-| `/plugin` | Manage plugins, inspect plugin components, and follow marketplace renames automatically | Public |
+| `/plugin` | Manage plugins, including HTTPS zip archive sources with optional SHA-256 pinning | Public |
 | `/plugin list` | List installed plugins; supports `--enabled` and `--disabled` filters | Public |
 | `/reload-plugins` | Reload plugins; also works from Remote Control clients | Public |
 | `/reload-skills` | Re-scan skill directories without restarting Claude Code | Public |
 | `/skills` | List available skills | Public |
+| `/subtask <task>` | Start a forked subagent that inherits the full conversation and prompt cache | Public |
 
 Skills and slash commands can set `disallowed-tools` in frontmatter to remove tools while that workflow is active.
+
+On macOS and Linux, `ListAgents` can discover other Claude Code sessions and `SendMessage` can contact them across machines. Type `@` in the prompt to mention a live session by name. `/config` controls whether inbound messages are accepted, held, or refused. Sessions running with bypassed permissions hold inbound messages for approval by default.
 
 ### Work Remotely or Across Devices
 
@@ -197,7 +203,7 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 |---|---|---|
 | `/add-dir <path>` | Add another directory to scope | Public |
 | `/advisor` | Architecture or design advice | Leak-based |
-| `/agents` | Manage subagents | Public |
+| `/agents` | Open the in-session subagent manager and custom-agent library | Public |
 | `/ant-trace` | Internal tracing | Internal |
 | `/autofix-pr` | Auto-fix PR issues | Internal / leak-based |
 | `/backfill-sessions` | Backfill session data | Internal / leak-based |
@@ -209,12 +215,14 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/brief` | Brief output mode | Leak-based |
 | `/btw <question>` | Ask a side question with minimal context | Public |
 | `/buddy` | Temporary April 1st command | Limited / non-essential |
+| `/bug [report]` | Report a bug; alias of `/feedback` | Public alias |
 | `/bughunter` | Bug-finding workflow | Leak-based |
 | `/cd <path>` | Move the session to a new working directory | Public |
+| `/checkup` | Alias of `/doctor` | Public alias |
 | `/chrome` | Open Chrome integration | Public |
 | `/claude-api` | Load Claude API / SDK helper workflow | Built-in skill |
 | `/clear` | Clear conversation context | Public |
-| `/code-review [effort]` | Review correctness issues; supports `--fix` and `--comment` | Public |
+| `/code-review [level] [PR#]` | Review the current diff or a PR; `ultra` runs a deep cloud review | Public |
 | `/color [color]` | Change session accent color | Public |
 | `/commit` | Generate a commit message and commit changes | Community |
 | `/commit-push-pr` | Commit, push, and create a PR | Leak-based / community |
@@ -224,6 +232,7 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/copy [N]` | Copy latest or selected response | Public |
 | `/cost` | Open cost information inside `/usage` | Public alias / shortcut |
 | `/ctx_viz` | Debug context visualization | Internal / leak-based |
+| `/dataviz` | Load chart and dashboard design guidance | Built-in skill |
 | `/debug [desc]` | Run a debugging workflow | Public |
 | `/debug-tool-call` | Debug a tool call | Internal / leak-based |
 | `/desktop` | Hand off to desktop app | Public |
@@ -234,10 +243,11 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/exit` | Exit Claude Code | Public |
 | `/export [filename]` | Export conversation | Public |
 | `/fast [on\|off]` | Toggle fast mode | Public |
-| `/feedback` | Send feedback | Public |
+| `/feedback [report]` | Send feedback or report a bug | Public |
 | `/files` | List files in context | Leak-based |
 | `/fix-pipeline` | Repair failing CI pipelines | Community |
 | `/focus` | Toggle Focus view | Public |
+| `/fork` | Copy the conversation into a new background session and worktree | Public |
 | `/goal` | Set a completion condition | Public |
 | `/good-claude` | Easter egg command | Leak-based |
 | `/heapdump` | Dump heap for memory analysis | Internal / leak-based |
@@ -289,7 +299,7 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/rename [name]` | Rename current session | Public |
 | `/reset-limits` | Reset rate limits | Internal / leak-based |
 | `/resume [session]` | Resume previous session | Public |
-| `/review` | Review current code changes; PR reviews use the `/code-review medium` engine | Public |
+| `/review` | Alias of `/code-review` for the current diff or a PR | Public alias |
 | `/rewind` | Rewind to an earlier checkpoint, including before `/clear` | Public |
 | `/sandbox` | Open sandbox controls and credential/network protections | Public |
 | `/sandbox-toggle` | Internal sandbox toggle | Internal |
@@ -297,7 +307,7 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/scroll-speed` | Tune mouse wheel scroll speed | Public |
 | `/security-review` | Run security-focused review | Public |
 | `/session` | Session management UI | Leak-based |
-| `/share` | Share a session | Leak-based |
+| `/share` | Share the conversation; alias of `/feedback` | Public alias |
 | `/simplify` | Run cleanup-only review and apply fixes | Public |
 | `/skills` | List skills | Public |
 | `/stats` | Open stats tab inside `/usage` | Public alias / shortcut |
@@ -305,8 +315,9 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/statusline` | Customize status line | Leak-based |
 | `/stickers` | Easter egg or promo command | Public but non-essential |
 | `/summary` | Generate session summary | Leak-based |
+| `/subtask <task>` | Start a forked subagent with the current conversation context | Public |
 | `/tag` | Legacy tag command | Removed |
-| `/tasks` | Manage background tasks | Leak-based |
+| `/tasks` | List and manage background tasks | Public |
 | `/team-onboarding` | Generate teammate onboarding guide | Public |
 | `/teleport` | Bridge or transfer sessions | Public |
 | `/terminal-setup` | Configure terminal integration | Public |
@@ -315,7 +326,7 @@ Skills and slash commands can set `disallowed-tools` in frontmatter to remove to
 | `/thinkback` | Replay or analyze thinking | Internal / leak-based |
 | `/thinkback-play` | Animated thinking replay | Internal / leak-based |
 | `/tui` | Switch terminal UI mode | Public |
-| `/ultraplan` | Detailed planning workflow | Leak-based |
+| `/ultraplan` | Old detailed planning workflow | Removed |
 | `/ultrareview [PR#]` | Comprehensive cloud code review | Public / workflow |
 | `/upgrade` | Upgrade flow | Leak-based |
 | `/usage` | Show plan limits, usage, and costs | Public |
@@ -368,6 +379,10 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `claude --bg --exec '<command>'` | Run a shell command as a background Claude session |
 | `claude -c` | Continue the last conversation |
 | `claude -r "name"` | Resume a named session |
+| `claude remote-control --continue` | Resume the most recent Remote Control server session for the current directory |
+| `claude --teleport <session-id>` | Continue a cloud session in the matching local repository |
+| `claude auto-mode reset [--yes]` | Restore the default auto-mode configuration |
+| `claude self-hosted-runner` | Register a machine or container for Team and Enterprise web, mobile, and desktop sessions |
 | `claude update` | Update Claude Code |
 | `claude mcp list` | List MCP servers |
 | `claude mcp login <name>` | Authenticate an MCP server from the CLI; supports `--no-browser` for SSH or headless use |
@@ -385,6 +400,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `--add-dir` | Add an extra directory to scope |
 | `--agent` | Select an agent |
 | `--allowedTools` | Pre-approve tools |
+| `--ax-screen-reader` | Use plain-text rendering for screen readers |
 | `--bare` | Minimal headless mode |
 | `--channels` | Enable channel/MCP push relay |
 | `--chrome` | Enable Chrome integration mode |
@@ -393,6 +409,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `--effort` | Set reasoning effort |
 | `--exclude-dynamic-system-prompt-sections` | Improve print-mode cross-user prompt caching |
 | `--fallback-model` | Continue the session with a configured fallback when the primary model is unavailable |
+| `--forward-subagent-text` | Include subagent text and thinking in stream-json output |
 | `--json-schema` | Request structured output; recent builds avoid repeat `StructuredOutput` calls after a valid result |
 | `--max-budget-usd` | Cap spend |
 | `--max-turns` | Limit turns |
@@ -400,7 +417,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `--model` | Set the model |
 | `-n`, `--name` | Name the session |
 | `--output-format` | Set machine-readable output |
-| `--permission-mode` | Set permission behavior |
+| `--permission-mode` | Set permission behavior; `manual` is the default mode name |
 | `--plugin-dir` | Use a plugin directory for dispatched background sessions |
 | `--plugin-url <url>` | Fetch a plugin `.zip` archive from a URL for the current session |
 | `-r` | Resume a session |
@@ -411,7 +428,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `--tools` | Explicitly allow tools; `Grep` and `Glob` now map to the dedicated native search tools on builds that include embedded search |
 | `--transport http\|stdio\|sse` | Select MCP transport |
 | `--verbose` | Enable verbose output |
-| `-w`, `--worktree` | Use a git worktree |
+| `-w`, `--worktree` | Use an isolated git worktree; accepts a name, GitHub PR number or URL, or GitLab MR URL |
 
 ---
 
@@ -421,10 +438,21 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 |---|---|
 | `CLAUDE_CODE_CERT_STORE=bundled` | Uses bundled CAs only instead of the OS certificate store |
 | `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS` | Hides bundled skills, workflows, and built-in slash commands from the model |
-| `CLAUDE_CODE_ENABLE_AUTO_MODE=1` | Enables Auto mode on Bedrock, Vertex, and Foundry for supported Opus 4.7 and Opus 4.8 setups |
 | `CLAUDE_CODE_ENABLE_FEEDBACK_SURVEY_FOR_OTEL` | Re-enables the session quality survey for enterprises capturing responses through OpenTelemetry |
 | `CLAUDE_CODE_DISABLE_BG_SHELL_PRESSURE_REAP=1` | Disables automatic memory-pressure cleanup for idle background shell commands |
+| `CLAUDE_CODE_DISABLE_1M_CONTEXT=1` | Holds models with a native 1M window to 200K through auto-compaction |
+| `CLAUDE_CODE_DISABLE_MOUSE_CLICKS=1` | Disables click, drag, and hover in fullscreen mode while keeping wheel scrolling |
+| `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` | Restores the legacy task-tracking tools on newer models that no longer expose them by default |
+| `CLAUDE_CODE_FORK_SUBAGENT` | Sets fork mode: `1` enables it in print mode and the Agent SDK; `0` disables it everywhere |
+| `CLAUDE_CODE_FORWARD_SUBAGENT_TEXT=1` | Includes subagent text and thinking in stream-json output |
+| `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` | Sets the concurrent subagent cap; the default is 20 |
+| `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` | Sets nested subagent depth; the default is 3 |
+| `CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION` | Sets the per-session WebSearch limit; the default is 200 |
+| `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS` | Sets when long MCP calls move to the background, or disables automatic backgrounding |
 | `CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT` | Overrides the idle timeout for remote MCP tool calls that stop responding |
+| `CLAUDE_CODE_TOOL_MEMORY_LIMIT` | Sets an opt-in Linux memory-cgroup limit for Bash tool commands |
+| `CLAUDE_CODE_WEBFETCH_CACHE_TTL_MS` | Sets the WebFetch session URL cache lifetime in milliseconds; the default is 15 minutes |
+| `CLAUDE_CODE_WORKFLOW_PREFIX_STAGGER_MS=0` | Disables the default stagger between same-prefix sibling agents in workflow fan-outs |
 | `CLAUDE_CLIENT_PRESENCE_FILE` | Points to a local marker file that suppresses mobile push notifications while you are at the machine |
 | `CLAUDE_CODE_PERFORCE_MODE=1` | Makes Edit/Write/NotebookEdit fail on read-only Perforce files with a `p4 edit` hint |
 | `CLAUDE_CODE_SAFE_MODE` | Starts Claude Code with customizations disabled for troubleshooting |
@@ -585,8 +613,7 @@ claude -p "review this diff and list risks"
 ### Run a Deep Cloud Review
 
 ```text
-/review
-/ultrareview
+/code-review ultra
 /pr-comments
 ```
 
@@ -644,15 +671,13 @@ These commands are preserved for completeness. Do not treat this section as a gu
 | `/reset-limits` | Internal / leak-based | Reset rate limits |
 | `/sandbox-toggle` | Internal | Internal sandbox toggle |
 | `/session` | Leak-based | Session management UI |
-| `/share` | Leak-based | Share a session |
 | `/statusline` | Leak-based | Customize status line |
 | `/summary` | Leak-based | Generate a session summary |
 | `/tag` | Removed | Legacy tag command |
-| `/tasks` | Leak-based | Manage background tasks |
 | `/terminalSetup` | Internal | Internal form of `/terminal-setup` |
 | `/thinkback` | Internal / leak-based | Replay or analyze thinking |
 | `/thinkback-play` | Internal / leak-based | Animated thinking replay |
-| `/ultraplan` | Leak-based | Detailed planning workflow |
+| `/ultraplan` | Removed | Old detailed planning workflow |
 | `/upgrade` | Leak-based | Upgrade flow |
 | `/version` | Leak-based | Show version |
 | `/vim` | Removed | Old Vim-mode slash command |
@@ -676,13 +701,21 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - `!` bash commands now prompt Claude to respond to the command output automatically and offer live file path autocomplete. Set `respondToBashCommands` to `false` in settings to keep the older context-only behavior.
 - `autoMode.classifyAllShell` routes all Bash and PowerShell commands through the auto-mode classifier instead of only arbitrary-code-execution patterns.
 - `sandbox.credentials` can block sandboxed commands from reading credential files and secret environment variables.
-- `CLAUDE_CODE_MAX_RETRIES` is capped at 15. Use `CLAUDE_CODE_RETRY_WATCHDOG` for unattended retry monitoring.
+- `/agents` opens the in-session subagent manager. `claude agents` is the separate terminal view for background Claude Code sessions.
+- `/fork` creates a separate background session and worktree. `/subtask` starts a forked subagent that inherits the current conversation; fork mode is on by default in interactive sessions as of `v2.1.232`.
+- `/review` is now an alias of `/code-review`; `/code-review ultra` runs a deep cloud review.
+- `/ultraplan` was removed in `v2.1.222`.
+- `sandbox.network.strictAllowlist` denies non-allowlisted hosts for sandboxed commands without prompting.
+- Plugins can use an HTTPS zip `archive` source with optional SHA-256 pinning.
+- Plugin marketplaces accept bare GitLab repository URLs. `additionalMarketplaces` and `allowedMarketplaces` are aliases for `extraKnownMarketplaces` and `strictKnownMarketplaces`.
+- `CLAUDE_CODE_RETRY_WATCHDOG` raises the default retry count for non-capacity transient errors to 300 and removes the old cap of 15 on `CLAUDE_CODE_MAX_RETRIES`.
 
 ---
 
 ## Sources
 
-- Claude Code changelogs through `v2.1.193`
+- [Claude Code changelog through `v2.1.233`](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+- [Official Claude Code command and CLI references](https://code.claude.com/docs/en/commands)
 - Local command reference notes and leak-based command lists
 
 ---
@@ -695,5 +728,5 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - [Best Agent Skills](https://www.scriptbyai.com/best-agent-skills/): useful skills for Claude Code and other AI coding workflows
 - [AI Coding Agents](https://www.scriptbyai.com/best-cli-ai-coding-agents/): comparison of Claude Code and other CLI coding agents
 
-*Last audited: July 21, 2026*
+*Last audited: August 15, 2026*
 
