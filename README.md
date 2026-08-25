@@ -1,10 +1,10 @@
 # Claude Code Commands Cheatsheet
 
-> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: August 21, 2026.
+> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: August 25, 2026.
 
 [![Status](https://img.shields.io/badge/status-updated-brightgreen)](#)
 [![Commands](https://img.shields.io/badge/commands-70%2B-blue)](#)
-[![Updated](https://img.shields.io/badge/updated-August%2021%202026-orange)](#)
+[![Updated](https://img.shields.io/badge/updated-August%2025%202026-orange)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Table of Contents
@@ -42,10 +42,10 @@
 | `/hooks` | Manage hooks, including `SessionStart`, `MessageDisplay`, and `DirectoryAdded` | Public |
 | `/init` | Generate `CLAUDE.md` | Public |
 | `/keybindings` | Edit keybindings, including actions such as `selection:clear` | Public |
-| `/login` | Sign in | Public |
+| `/login` | Sign in with a Claude account, an Anthropic Console account without creating an API key, or a supported API-key flow | Public |
 | `/logout` | Sign out | Public |
 | `/memory` | Open memory files | Public |
-| `/model [model]` | Switch models; the picker saves the default for new sessions, `s` switches only the current session, and `ANTHROPIC_DEFAULT_MODEL` sets the startup model | Public |
+| `/model [model]` | Switch models; the picker saves the default for new sessions, `s` switches only the current session, `ANTHROPIC_DEFAULT_MODEL` sets the startup model, and `modelPicker` can curate the picker | Public |
 | `/output-style [style]` | Change response style; `Concise` is a built-in style available from `/config` > Output style | Public |
 | `/permissions` | Manage permission rules and review recent auto-mode denial reasons; Manual is the default permission mode | Public |
 | `/sandbox` | Open sandbox controls; newer builds can block credential reads, remember approved network hosts for the session, and enforce wildcard read-deny rules on macOS | Public |
@@ -68,13 +68,13 @@
 | `/copy [N]` | Copy the latest or selected response | Public |
 | `/export [filename]` | Export the conversation | Public |
 | `/fork` | Copy the conversation into a new background session and its own worktree | Public |
-| `/goal` | Set a completion condition and keep Claude working across turns until it is met; background check-ins default to 30 minutes and can be changed with `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` | Public |
+| `/goal` | Set a completion condition and keep Claude working across turns until it is met; repeat background check-ins back off from 30 minutes to 1 hour, then every 2 hours | Public |
 | `/rename [name]` | Rename the current session | Public |
-| `/resume [session]` | Resume a previous session, including background sessions | Public |
+| `/resume [session]` | Resume a previous session, including background sessions; active goals are restored, and the picker loads older sessions as you scroll | Public |
 | `/rewind` | Rewind to an earlier checkpoint, including checkpoints before `/clear`; `/undo` appears as an alias | Public |
 | `/session` | Open session management UI | Leak-based |
 | `/share` | Share the conversation; alias of `/feedback` | Public alias |
-| `/status` | Show current session status and whether it is interactive, attached, or unattended | Public |
+| `/status` | Show session status, mode, GitHub connection for Claude Code on the web, and managed-setting sources skipped by precedence | Public |
 | `/summary` | Generate a session summary | Leak-based |
 | `/exit` | Exit Claude Code | Public |
 
@@ -106,7 +106,7 @@
 | `/review` | Alias of `/code-review`; reviews the current diff or a PR | Public alias |
 | `/security-review` | Run a security-focused review | Public |
 | `/simplify` | Run a cleanup-only review and apply simplification, reuse, efficiency, and structure fixes | Public |
-| `/tasks` | List and manage background tasks; `/bashes` is an alias | Public |
+| `/tasks` | List and manage background tasks, including the model and effort used by each subagent; `/bashes` is an alias | Public |
 | `/ultraplan` | Old detailed planning workflow | Removed in `v2.1.222` |
 | `/ultrareview [PR#]` | Run the established deep cloud review workflow; `/code-review ultra` is the current form | Public / workflow command |
 | `/workflows` | View dynamic workflow runs | Public |
@@ -133,7 +133,7 @@
 | `/agents` | Open the in-session subagent manager and custom-agent library | Public |
 | `/bridge` | Manage IDE or bridge sessions | Leak-based |
 | `/bridge-kick` | Force-restart a bridge connection | Leak-based |
-| `/claude-api` | Load Claude API / SDK helper workflow | Built-in skill command |
+| `/claude-api` | Load Claude API or SDK guidance; `/claude-api upgrade` migrates Python projects from `anthropic` 0.x to 1.x | Built-in skill command |
 | `/dataviz` | Load chart and dashboard design guidance | Built-in skill command |
 | `/less-permission-prompts` | Scan transcripts for safe read-only Bash and MCP allowlist candidates | Built-in skill command |
 | `/mcp` | Manage MCP servers, authentication, dynamic MCP commands, and connection-time headers generated by `headersHelper` | Public |
@@ -147,7 +147,7 @@
 
 Skills and slash commands can set `disallowed-tools` in frontmatter to remove tools while that workflow is active.
 
-On macOS and Linux, `ListAgents` can discover other Claude Code sessions and `SendMessage` can contact them across machines. Type `@` in the prompt to mention a live session by name. `/config` controls whether inbound messages are accepted, held, or refused. Sessions running with bypassed permissions hold inbound messages for approval by default. The optional `notify_when_idle` request asks a recipient session to send one notice when it next goes idle; it is a one-shot option with no polling.
+On Windows, macOS, and Linux, `ListAgents` can discover other Claude Code sessions and `SendMessage` can contact them across machines. `ListAgents` and `/list-agents` also include live teammates. Type `@` in the prompt to mention a live session by name. `/config` controls whether inbound messages are accepted, held, or refused. Sessions running with bypassed permissions hold inbound messages for approval by default. The optional `notify_when_idle` request asks a recipient session to send one notice when it next goes idle; it is a one-shot option with no polling.
 
 ### Work Remotely or Across Devices
 
@@ -173,7 +173,7 @@ On macOS and Linux, `ListAgents` can discover other Claude Code sessions and `Se
 |---|---|---|
 | `/cost` | Shortcut to the cost tab inside `/usage` | Public alias / shortcut |
 | `/stats` | Shortcut to the stats tab inside `/usage` | Public alias / shortcut |
-| `/usage` | Show limits, quota usage, costs, category breakdowns, and usage-credit spend rows for Team and Enterprise plans | Public |
+| `/usage` | Show limits, quota usage, costs, category breakdowns, and per-loop run count, token totals, tokens per run, and last-run time | Public |
 | `/usage-credits` | Open usage credits information; `/extra-usage` remains an alias | Public |
 | `/ant-trace` | Internal tracing | Internal / leak-based |
 | `/autofix-pr` | Auto-fix PR issues | Internal / leak-based |
@@ -220,7 +220,7 @@ On macOS and Linux, `ListAgents` can discover other Claude Code sessions and `Se
 | `/cd <path>` | Move the session to a new working directory | Public |
 | `/checkup` | Alias of `/doctor` | Public alias |
 | `/chrome` | Open Chrome integration | Public |
-| `/claude-api` | Load Claude API / SDK helper workflow | Built-in skill |
+| `/claude-api` | Load Claude API or SDK guidance; `/claude-api upgrade` migrates Python projects from `anthropic` 0.x to 1.x | Built-in skill |
 | `/clear` | Clear conversation context | Public |
 | `/code-review [level] [PR#]` | Review the current diff or a PR; `ultra` runs a deep cloud review | Public |
 | `/color [color]` | Change session accent color | Public |
@@ -248,7 +248,7 @@ On macOS and Linux, `ListAgents` can discover other Claude Code sessions and `Se
 | `/fix-pipeline` | Repair failing CI pipelines | Community |
 | `/focus` | Toggle Focus view | Public |
 | `/fork` | Copy the conversation into a new background session and worktree | Public |
-| `/goal` | Set a completion condition; background check-ins default to 30 minutes | Public |
+| `/goal` | Set a completion condition; repeat background check-ins back off from 30 minutes to 1 hour, then every 2 hours | Public |
 | `/good-claude` | Easter egg command | Leak-based |
 | `/heapdump` | Dump heap for memory analysis | Internal / leak-based |
 | `/help` | Show help and available commands | Public |
@@ -263,7 +263,7 @@ On macOS and Linux, `ListAgents` can discover other Claude Code sessions and `Se
 | `/keybindings` | Edit keyboard shortcuts | Public |
 | `/less-permission-prompts` | Propose safe read-only allowlist entries | Built-in skill |
 | `/lint` | Run linting commands | Community |
-| `/login` | Sign in | Public |
+| `/login` | Sign in, including keyless Anthropic Console account authentication | Public |
 | `/logout` | Sign out | Public |
 | `/loop [interval]` | Run a recurring workflow | Public / workflow |
 | `/mcp` | Manage MCP servers, authentication, and dynamic headers | Public |
@@ -272,7 +272,7 @@ On macOS and Linux, `ListAgents` can discover other Claude Code sessions and `Se
 | `/merge-to-main` | Merge to main | Community |
 | `/mobile` | Mobile integration or handoff | Leak-based |
 | `/mock-limits` | Mock rate limits | Internal / leak-based |
-| `/model [model]` | Switch active model; `ANTHROPIC_DEFAULT_MODEL` sets the startup model | Public |
+| `/model [model]` | Switch active model; `ANTHROPIC_DEFAULT_MODEL` sets the startup model and `modelPicker` can curate the picker | Public |
 | `/oauth-refresh` | Refresh OAuth tokens | Leak-based |
 | `/onboarding` | First-run onboarding | Leak-based |
 | `/output-style [style]` | Change response style, including the built-in `Concise` style | Public |
@@ -311,13 +311,13 @@ On macOS and Linux, `ListAgents` can discover other Claude Code sessions and `Se
 | `/simplify` | Run cleanup-only review and apply fixes | Public |
 | `/skills` | List skills | Public |
 | `/stats` | Open stats tab inside `/usage` | Public alias / shortcut |
-| `/status` | Show session status | Public |
+| `/status` | Show session, web GitHub connection, and managed-setting source status | Public |
 | `/statusline` | Customize status line | Leak-based |
 | `/stickers` | Easter egg or promo command | Public but non-essential |
 | `/summary` | Generate session summary | Leak-based |
 | `/subtask <task>` | Start a forked subagent with the current conversation context | Public |
 | `/tag` | Legacy tag command | Removed |
-| `/tasks` | List and manage background tasks | Public |
+| `/tasks` | List background tasks with each subagent's model and effort | Public |
 | `/team-onboarding` | Generate teammate onboarding guide | Public |
 | `/teleport` | Bridge or transfer sessions | Public |
 | `/terminal-setup` | Configure terminal integration | Public |
@@ -329,7 +329,7 @@ On macOS and Linux, `ListAgents` can discover other Claude Code sessions and `Se
 | `/ultraplan` | Old detailed planning workflow | Removed |
 | `/ultrareview [PR#]` | Comprehensive cloud code review | Public / workflow |
 | `/upgrade` | Upgrade flow | Leak-based |
-| `/usage` | Show plan limits, usage, costs, and usage-credit spend | Public |
+| `/usage` | Show limits, costs, usage breakdowns, and per-loop run and token data | Public |
 | `/usage-credits` | Show usage credits | Public |
 | `/version` | Show version | Leak-based |
 | `/vim` | Old Vim-mode command | Removed |
@@ -720,7 +720,10 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - `ANTHROPIC_DEFAULT_MODEL` sets the model used by new sessions; a `/model` pick still overrides it and persists across restarts.
 - The built-in `Concise` output style was added in `v2.1.237`. Select it under Output style in `/config`; it takes effect after `/clear` or in a new session.
 - The `spellcheck` setting was added in `v2.1.235`, and `keybindingFlavor: "readline"` was added in `v2.1.238`. The latter makes `Ctrl+W` delete back to the previous whitespace.
-- `selection:clear` is available as a keybinding action. `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` controls the default 30-minute background check-in for `/goal`; set it to `0` to disable check-ins.
+- `selection:clear` is available as a keybinding action. `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` controls the initial background check-in for `/goal`; the default is 30 minutes, later checks back off to 1 hour and then every 2 hours, and `0` disables check-ins.
+- `modelPicker` can append to or replace the built-in `/model` list with an ordered, labeled model list. `promptCacheTtl` and `subagentPromptCacheTtl` let API-key and cloud-provider users choose separate prompt-cache lifetimes for the main conversation and subagents.
+- Managed deployments can set `modelPricing` so `/cost`, the status line, and telemetry use contracted model rates and an organization discount multiplier. US-only inference workspaces include the 1.1x data-residency premium in cost estimates.
+- `/mcp` and `/plugins` mark claude.ai connectors whose authentication is managed by the organization. Cloud-synced plugins appear as `name@synced` and can be enabled or disabled with that identifier.
 - `headersHelper` can generate short-lived MCP or plugin-marketplace headers. Catalog helpers run during install or update only after the command is shown, and `-y`/`--yes` skips the confirmation prompt for command-source plugins.
 - On macOS, wildcard read-deny rules such as `**/.env` take precedence inside allowed read regions and cannot be bypassed by renaming a matched file.
 - In fullscreen mode, `Ctrl+L` and `Cmd+K` now repaint the screen only; the old double-press `/clear` shortcut was removed.
@@ -729,8 +732,8 @@ These commands are preserved for completeness. Do not treat this section as a gu
 
 ## Sources
 
-- [Claude Code changelog through `v2.1.238`](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
-- [Claude Code `v2.1.238` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.238)
+- [Claude Code changelog through `v2.1.243`](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+- [Claude Code `v2.1.243` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.243)
 - [Official Claude Code command and CLI references](https://code.claude.com/docs/en/commands)
 - Local command reference notes and leak-based command lists
 
@@ -744,5 +747,5 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - [Best Agent Skills](https://www.scriptbyai.com/best-agent-skills/): useful skills for Claude Code and other AI coding workflows
 - [AI Coding Agents](https://www.scriptbyai.com/best-cli-ai-coding-agents/): comparison of Claude Code and other CLI coding agents
 
-*Last audited: August 21, 2026*
+*Last audited: August 25, 2026*
 
