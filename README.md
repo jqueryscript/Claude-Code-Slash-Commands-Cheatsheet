@@ -1,10 +1,10 @@
 # Claude Code Commands Cheatsheet
 
-> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: August 25, 2026.
+> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: August 29, 2026.
 
 [![Status](https://img.shields.io/badge/status-updated-brightgreen)](#)
 [![Commands](https://img.shields.io/badge/commands-70%2B-blue)](#)
-[![Updated](https://img.shields.io/badge/updated-August%2025%202026-orange)](#)
+[![Updated](https://img.shields.io/badge/updated-August%2029%202026-orange)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Table of Contents
@@ -35,7 +35,7 @@
 |---|---|---|
 | `/add-dir <path>` | Add another directory to the working scope | Public |
 | `/config` | Open settings, including editor mode, keybinding flavor, spellcheck, output style, usage-limit continuation, cross-session message handling, dialog expiry, and ultracode keyword trigger settings; `/config key=value` sets a setting from the prompt | Public |
-| `/doctor` | Run a full setup checkup, diagnose problems, and offer fixes; `/checkup` is an alias | Public |
+| `/doctor` | Run a full setup checkup, diagnose problems, and offer fixes; current builds also explain failures to load server-managed settings; `/checkup` is an alias | Public |
 | `/effort [low\|medium\|high\|xhigh\|max\|auto]` | Set reasoning effort; no-arg `/effort` opens an interactive slider and confirms when the level becomes the default for new sessions | Public |
 | `/fast [on\|off]` | Toggle fast mode for Opus 5 and Opus 4.8 | Public |
 | `/help` | Show help and available commands | Public |
@@ -47,7 +47,7 @@
 | `/memory` | Open memory files | Public |
 | `/model [model]` | Switch models; the picker saves the default for new sessions, `s` switches only the current session, `ANTHROPIC_DEFAULT_MODEL` sets the startup model, and `modelPicker` can curate the picker | Public |
 | `/output-style [style]` | Change response style; `Concise` is a built-in style available from `/config` > Output style | Public |
-| `/permissions` | Manage permission rules and review recent auto-mode denial reasons; Manual is the default permission mode | Public |
+| `/permissions` | Manage permission rules and recent denials; the Auto mode tab lets you view and edit classifier rules, and Manual remains the default mode | Public |
 | `/sandbox` | Open sandbox controls; newer builds can block credential reads, remember approved network hosts for the session, and enforce wildcard read-deny rules on macOS | Public |
 | `/team-onboarding` | Generate a teammate ramp-up guide from local Claude Code usage | Public |
 | `/terminal-setup` | Configure terminal integration and fix terminal rendering issues | Public |
@@ -61,14 +61,14 @@
 | Command | Purpose | Status |
 |---|---|---|
 | `/branch [name]` | Branch the current conversation or workflow | Public |
-| `/cd <path>` | Move the current session to a new working directory without breaking the prompt cache | Public |
+| `/cd <path>` | Move the session to a new working directory and immediately load that directory's project settings, hooks, approved `.mcp.json` servers, skills, and agents | Public |
 | `/clear` | Clear the current conversation context | Public |
 | `/compact [focus]` | Compact context with optional focus instructions | Public |
 | `/context` | Show context usage breakdown, skill token estimates, and plugin-sourced skill names | Public |
 | `/copy [N]` | Copy the latest or selected response | Public |
 | `/export [filename]` | Export the conversation | Public |
 | `/fork` | Copy the conversation into a new background session and its own worktree | Public |
-| `/goal` | Set a completion condition and keep Claude working across turns until it is met; repeat background check-ins back off from 30 minutes to 1 hour, then every 2 hours | Public |
+| `/goal` | Set a completion condition and keep Claude working across turns; an idle goal gets at most three background check-ins, and your next message allows three more | Public |
 | `/rename [name]` | Rename the current session | Public |
 | `/resume [session]` | Resume a previous session, including background sessions; active goals are restored, and the picker loads older sessions as you scroll | Public |
 | `/rewind` | Rewind to an earlier checkpoint, including checkpoints before `/clear`; `/undo` appears as an alias | Public |
@@ -91,11 +91,11 @@
 | `/code-review [level] [PR#]` | Review the current diff or a PR in a background subagent; use `ultra` for a deep cloud review | Public |
 | `/debug [desc]` | Run a debugging workflow | Public |
 | `/diff` | Open the diff viewer; detail view supports keyboard scrolling | Public |
-| `/feedback [report]` | Send feedback, report a bug, or share the conversation | Public |
+| `/feedback [report]` | Send feedback, report a bug, or share the conversation; Claude can draft a report for your review unless `feedbackDrafts` is disabled | Public |
 | `/files` | List files in current context | Leak-based |
 | `/focus` | Toggle Focus view | Public |
 | `/insights` | Show usage/session insights | Public |
-| `/loop [interval]` | Run a recurring workflow; `/proactive` appears as an alias | Public / workflow command |
+| `/loop [interval]` | Run a recurring workflow; self-paced dynamic mode and the no-prompt autonomous default work across Anthropic, Bedrock, Vertex AI, and Foundry; `/proactive` appears as an alias | Public / workflow command |
 | `/passes` | Run a multi-pass workflow | Leak-based |
 | `/plan [desc]` | Enter plan mode | Public |
 | `/powerup` | Open interactive lessons | Public |
@@ -133,7 +133,7 @@
 | `/agents` | Open the in-session subagent manager and custom-agent library | Public |
 | `/bridge` | Manage IDE or bridge sessions | Leak-based |
 | `/bridge-kick` | Force-restart a bridge connection | Leak-based |
-| `/claude-api` | Load Claude API or SDK guidance; `/claude-api upgrade` migrates Python projects from `anthropic` 0.x to 1.x | Built-in skill command |
+| `/claude-api` | Load Claude API or SDK guidance; `upgrade` migrates Python projects from `anthropic` 0.x to 1.x, and `cost-optimize` profiles API spend and works through measured cost reductions | Built-in skill command |
 | `/dataviz` | Load chart and dashboard design guidance | Built-in skill command |
 | `/less-permission-prompts` | Scan transcripts for safe read-only Bash and MCP allowlist candidates | Built-in skill command |
 | `/mcp` | Manage MCP servers, authentication, dynamic MCP commands, and connection-time headers generated by `headersHelper` | Public |
@@ -174,7 +174,7 @@ On Windows, macOS, and Linux, `ListAgents` can discover other Claude Code sessio
 | `/cost` | Shortcut to the cost tab inside `/usage` | Public alias / shortcut |
 | `/stats` | Shortcut to the stats tab inside `/usage` | Public alias / shortcut |
 | `/usage` | Show limits, quota usage, costs, category breakdowns, and per-loop run count, token totals, tokens per run, and last-run time | Public |
-| `/usage-credits` | Open usage credits information; `/extra-usage` remains an alias | Public |
+| `/usage-credits` | View usage credits or request a higher limit when the organization supports it; `/extra-usage` remains an alias | Public |
 | `/ant-trace` | Internal tracing | Internal / leak-based |
 | `/autofix-pr` | Auto-fix PR issues | Internal / leak-based |
 | `/backfill-sessions` | Backfill session data | Internal / leak-based |
@@ -217,10 +217,10 @@ On Windows, macOS, and Linux, `ListAgents` can discover other Claude Code sessio
 | `/buddy` | Temporary April 1st command | Limited / non-essential |
 | `/bug [report]` | Report a bug; alias of `/feedback` | Public alias |
 | `/bughunter` | Bug-finding workflow | Leak-based |
-| `/cd <path>` | Move the session to a new working directory | Public |
+| `/cd <path>` | Move the session and load the new directory's project configuration | Public |
 | `/checkup` | Alias of `/doctor` | Public alias |
 | `/chrome` | Open Chrome integration | Public |
-| `/claude-api` | Load Claude API or SDK guidance; `/claude-api upgrade` migrates Python projects from `anthropic` 0.x to 1.x | Built-in skill |
+| `/claude-api` | Load Claude API or SDK guidance; includes `upgrade` and `cost-optimize` workflows | Built-in skill |
 | `/clear` | Clear conversation context | Public |
 | `/code-review [level] [PR#]` | Review the current diff or a PR; `ultra` runs a deep cloud review | Public |
 | `/color [color]` | Change session accent color | Public |
@@ -243,12 +243,12 @@ On Windows, macOS, and Linux, `ListAgents` can discover other Claude Code sessio
 | `/exit` | Exit Claude Code | Public |
 | `/export [filename]` | Export conversation | Public |
 | `/fast [on\|off]` | Toggle fast mode | Public |
-| `/feedback [report]` | Send feedback or report a bug | Public |
+| `/feedback [report]` | Send feedback or review a Claude-drafted report | Public |
 | `/files` | List files in context | Leak-based |
 | `/fix-pipeline` | Repair failing CI pipelines | Community |
 | `/focus` | Toggle Focus view | Public |
 | `/fork` | Copy the conversation into a new background session and worktree | Public |
-| `/goal` | Set a completion condition; repeat background check-ins back off from 30 minutes to 1 hour, then every 2 hours | Public |
+| `/goal` | Set a completion condition; idle goals get up to three background check-ins until the next message | Public |
 | `/good-claude` | Easter egg command | Leak-based |
 | `/heapdump` | Dump heap for memory analysis | Internal / leak-based |
 | `/help` | Show help and available commands | Public |
@@ -265,7 +265,7 @@ On Windows, macOS, and Linux, `ListAgents` can discover other Claude Code sessio
 | `/lint` | Run linting commands | Community |
 | `/login` | Sign in, including keyless Anthropic Console account authentication | Public |
 | `/logout` | Sign out | Public |
-| `/loop [interval]` | Run a recurring workflow | Public / workflow |
+| `/loop [interval]` | Run a recurring or self-paced autonomous workflow | Public / workflow |
 | `/mcp` | Manage MCP servers, authentication, and dynamic headers | Public |
 | `/mcp__[server]__[prompt] [args]` | Dynamic MCP prompt command | MCP-generated |
 | `/memory` | Open memory files | Public |
@@ -278,7 +278,7 @@ On Windows, macOS, and Linux, `ListAgents` can discover other Claude Code sessio
 | `/output-style [style]` | Change response style, including the built-in `Concise` style | Public |
 | `/passes` | Multi-pass workflow | Leak-based |
 | `/perf-issue` | Report performance issue | Internal / leak-based |
-| `/permissions` | Manage permission rules and recent denials | Public |
+| `/permissions` | Manage permission rules, recent denials, and Auto mode classifier rules | Public |
 | `/plan [desc]` | Enter plan mode | Public |
 | `/plugin` | Manage plugins | Public |
 | `/plugin list` | List installed plugins | Public |
@@ -330,7 +330,7 @@ On Windows, macOS, and Linux, `ListAgents` can discover other Claude Code sessio
 | `/ultrareview [PR#]` | Comprehensive cloud code review | Public / workflow |
 | `/upgrade` | Upgrade flow | Leak-based |
 | `/usage` | Show limits, costs, usage breakdowns, and per-loop run and token data | Public |
-| `/usage-credits` | Show usage credits | Public |
+| `/usage-credits` | View credits or request a higher supported organization limit | Public |
 | `/version` | Show version | Leak-based |
 | `/vim` | Old Vim-mode command | Removed |
 | `/vitest` | Run Vitest workflows | Community |
@@ -383,6 +383,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `claude --teleport <session-id>` | Continue a cloud session in the matching local repository |
 | `claude auto-mode reset [--yes]` | Restore the default auto-mode configuration |
 | `claude self-hosted-runner` | Register a machine or container for Team and Enterprise web, mobile, and desktop sessions |
+| `claude self-hosted-runner --client-label <label>` | Override the label registered by the runner; the default is the hostname |
 | `claude self-hosted-runner --defer-shutdown-max-min <minutes>` | On SIGTERM, keep attached sessions serving, park remaining work after the timeout, then exit |
 | `claude self-hosted-runner --proxy-authorization-command <command>` / `--proxy-authorization-file <path>` | Supply a fresh `Proxy-Authorization` header for each egress connection |
 | `claude update` | Update Claude Code |
@@ -428,6 +429,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `-r` | Resume a session |
 | `--remote` | Start a remote/web-backed session |
 | `--remote-control-session-name-prefix` | Prefix Remote Control session names |
+| `--restricted` | Start a shared-machine or evaluation session without command/code tools or WebFetch, confine file tools to working directories, load only managed settings and `--settings`, and refuse `bypassPermissions` |
 | `--safe-mode` | Start Claude Code with customizations disabled for troubleshooting |
 | `--settings` | Load settings for dispatched background sessions |
 | `--tools` | Explicitly allow tools; `Grep` and `Glob` now map to the dedicated native search tools on builds that include embedded search |
@@ -472,6 +474,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1` | Opts out of the fullscreen alternate-screen renderer and keeps the conversation in the terminal's native scrollback |
 | `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE` | Lets Homebrew or WinGet installations run package-manager upgrades in the background, then prompt for restart |
 | `CLAUDE_CODE_PROJECT_DIR_NAME` | With `CLAUDE_CONFIG_DIR`, chooses the directory name used for project transcripts and auto memory |
+| `CLAUDE_CODE_RESTRICTED=1` | Enables the same restricted mode as `--restricted` |
 | `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` | Enables gateway `/v1/models` discovery for the `/model` picker |
 | `OTEL_LOG_ASSISTANT_RESPONSES` | Controls assistant response text in `claude_code.assistant_response` OpenTelemetry logs; when unset, it follows `OTEL_LOG_USER_PROMPTS`; set `0` to keep prompts-only logging or `1` to log response content |
 | `OTEL_LOG_TOOL_DETAILS=1` | Adds tool parameters such as Bash commands and MCP or skill names to tool decision telemetry events |
@@ -514,6 +517,8 @@ Remote Control, `/schedule`, Claude.ai MCP connectors, and notification preferen
 /context
 /review
 ```
+
+An idle goal can start up to three background check-ins. Your next message allows three more.
 
 ### Review a Pull Request
 
@@ -720,8 +725,8 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - `ANTHROPIC_DEFAULT_MODEL` sets the model used by new sessions; a `/model` pick still overrides it and persists across restarts.
 - The built-in `Concise` output style was added in `v2.1.237`. Select it under Output style in `/config`; it takes effect after `/clear` or in a new session.
 - The `spellcheck` setting was added in `v2.1.235`, and `keybindingFlavor: "readline"` was added in `v2.1.238`. The latter makes `Ctrl+W` delete back to the previous whitespace.
-- `selection:clear` is available as a keybinding action. `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` controls the initial background check-in for `/goal`; the default is 30 minutes, later checks back off to 1 hour and then every 2 hours, and `0` disables check-ins.
-- `modelPicker` can append to or replace the built-in `/model` list with an ordered, labeled model list. `promptCacheTtl` and `subagentPromptCacheTtl` let API-key and cloud-provider users choose separate prompt-cache lifetimes for the main conversation and subagents.
+- `selection:clear` is available as a keybinding action. `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` controls the first background check-in for `/goal`; later checks back off from 30 minutes to 1 hour and then every 2 hours. An idle goal gets at most three check-ins until your next message, and `0` disables check-ins.
+- `modelPicker` can append to or replace the built-in `/model` list with an ordered, labeled model list. `promptCacheTtl` and `subagentPromptCacheTtl` set prompt-cache lifetimes for the main conversation and subagents. Agent frontmatter can set `experimental.cacheTtl` to `"5m"` or `"1h"` when no subagent TTL setting applies.
 - Managed deployments can set `modelPricing` so `/cost`, the status line, and telemetry use contracted model rates and an organization discount multiplier. US-only inference workspaces include the 1.1x data-residency premium in cost estimates.
 - `/mcp` and `/plugins` mark claude.ai connectors whose authentication is managed by the organization. Cloud-synced plugins appear as `name@synced` and can be enabled or disabled with that identifier.
 - `headersHelper` can generate short-lived MCP or plugin-marketplace headers. Catalog helpers run during install or update only after the command is shown, and `-y`/`--yes` skips the confirmation prompt for command-source plugins.
@@ -732,8 +737,10 @@ These commands are preserved for completeness. Do not treat this section as a gu
 
 ## Sources
 
-- [Claude Code changelog through `v2.1.243`](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
-- [Claude Code `v2.1.243` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.243)
+- [Claude Code changelog through `v2.1.250`](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+- [Claude Code `v2.1.248` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.248)
+- [Claude Code `v2.1.247` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.247)
+- [Claude Code `v2.1.246` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.246)
 - [Official Claude Code command and CLI references](https://code.claude.com/docs/en/commands)
 - Local command reference notes and leak-based command lists
 
@@ -747,5 +754,5 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - [Best Agent Skills](https://www.scriptbyai.com/best-agent-skills/): useful skills for Claude Code and other AI coding workflows
 - [AI Coding Agents](https://www.scriptbyai.com/best-cli-ai-coding-agents/): comparison of Claude Code and other CLI coding agents
 
-*Last audited: August 25, 2026*
+*Last audited: August 29, 2026*
 
