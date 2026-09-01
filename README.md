@@ -1,10 +1,10 @@
 # Claude Code Commands Cheatsheet
 
-> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: August 29, 2026.
+> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: September 2, 2026.
 
 [![Status](https://img.shields.io/badge/status-updated-brightgreen)](#)
 [![Commands](https://img.shields.io/badge/commands-70%2B-blue)](#)
-[![Updated](https://img.shields.io/badge/updated-August%2029%202026-orange)](#)
+[![Updated](https://img.shields.io/badge/updated-September%202%202026-orange)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Table of Contents
@@ -33,13 +33,13 @@
 
 | Command | Purpose | Status |
 |---|---|---|
-| `/add-dir <path>` | Add another directory to the working scope | Public |
+| `/add-dir <path>` | Add another directory to the working scope; network paths are refused, so use a mapped drive letter on Windows | Public |
 | `/config` | Open settings, including editor mode, keybinding flavor, spellcheck, output style, usage-limit continuation, cross-session message handling, dialog expiry, and ultracode keyword trigger settings; `/config key=value` sets a setting from the prompt | Public |
 | `/doctor` | Run a full setup checkup, diagnose problems, and offer fixes; current builds also explain failures to load server-managed settings; `/checkup` is an alias | Public |
-| `/effort [low\|medium\|high\|xhigh\|max\|auto]` | Set reasoning effort; no-arg `/effort` opens an interactive slider and confirms when the level becomes the default for new sessions | Public |
+| `/effort [low\|medium\|high\|xhigh\|max\|auto]` | Set reasoning effort per model; press `s` in the picker to change only the current session | Public |
 | `/fast [on\|off]` | Toggle fast mode for Opus 5 and Opus 4.8 | Public |
 | `/help` | Show help and available commands | Public |
-| `/hooks` | Manage hooks, including `SessionStart`, `MessageDisplay`, and `DirectoryAdded` | Public |
+| `/hooks` | Manage hooks; `PreModelSwitch` can block, confirm, or annotate a model change, `PostModelSwitch` runs afterward, and resume-time `SessionStart` receives staleness and re-cache estimates | Public |
 | `/init` | Generate `CLAUDE.md` | Public |
 | `/keybindings` | Edit keybindings, including actions such as `selection:clear` | Public |
 | `/login` | Sign in with a Claude account, an Anthropic Console account without creating an API key, or a supported API-key flow | Public |
@@ -85,10 +85,10 @@
 | `/advisor` | Architecture or design advice workflow | Leak-based |
 | `/batch` | Apply one change across many files or worktrees | Public / workflow command |
 | `/brief` | Brief output mode | Leak-based |
-| `/btw <question>` | Ask a side question with minimal context; use arrow navigation for earlier answers and press `c` to copy raw Markdown | Public |
+| `/btw <question>` | Ask a side question with minimal context; browse history with `Shift+Left`/`Shift+Right` or `[`/`]`, and press `c` to copy raw Markdown | Public |
 | `/bughunter` | Bug-finding workflow | Leak-based |
 | `/bug [report]` | Report a bug with optional session context; alias of `/feedback` | Public alias |
-| `/code-review [level] [PR#]` | Review the current diff or a PR in a background subagent; use `ultra` for a deep cloud review | Public |
+| `/code-review [level] [PR#]` | Review the current diff or a PR in a background subagent; use `ultra` for a deep cloud review and `--comment` to post GitHub PR or GitLab MR findings | Public |
 | `/debug [desc]` | Run a debugging workflow | Public |
 | `/diff` | Open the diff viewer; detail view supports keyboard scrolling | Public |
 | `/feedback [report]` | Send feedback, report a bug, or share the conversation; Claude can draft a report for your review unless `feedbackDrafts` is disabled | Public |
@@ -171,9 +171,9 @@ On Windows, macOS, and Linux, `ListAgents` can discover other Claude Code sessio
 
 | Command | Purpose | Status |
 |---|---|---|
-| `/cost` | Shortcut to the cost tab inside `/usage` | Public alias / shortcut |
+| `/cost` | Open cost data plus the current session's prompt-cache hit ratio, misses, re-cached tokens, and warm or cold state | Public alias / shortcut |
 | `/stats` | Shortcut to the stats tab inside `/usage` | Public alias / shortcut |
-| `/usage` | Show limits, quota usage, costs, category breakdowns, and per-loop run count, token totals, tokens per run, and last-run time | Public |
+| `/usage` | Show limits, quota usage, costs, category breakdowns, and per-loop data; Claude apps gateways with spend limits also show a Spend limit bar | Public |
 | `/usage-credits` | View usage credits or request a higher limit when the organization supports it; `/extra-usage` remains an alias | Public |
 | `/ant-trace` | Internal tracing | Internal / leak-based |
 | `/autofix-pr` | Auto-fix PR issues | Internal / leak-based |
@@ -373,6 +373,12 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `claude agents` | Open agent view: running, blocked, and completed Claude Code sessions |
 | `claude agents --json` | List active Claude Code sessions as JSON, including blocked and just-dispatched sessions, with `id` and `state` fields |
 | `claude agents --json --all` | Include completed sessions in the JSON agent list |
+| `claude attach <id>` | Attach this terminal to a background session |
+| `claude logs <id>` | Print recent output from a background session |
+| `claude stop <id>` | Stop a background session; `claude kill` is an alias |
+| `claude respawn <id>` | Restart a running or stopped session and resume its saved conversation |
+| `claude respawn --all` | Restart every running background session on the current Claude Code binary |
+| `claude rm <id>` | Remove a session when its Claude-created worktree is safe to remove; keep its transcript available through `claude --resume` |
 | `claude agents` then `! <command>` | Start a shell command as a background session you can attach to or detach from |
 | `claude "prompt"` | Start with an initial prompt |
 | `claude -p "prompt"` | Run a non-interactive single prompt |
@@ -403,7 +409,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 
 | Flag | Purpose |
 |---|---|
-| `--add-dir` | Add an extra directory to scope |
+| `--add-dir` | Add an extra directory to scope; network paths are refused, so use a mapped drive letter on Windows |
 | `--agent` | Select an agent |
 | `--allowedTools` | Pre-approve tools |
 | `--ax-screen-reader` | Use plain-text rendering for screen readers |
@@ -412,7 +418,7 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `--chrome` | Enable Chrome integration mode |
 | `--console` | Use Anthropic Console auth |
 | `--dangerously-skip-permissions` | Skip permission prompts |
-| `--effort` | Set reasoning effort |
+| `--effort` | Set reasoning effort for the current session without changing the saved per-model default |
 | `--exclude-dynamic-system-prompt-sections` | Improve print-mode cross-user prompt caching |
 | `--fallback-model` | Continue the session with a configured fallback when the primary model is unavailable |
 | `--forward-subagent-text` | Include subagent text and thinking in stream-json output |
@@ -452,6 +458,8 @@ Use `/mcp` to connect servers and inspect the commands they expose. Reconnect pi
 | `CLAUDE_CODE_DISABLE_MOUSE_CLICKS=1` | Disables click, drag, and hover in fullscreen mode while keeping wheel scrolling |
 | `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` | Restores the legacy task-tracking tools on newer models that no longer expose them by default |
 | `CLAUDE_CODE_FORK_SUBAGENT` | Sets fork mode: `1` enables it in print mode and the Agent SDK; `0` disables it everywhere |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | Sets the default subagent model; agent frontmatter and explicit per-spawn models take precedence |
+| `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` | Forces every subagent to use `CLAUDE_CODE_SUBAGENT_MODEL`, or the main model when it is unset |
 | `CLAUDE_CODE_FORWARD_SUBAGENT_TEXT=1` | Includes subagent text and thinking in stream-json output |
 | `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` | Sets how long background work can keep an active `/goal` waiting; default is 30 minutes and `0` disables check-ins |
 | `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` | Sets the concurrent subagent cap; the default is 20 |
@@ -723,10 +731,15 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - Plugin marketplaces accept bare GitLab repository URLs. `additionalMarketplaces` and `allowedMarketplaces` are aliases for `extraKnownMarketplaces` and `strictKnownMarketplaces`.
 - `CLAUDE_CODE_RETRY_WATCHDOG` raises the default retry count for non-capacity transient errors to 300 and removes the old cap of 15 on `CLAUDE_CODE_MAX_RETRIES`.
 - `ANTHROPIC_DEFAULT_MODEL` sets the model used by new sessions; a `/model` pick still overrides it and persists across restarts.
+- Claude Fable 5.1 is available as `claude-fable-5-1`. In Claude apps gateway sessions, the `fable` and `best` aliases still resolve to Fable 5 until the gateway supports the newer default, so select Fable 5.1 explicitly.
 - The built-in `Concise` output style was added in `v2.1.237`. Select it under Output style in `/config`; it takes effect after `/clear` or in a new session.
 - The `spellcheck` setting was added in `v2.1.235`, and `keybindingFlavor: "readline"` was added in `v2.1.238`. The latter makes `Ctrl+W` delete back to the previous whitespace.
 - `selection:clear` is available as a keybinding action. `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` controls the first background check-in for `/goal`; later checks back off from 30 minutes to 1 hour and then every 2 hours. An idle goal gets at most three check-ins until your next message, and `0` disables check-ins.
 - `modelPicker` can append to or replace the built-in `/model` list with an ordered, labeled model list. `promptCacheTtl` and `subagentPromptCacheTtl` set prompt-cache lifetimes for the main conversation and subagents. Agent frontmatter can set `experimental.cacheTtl` to `"5m"` or `"1h"` when no subagent TTL setting applies.
+- `timeFormat` and `timeZone` control the turn-end clock and transcript timestamps. Supported choices include 12-hour, 24-hour, UTC, and custom `strftime` formats.
+- `permissions.blockReadsOutsideWorkingDirectories` blocks file reads outside the working directories after the first-read prompt. Project and local settings cannot set `defaultMode` to `auto` or `bypassPermissions`; use user or managed settings, or pass `--permission-mode`.
+- `/effort` now saves a separate default for each model. Press `s` in its picker for a session-only choice; the `--effort` CLI flag is also session-only.
+- `CLAUDE_CODE_SUBAGENT_MODEL` is a default that agent frontmatter and explicit per-spawn choices can override. Set `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` when every subagent must use that model, or the main model if no subagent model is set.
 - Managed deployments can set `modelPricing` so `/cost`, the status line, and telemetry use contracted model rates and an organization discount multiplier. US-only inference workspaces include the 1.1x data-residency premium in cost estimates.
 - `/mcp` and `/plugins` mark claude.ai connectors whose authentication is managed by the organization. Cloud-synced plugins appear as `name@synced` and can be enabled or disabled with that identifier.
 - `headersHelper` can generate short-lived MCP or plugin-marketplace headers. Catalog helpers run during install or update only after the command is shown, and `-y`/`--yes` skips the confirmation prompt for command-source plugins.
@@ -737,10 +750,9 @@ These commands are preserved for completeness. Do not treat this section as a gu
 
 ## Sources
 
-- [Claude Code changelog through `v2.1.250`](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
-- [Claude Code `v2.1.248` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.248)
-- [Claude Code `v2.1.247` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.247)
-- [Claude Code `v2.1.246` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.246)
+- [Claude Code changelog through `v2.1.258`](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+- [Claude Code `v2.1.257` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.257)
+- [Claude Code `v2.1.251` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.251)
 - [Official Claude Code command and CLI references](https://code.claude.com/docs/en/commands)
 - Local command reference notes and leak-based command lists
 
@@ -754,5 +766,5 @@ These commands are preserved for completeness. Do not treat this section as a gu
 - [Best Agent Skills](https://www.scriptbyai.com/best-agent-skills/): useful skills for Claude Code and other AI coding workflows
 - [AI Coding Agents](https://www.scriptbyai.com/best-cli-ai-coding-agents/): comparison of Claude Code and other CLI coding agents
 
-*Last audited: August 29, 2026*
+*Last audited: September 2, 2026*
 
