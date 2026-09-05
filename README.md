@@ -1,770 +1,1306 @@
-# Claude Code Commands Cheatsheet
+# Claude Code Commands Cheat Sheet
 
-> Slash commands, MCP commands, CLI commands, flags, environment variables, and workflows. Last audited: September 2, 2026.
+A comprehensive GitHub reference for Claude Code slash commands, CLI commands, flags, keyboard shortcuts, MCP commands, skills, environment variables, removed command names, and common workflows.
 
-[![Status](https://img.shields.io/badge/status-updated-brightgreen)](#)
-[![Commands](https://img.shields.io/badge/commands-70%2B-blue)](#)
-[![Updated](https://img.shields.io/badge/updated-September%202%202026-orange)](#)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PDF](https://img.shields.io/badge/PDF-Download-red)](./claude-code-commands-cheat-sheet.pdf) [![Web Reference](https://img.shields.io/badge/Web-ScriptByAI.com-blue)](https://www.scriptbyai.com/claude-code-commands-cheat-sheet/) [![Claude Code Releases](https://img.shields.io/badge/Claude%20Code-Releases-black)](https://github.com/anthropics/claude-code/releases)
 
-## Table of Contents
+This README is the full GitHub reference. The PDF provides a printable format, and the [web version](https://www.scriptbyai.com/claude-code-commands-cheat-sheet/) provides the same maintained reference in a browser-friendly layout.
 
+> Type `/` on an empty prompt inside Claude Code to see the commands available in your installation. Availability can vary by platform, plan, provider, enabled features, plugins, MCP servers, and organization policy.
+
+## Contents
+
+- [Quick Reference](#quick-reference)
+- [Slash Commands A-Z](#slash-commands-a-z)
 - [Slash Commands by Task](#slash-commands-by-task)
   - [Start and Configure Claude Code](#start-and-configure-claude-code)
   - [Manage Context and Sessions](#manage-context-and-sessions)
+  - [MCP, Plugins, Skills, and Agents](#mcp-plugins-skills-and-agents)
   - [Review, Debug, and Change Code](#review-debug-and-change-code)
-  - [Use GitHub, PR, and Release Workflows](#use-github-pr-and-release-workflows)
-  - [Use MCP, Plugins, Skills, and Agents](#use-mcp-plugins-skills-and-agents)
-  - [Work Remotely or Across Devices](#work-remotely-or-across-devices)
-  - [Check Usage, Costs, Diagnostics, and UI State](#check-usage-costs-diagnostics-and-ui-state)
-- [A-Z Slash Command Index](#a-z-slash-command-index)
-- [MCP Commands](#mcp-commands)
-- [CLI Commands and Flags](#cli-commands-and-flags)
-- [Environment Variables](#environment-variables)
-- [Real Workflows](#real-workflows)
-- [Internal, Experimental, Removed, and Community Commands](#internal-experimental-removed-and-community-commands)
-- [Notes](#notes)
-- [Sources](#sources)
+  - [GitHub, PR, and Release Workflows](#github-pr-and-release-workflows)
+  - [Remote and Cross-Device Commands](#remote-and-cross-device-commands)
+  - [Usage, Diagnostics, and Account Commands](#usage-diagnostics-and-account-commands)
+  - [Interface and Utility Commands](#interface-and-utility-commands)
+- [MCP Slash Commands and Custom Commands](#mcp-slash-commands-and-custom-commands)
+- [Claude Code CLI Commands](#claude-code-cli-commands)
+- [Claude Code CLI Flags](#claude-code-cli-flags)
+- [Claude Code Keyboard Shortcuts](#claude-code-keyboard-shortcuts)
+- [Claude Code Environment Variables](#claude-code-environment-variables)
+- [Older, Removed, and Replaced Command Names](#older-removed-and-replaced-command-names)
+- [Common Workflows](#common-workflows)
+- [Custom, Community, and Internal Command Names](#custom-community-and-internal-command-names)
+- [FAQ](#faq)
+- [Maintenance and Sources](#maintenance-and-sources)
 - [Related Resources](#related-resources)
+
+## Quick Reference
+
+Claude Code has two command surfaces. Slash commands run inside an active Claude Code session. CLI commands and flags run from your shell.
+
+### Common Claude Code Commands
+
+| Command | What it does |
+| --- | --- |
+| **/help** | Show help and commands available in your installation. |
+| **/init** | Create a starter CLAUDE.md for the current project. |
+| **/model [model]** | Switch the active model. |
+| **/plan [description]** | Enter Plan Mode for a task. |
+| **/context [all]** | Inspect current context usage. |
+| **/compact [instructions]** | Free context by summarizing the conversation. |
+| **/clear [name]** | Start a fresh conversation. |
+| **/resume [session]** | Return to an earlier conversation. |
+| **/diff** | Review working-tree changes. |
+| **/code-review [level] [target]** | Review a diff, branch, path, or pull request. |
+| **/permissions** | Manage tool permission rules. |
+| **/mcp [subcommand]** | Manage MCP servers and authentication. |
+| **/skills** | Browse available skills. |
+| **/tasks** | View background work in the current session. |
+| **/doctor** | Diagnose setup and configuration issues. |
+
+### Slash Commands vs. CLI Commands
+
+Slash commands run inside an active Claude Code session. CLI commands and flags run in your shell before or while starting Claude Code.
+
+| Where you run it | Examples |
+| --- | --- |
+| **Inside Claude Code** | **/compact**, **/model**, **/mcp**, **/doctor** |
+| **In your terminal** | **claude -p "prompt"**, **claude -c**, **claude update**, **claude --model sonnet** |
+
+## Slash Commands A-Z
+
+The main A-Z table contains current built-in slash commands. If a command appears here, it is intended to be available in current Claude Code installations where the relevant feature, plan, provider, or policy permits it.
+
+This A-Z index lists the current built-in commands, bundled skills, and bundled workflows. If a command appears here, it is part of the current Claude Code command reference, though account, platform, provider, or policy restrictions can hide individual commands in a particular installation.
+
+| Command | What it does |
+| --- | --- |
+| **/add-dir <path>** | Add another working directory to the current session. |
+| **/advisor [model|off]** | Turn the advisor tool on or off, optionally choosing its model. |
+| **/agents** | Point you to Claude-managed subagent creation or the agent files in `.claude/agents/` and `~/.claude/agents/`. |
+| **/artifacts** | List, attach, open, or copy links to available artifacts. |
+| **/auto-mode-setup** | Draft auto-mode environment rules from the project and recent sessions. |
+| **/autocompact [auto|<tokens>]** | Set the auto-compact window with **auto** or a token value such as **500k**; the choice is saved to settings. |
+| **/autofix-pr [prompt]** | Start a Claude Code web session that watches the current branch’s PR and pushes fixes for CI failures or review comments; an optional prompt can narrow the work. |
+| **/background [prompt]** | Detach the current session and keep it running as a background agent. Alias: /bg. |
+| **/batch <instruction>** | Break a large codebase change into parallel worktree tasks. |
+| **/branch [name]** | Branch the current conversation so you can try a different direction. |
+| **/btw [question]** | Ask a side question about the current session without adding it to the main conversation history; run it with no question to revisit recent side questions. |
+| **/bug [report]** | Report a bug or share selected session context. Alias: /share. |
+| **/cd <path>** | Move the current session to another working directory without losing the conversation. |
+| **/chrome** | Configure Claude in Chrome integration. |
+| **/claude-api [subcommand]** | Load Claude API and Managed Agents guidance, including migration and audit workflows. |
+| **/clear [name]** | Start a new conversation with empty conversational context while keeping project memory; an optional name labels the previous conversation for later resume. |
+| **/code-review [level] [--fix] [--comment] [target]** | Review the current diff or a path, branch, or PR. Use **--fix** to apply findings, **--comment** for PR comments, or **ultra** for the cloud review flow. |
+| **/color [color|default]** | Change the prompt bar color for the current session. |
+| **/compact [instructions]** | Summarize the conversation to free context while keeping the current task. |
+| **/config [key=value ...]** | Open the Settings interface, or pass supported **key=value** pairs to change settings directly. |
+| **/context [all]** | Show context usage, capacity warnings, and optimization suggestions; pass **all** to expand the per-item breakdown. |
+| **/copy [N]** | Copy the latest response or the Nth-latest response; when code blocks exist, the picker can copy an individual block or the full response. |
+| **/cost** | Open the Usage view. Alias of /usage. |
+| **/dataviz [request]** | Load bundled chart, graph, and dashboard design guidance. |
+| **/debug [description]** | Enable session debug logging and investigate a runtime problem. |
+| **/deep-research <question>** | Run a multi-source research workflow and synthesize a cited report. |
+| **/design [brief]** | Create UI or graphic design artboards and publish them as an artifact where available. |
+| **/design-login** | Authorize access used by design-system synchronization. |
+| **/design-sync [hint]** | Sync a React design system for use with Claude Design. |
+| **/desktop** | Continue the current session in the Claude Code Desktop app. Alias: /app. |
+| **/diff** | Review working-tree changes, including edits made by Claude. |
+| **/doctor** | Run a setup checkup for installation, settings, hooks, skills, plugins, MCP servers, and context overhead, with fixes offered where available. |
+| **/effort [level|auto|status]** | Set or inspect reasoning effort with model-appropriate levels, **auto**, or **status**. |
+| **/exit** | Exit Claude Code; in an attached background session, detach without stopping it. Alias: /quit. |
+| **/export [filename]** | Export the current conversation as plain text. |
+| **/fast [on|off]** | Turn fast mode on or off. |
+| **/feedback [report]** | Send product feedback or review queued feedback drafts. |
+| **/fewer-permission-prompts** | Find common read-only tool calls and propose permission allowlist entries. |
+| **/focus** | Toggle the compact Focus view in fullscreen mode. |
+| **/fork [prompt]** | Copy the current conversation into a separate background session while you keep working in the original session. |
+| **/goal [condition|clear]** | Set a completion condition that keeps Claude working across turns until the condition is met, or clear the active goal. |
+| **/heapdump** | Write heap diagnostics for investigating high memory use. |
+| **/help** | Show help and the commands available in the current installation. |
+| **/hooks** | View configured hook events and commands. |
+| **/ide** | Manage IDE integrations and connection status. |
+| **/import [codex|gemini] [--dry-run] [--yes]** | Import supported configuration from Codex or Gemini CLI. |
+| **/init** | Create or initialize CLAUDE.md project guidance. |
+| **/insights** | Generate an HTML report from recent local Claude Code usage. |
+| **/install-github-app** | Set up the Claude GitHub App and optional GitHub Actions workflow. |
+| **/install-slack-app** | Open the Slack app installation flow. |
+| **/keybindings** | Open the custom keyboard-shortcuts configuration file. |
+| **/list-agents** | List subagents, agent-team teammates, and other messageable Claude Code sessions. Alias: /peers. |
+| **/login** | Sign in to an Anthropic account. |
+| **/logout** | Sign out from the current Anthropic account. |
+| **/loop [interval] [prompt]** | Repeat a prompt while the session stays open. Alias: /proactive. |
+| **/mcp [subcommand]** | Open MCP management, authenticate servers, reconnect a server, or enable and disable individual servers or all servers. |
+| **/memory** | Edit CLAUDE.md files and manage auto memory. |
+| **/mobile** | Show a QR code for the Claude mobile app. Aliases: /ios, /android. |
+| **/model [model]** | Switch the active model; the picker can save a default for new sessions or apply a model only to the current session. |
+| **/passes** | Share a free week of Claude Code with friends when the account is eligible. |
+| **/permissions** | Manage allow, ask, and deny rules, working directories, recent denials, and auto-mode classifier rules. |
+| **/plan [description]** | Enter Plan Mode, optionally starting with a task description. |
+| **/plugin [subcommand]** | Open plugin management or run plugin subcommands such as **list**, **install**, **enable**, and **disable**. |
+| **/powerup** | Open interactive lessons for Claude Code features. |
+| **/privacy-settings** | View and update privacy settings on eligible plans. |
+| **/radio** | Open Claude FM lo-fi radio. |
+| **/rate-limit-options** | Show options for continuing when a Claude.ai usage limit blocks a request. |
+| **/recap** | Generate a one-line summary of the current session. |
+| **/release-notes** | Open the interactive Claude Code changelog. |
+| **/reload-plugins [--force]** | Reload active plugin components without restarting Claude Code; **--force** permits reloads that would change MCP tools and invalidate prompt cache. |
+| **/reload-skills** | Re-scan skill and command directories during the current session and report which skills were added or removed. |
+| **/remote-control** | Make the local session available from claude.ai or the Claude app through Remote Control. Alias: **/rc**. |
+| **/remote-env** | Choose the default environment for cloud agents. |
+| **/rename [name]** | Rename the current session. |
+| **/resume [session]** | Resume a previous conversation by ID or name, or open the session picker. Alias: /continue. |
+| **/review [level] [--fix] [--comment] [target]** | Alias of /code-review. |
+| **/rewind** | Restore or summarize an earlier checkpoint. Aliases: /checkpoint, /undo. |
+| **/run** | Build and run the project so Claude can observe a change working. |
+| **/run-skill-generator** | Create project guidance that teaches /run and /verify how to launch the app. |
+| **/sandbox** | Toggle sandbox mode on supported platforms. |
+| **/schedule [description]** | Create, update, list, or run cloud routines. Alias: /routines. |
+| **/scroll-speed** | Adjust mouse-wheel speed in fullscreen mode. |
+| **/security-review** | Review the current branch against the origin default branch for security issues such as injection, authentication flaws, and data exposure. |
+| **/setup-bedrock** | Open the Amazon Bedrock setup wizard. |
+| **/setup-vertex** | Open the Google Cloud Agent Platform setup wizard. |
+| **/simplify [target]** | Review changed code for reuse, simplicity, efficiency, and abstraction issues, then apply cleanup fixes; use code review when you want correctness bugs checked too. |
+| **/skill-doctor** | Show each skill’s context cost and usage frequency to identify skills that consume context without being used. |
+| **/skills** | List skills, filter by name, description, or source, sort by token count, and manage visibility where the skill can be toggled. |
+| **/stats** | Open the Stats tab in /usage. |
+| **/status** | Show version, model, account, connectivity, and session status. |
+| **/statusline** | Configure the custom status line. |
+| **/stickers** | Open the Claude Code sticker-ordering flow. |
+| **/stop** | Stop the current attached background session while keeping its transcript and worktree. |
+| **/subtask <task>** | Start a forked subagent that inherits the current conversation, works in the background, and reports its result back to this session. |
+| **/tasks** | View and manage background work in the current session. Alias: /bashes. |
+| **/team-onboarding** | Generate a team onboarding guide from recent Claude Code usage. |
+| **/teleport** | Pull a Claude Code web session and its conversation into the local terminal. Alias: **/tp**. |
+| **/terminal-setup** | Configure supported terminals for multiline input and related integration settings. |
+| **/theme** | Choose or create a terminal color theme. |
+| **/tui [default|fullscreen]** | Switch between the standard and fullscreen terminal renderers. |
+| **/ultrareview [PR or branch]** | Run the deep cloud review flow. /code-review ultra is the preferred form. |
+| **/upgrade** | Open the plan upgrade flow. |
+| **/usage** | Show session cost, plan usage limits, and activity statistics; **/cost** and **/stats** open views within the same usage surface. |
+| **/usage-credits** | Open or request usage-credit settings when a limit is reached. |
+| **/verify** | Build and run the project to confirm a code change works in the actual app. |
+| **/voice [hold|tap|off]** | Turn voice dictation on, choose hold/tap behavior, or turn it off. |
+| **/web-setup** | Connect GitHub credentials for Claude Code on the web. |
+| **/workflow-authoring** | Load the reference for creating or editing dynamic workflow scripts. |
+| **/workflows** | Open the workflow progress view to watch and manage workflow runs. |
+
+**Download the Claude Code Commands Cheat Sheet**
+
+Save or print the PDF version for a compact offline reference. The web version below is the fuller reference and is updated as Claude Code changes.
+
+[Download PDF](https://raw.githubusercontent.com/jqueryscript/Claude-Code-Slash-Commands-Cheatsheet/main/claude-code-commands-cheat-sheet.pdf)
 
 ## Slash Commands by Task
 
+The A-Z index is best when you already know the command name. The task sections below group the same current commands by what you are trying to do.
+
 ### Start and Configure Claude Code
 
-| Command | Purpose | Status |
-|---|---|---|
-| `/add-dir <path>` | Add another directory to the working scope; network paths are refused, so use a mapped drive letter on Windows | Public |
-| `/config` | Open settings, including editor mode, keybinding flavor, spellcheck, output style, usage-limit continuation, cross-session message handling, dialog expiry, and ultracode keyword trigger settings; `/config key=value` sets a setting from the prompt | Public |
-| `/doctor` | Run a full setup checkup, diagnose problems, and offer fixes; current builds also explain failures to load server-managed settings; `/checkup` is an alias | Public |
-| `/effort [low\|medium\|high\|xhigh\|max\|auto]` | Set reasoning effort per model; press `s` in the picker to change only the current session | Public |
-| `/fast [on\|off]` | Toggle fast mode for Opus 5 and Opus 4.8 | Public |
-| `/help` | Show help and available commands | Public |
-| `/hooks` | Manage hooks; `PreModelSwitch` can block, confirm, or annotate a model change, `PostModelSwitch` runs afterward, and resume-time `SessionStart` receives staleness and re-cache estimates | Public |
-| `/init` | Generate `CLAUDE.md` | Public |
-| `/keybindings` | Edit keybindings, including actions such as `selection:clear` | Public |
-| `/login` | Sign in with a Claude account, an Anthropic Console account without creating an API key, or a supported API-key flow | Public |
-| `/logout` | Sign out | Public |
-| `/memory` | Open memory files | Public |
-| `/model [model]` | Switch models; the picker saves the default for new sessions, `s` switches only the current session, `ANTHROPIC_DEFAULT_MODEL` sets the startup model, and `modelPicker` can curate the picker | Public |
-| `/output-style [style]` | Change response style; `Concise` is a built-in style available from `/config` > Output style | Public |
-| `/permissions` | Manage permission rules and recent denials; the Auto mode tab lets you view and edit classifier rules, and Manual remains the default mode | Public |
-| `/sandbox` | Open sandbox controls; newer builds can block credential reads, remember approved network hosts for the session, and enforce wildcard read-deny rules on macOS | Public |
-| `/team-onboarding` | Generate a teammate ramp-up guide from local Claude Code usage | Public |
-| `/terminal-setup` | Configure terminal integration and fix terminal rendering issues | Public |
-| `/theme` | Change or create themes, including custom JSON and plugin-shipped themes | Public |
-| `/scroll-speed` | Tune mouse wheel scroll speed with live preview | Public |
-| `/tui` | Switch terminal UI mode; `/tui fullscreen` enables fullscreen rendering | Public |
-| `Vim mode` | Editor mode available through `/config`; `/vim` was removed | Setting, not current slash command |
+Use these commands for initial project setup, model and permission choices, terminal configuration, memory, providers, and session-wide settings.
+
+| Command | What it does |
+| --- | --- |
+| **/add-dir <path>** | Add another working directory to the current session. |
+| **/auto-mode-setup** | Draft auto-mode environment rules from the project and recent sessions. |
+| **/autocompact [auto|<tokens>]** | Set the auto-compact window with **auto** or a token value such as **500k**; the choice is saved to settings. |
+| **/cd <path>** | Move the current session to another working directory without losing the conversation. |
+| **/color [color|default]** | Change the prompt bar color for the current session. |
+| **/config [key=value ...]** | Open the Settings interface, or pass supported **key=value** pairs to change settings directly. |
+| **/doctor** | Run a setup checkup for installation, settings, hooks, skills, plugins, MCP servers, and context overhead, with fixes offered where available. |
+| **/effort [level|auto|status]** | Set or inspect reasoning effort with model-appropriate levels, **auto**, or **status**. |
+| **/fast [on|off]** | Turn fast mode on or off. |
+| **/help** | Show help and the commands available in the current installation. |
+| **/hooks** | View configured hook events and commands. |
+| **/ide** | Manage IDE integrations and connection status. |
+| **/import [codex|gemini] [--dry-run] [--yes]** | Import supported configuration from Codex or Gemini CLI. |
+| **/init** | Create or initialize CLAUDE.md project guidance. |
+| **/keybindings** | Open the custom keyboard-shortcuts configuration file. |
+| **/login** | Sign in to an Anthropic account. |
+| **/logout** | Sign out from the current Anthropic account. |
+| **/memory** | Edit CLAUDE.md files and manage auto memory. |
+| **/model [model]** | Switch the active model; the picker can save a default for new sessions or apply a model only to the current session. |
+| **/permissions** | Manage allow, ask, and deny rules, working directories, recent denials, and auto-mode classifier rules. |
+| **/privacy-settings** | View and update privacy settings on eligible plans. |
+| **/sandbox** | Toggle sandbox mode on supported platforms. |
+| **/setup-bedrock** | Open the Amazon Bedrock setup wizard. |
+| **/setup-vertex** | Open the Google Cloud Agent Platform setup wizard. |
+| **/statusline** | Configure the custom status line. |
+| **/terminal-setup** | Configure supported terminals for multiline input and related integration settings. |
+| **/theme** | Choose or create a terminal color theme. |
+| **/tui [default|fullscreen]** | Switch between the standard and fullscreen terminal renderers. |
+| **/upgrade** | Open the plan upgrade flow. |
 
 ### Manage Context and Sessions
 
-| Command | Purpose | Status |
-|---|---|---|
-| `/branch [name]` | Branch the current conversation or workflow | Public |
-| `/cd <path>` | Move the session to a new working directory and immediately load that directory's project settings, hooks, approved `.mcp.json` servers, skills, and agents | Public |
-| `/clear` | Clear the current conversation context | Public |
-| `/compact [focus]` | Compact context with optional focus instructions | Public |
-| `/context` | Show context usage breakdown, skill token estimates, and plugin-sourced skill names | Public |
-| `/copy [N]` | Copy the latest or selected response | Public |
-| `/export [filename]` | Export the conversation | Public |
-| `/fork` | Copy the conversation into a new background session and its own worktree | Public |
-| `/goal` | Set a completion condition and keep Claude working across turns; an idle goal gets at most three background check-ins, and your next message allows three more | Public |
-| `/rename [name]` | Rename the current session | Public |
-| `/resume [session]` | Resume a previous session, including background sessions; active goals are restored, and the picker loads older sessions as you scroll | Public |
-| `/rewind` | Rewind to an earlier checkpoint, including checkpoints before `/clear`; `/undo` appears as an alias | Public |
-| `/session` | Open session management UI | Leak-based |
-| `/share` | Share the conversation; alias of `/feedback` | Public alias |
-| `/status` | Show session status, mode, GitHub connection for Claude Code on the web, and managed-setting sources skipped by precedence | Public |
-| `/summary` | Generate a session summary | Leak-based |
-| `/exit` | Exit Claude Code | Public |
+These commands manage context size, conversation state, checkpoints, background work, session naming, and session history.
+
+| Command | What it does |
+| --- | --- |
+| **/background [prompt]** | Detach the current session and keep it running as a background agent. Alias: /bg. |
+| **/branch [name]** | Branch the current conversation so you can try a different direction. |
+| **/btw [question]** | Ask a side question about the current session without adding it to the main conversation history; run it with no question to revisit recent side questions. |
+| **/clear [name]** | Start a new conversation with empty conversational context while keeping project memory; an optional name labels the previous conversation for later resume. |
+| **/compact [instructions]** | Summarize the conversation to free context while keeping the current task. |
+| **/context [all]** | Show context usage, capacity warnings, and optimization suggestions; pass **all** to expand the per-item breakdown. |
+| **/copy [N]** | Copy the latest response or the Nth-latest response; when code blocks exist, the picker can copy an individual block or the full response. |
+| **/cost** | Open the Usage view. Alias of /usage. |
+| **/export [filename]** | Export the current conversation as plain text. |
+| **/focus** | Toggle the compact Focus view in fullscreen mode. |
+| **/fork [prompt]** | Copy the current conversation into a separate background session while you keep working in the original session. |
+| **/goal [condition|clear]** | Set a completion condition that keeps Claude working across turns until the condition is met, or clear the active goal. |
+| **/recap** | Generate a one-line summary of the current session. |
+| **/rename [name]** | Rename the current session. |
+| **/resume [session]** | Resume a previous conversation by ID or name, or open the session picker. Alias: /continue. |
+| **/rewind** | Restore or summarize an earlier checkpoint. Aliases: /checkpoint, /undo. |
+| **/stats** | Open the Stats tab in /usage. |
+| **/status** | Show version, model, account, connectivity, and session status. |
+| **/stop** | Stop the current attached background session while keeping its transcript and worktree. |
+| **/subtask <task>** | Start a forked subagent that inherits the current conversation, works in the background, and reports its result back to this session. |
+| **/tasks** | View and manage background work in the current session. Alias: /bashes. |
+| **/usage** | Show session cost, plan usage limits, and activity statistics; **/cost** and **/stats** open views within the same usage surface. |
+
+### MCP, Plugins, Skills, and Agents
+
+Use these commands to extend Claude Code with MCP servers, plugins, skills, subagents, background work, and dynamic workflows.
+
+| Command | What it does |
+| --- | --- |
+| **/agents** | Point you to Claude-managed subagent creation or the agent files in `.claude/agents/` and `~/.claude/agents/`. |
+| **/batch <instruction>** | Break a large codebase change into parallel worktree tasks. |
+| **/claude-api [subcommand]** | Load Claude API and Managed Agents guidance, including migration and audit workflows. |
+| **/dataviz [request]** | Load bundled chart, graph, and dashboard design guidance. |
+| **/deep-research <question>** | Run a multi-source research workflow and synthesize a cited report. |
+| **/fewer-permission-prompts** | Find common read-only tool calls and propose permission allowlist entries. |
+| **/list-agents** | List subagents, agent-team teammates, and other messageable Claude Code sessions. Alias: /peers. |
+| **/loop [interval] [prompt]** | Repeat a prompt while the session stays open. Alias: /proactive. |
+| **/mcp [subcommand]** | Open MCP management, authenticate servers, reconnect a server, or enable and disable individual servers or all servers. |
+| **/plugin [subcommand]** | Open plugin management or run plugin subcommands such as **list**, **install**, **enable**, and **disable**. |
+| **/reload-plugins [--force]** | Reload active plugin components without restarting Claude Code; **--force** permits reloads that would change MCP tools and invalidate prompt cache. |
+| **/reload-skills** | Re-scan skill and command directories during the current session and report which skills were added or removed. |
+| **/run-skill-generator** | Create project guidance that teaches /run and /verify how to launch the app. |
+| **/skill-doctor** | Show each skill’s context cost and usage frequency to identify skills that consume context without being used. |
+| **/skills** | List skills, filter by name, description, or source, sort by token count, and manage visibility where the skill can be toggled. |
+| **/subtask <task>** | Start a forked subagent that inherits the current conversation, works in the background, and reports its result back to this session. |
+| **/workflow-authoring** | Load the reference for creating or editing dynamic workflow scripts. |
+| **/workflows** | Open the workflow progress view to watch and manage workflow runs. |
 
 ### Review, Debug, and Change Code
 
-| Command | Purpose | Status |
-|---|---|---|
-| `/advisor` | Architecture or design advice workflow | Leak-based |
-| `/batch` | Apply one change across many files or worktrees | Public / workflow command |
-| `/brief` | Brief output mode | Leak-based |
-| `/btw <question>` | Ask a side question with minimal context; browse history with `Shift+Left`/`Shift+Right` or `[`/`]`, and press `c` to copy raw Markdown | Public |
-| `/bughunter` | Bug-finding workflow | Leak-based |
-| `/bug [report]` | Report a bug with optional session context; alias of `/feedback` | Public alias |
-| `/code-review [level] [PR#]` | Review the current diff or a PR in a background subagent; use `ultra` for a deep cloud review and `--comment` to post GitHub PR or GitLab MR findings | Public |
-| `/debug [desc]` | Run a debugging workflow | Public |
-| `/diff` | Open the diff viewer; detail view supports keyboard scrolling | Public |
-| `/feedback [report]` | Send feedback, report a bug, or share the conversation; Claude can draft a report for your review unless `feedbackDrafts` is disabled | Public |
-| `/files` | List files in current context | Leak-based |
-| `/focus` | Toggle Focus view | Public |
-| `/insights` | Show usage/session insights | Public |
-| `/loop [interval]` | Run a recurring workflow; self-paced dynamic mode and the no-prompt autonomous default work across Anthropic, Bedrock, Vertex AI, and Foundry; `/proactive` appears as an alias | Public / workflow command |
-| `/passes` | Run a multi-pass workflow | Leak-based |
-| `/plan [desc]` | Enter plan mode | Public |
-| `/powerup` | Open interactive lessons | Public |
-| `/pr-comments [PR]` | Fetch PR review comments | Public |
-| `/pr_comments` | Internal underscore form of `/pr-comments` | Internal |
-| `/rate-limit-options` | Open rate-limit options | Leak-based |
-| `/release-notes` | View release notes | Public |
-| `/review` | Alias of `/code-review`; reviews the current diff or a PR | Public alias |
-| `/security-review` | Run a security-focused review | Public |
-| `/simplify` | Run a cleanup-only review and apply simplification, reuse, efficiency, and structure fixes | Public |
-| `/tasks` | List and manage background tasks, including the model and effort used by each subagent; `/bashes` is an alias | Public |
-| `/ultraplan` | Old detailed planning workflow | Removed in `v2.1.222` |
-| `/ultrareview [PR#]` | Run the established deep cloud review workflow; `/code-review ultra` is the current form | Public / workflow command |
-| `/workflows` | View dynamic workflow runs | Public |
+These commands help plan changes, inspect diffs, review code, debug failures, verify behavior, and run larger changes in parallel.
 
-### Use GitHub, PR, and Release Workflows
+| Command | What it does |
+| --- | --- |
+| **/advisor [model|off]** | Turn the advisor tool on or off, optionally choosing its model. |
+| **/autofix-pr [prompt]** | Start a Claude Code web session that watches the current branch’s PR and pushes fixes for CI failures or review comments; an optional prompt can narrow the work. |
+| **/batch <instruction>** | Break a large codebase change into parallel worktree tasks. |
+| **/code-review [level] [--fix] [--comment] [target]** | Review the current diff or a path, branch, or PR. Use **--fix** to apply findings, **--comment** for PR comments, or **ultra** for the cloud review flow. |
+| **/debug [description]** | Enable session debug logging and investigate a runtime problem. |
+| **/diff** | Review working-tree changes, including edits made by Claude. |
+| **/plan [description]** | Enter Plan Mode, optionally starting with a task description. |
+| **/review [level] [--fix] [--comment] [target]** | Alias of /code-review. |
+| **/run** | Build and run the project so Claude can observe a change working. |
+| **/security-review** | Review the current branch against the origin default branch for security issues such as injection, authentication flaws, and data exposure. |
+| **/simplify [target]** | Review changed code for reuse, simplicity, efficiency, and abstraction issues, then apply cleanup fixes; use code review when you want correctness bugs checked too. |
+| **/ultrareview [PR or branch]** | Run the deep cloud review flow. /code-review ultra is the preferred form. |
+| **/verify** | Build and run the project to confirm a code change works in the actual app. |
 
-| Command | Purpose | Status |
-|---|---|---|
-| `/commit` | Generate a commit message and commit changes | Community |
-| `/commit-push-pr` | Commit, push, and create a PR | Leak-based / community |
-| `/fix-pipeline` | Repair failing CI pipelines | Community |
-| `/install-github-app` | Set up GitHub app integration; GitHub Actions workflow setup is optional | Public |
-| `/issue` | File a GitHub issue | Leak-based |
-| `/lint` | Run linting commands | Community |
-| `/merge-to-main` | Merge to main | Community |
-| `/pr` | Create a pull request | Community |
-| `/push` | Push the current branch | Community |
-| `/vitest` | Run Vitest-based test workflows | Community |
+### GitHub, PR, and Release Workflows
 
-### Use MCP, Plugins, Skills, and Agents
+These commands handle pull-request review, GitHub integration, cloud autofix work, release notes, and web-session setup.
 
-| Command | Purpose | Status |
-|---|---|---|
-| `/agents` | Open the in-session subagent manager and custom-agent library | Public |
-| `/bridge` | Manage IDE or bridge sessions | Leak-based |
-| `/bridge-kick` | Force-restart a bridge connection | Leak-based |
-| `/claude-api` | Load Claude API or SDK guidance; `upgrade` migrates Python projects from `anthropic` 0.x to 1.x, and `cost-optimize` profiles API spend and works through measured cost reductions | Built-in skill command |
-| `/dataviz` | Load chart and dashboard design guidance | Built-in skill command |
-| `/less-permission-prompts` | Scan transcripts for safe read-only Bash and MCP allowlist candidates | Built-in skill command |
-| `/mcp` | Manage MCP servers, authentication, dynamic MCP commands, and connection-time headers generated by `headersHelper` | Public |
-| `/mcp__[server]__[prompt] [args]` | Run a dynamic MCP prompt command | Generated by connected MCP servers |
-| `/plugin` | Manage plugins, including HTTPS zip archive sources with optional SHA-256 pinning and marketplace `headersHelper` authentication | Public |
-| `/plugin list` | List installed plugins; supports `--enabled` and `--disabled` filters | Public |
-| `/reload-plugins` | Reload plugins; also works from Remote Control clients | Public |
-| `/reload-skills` | Re-scan skill directories without restarting Claude Code | Public |
-| `/skills` | List available skills | Public |
-| `/subtask <task>` | Start a forked subagent that inherits the full conversation and prompt cache | Public |
+| Command | What it does |
+| --- | --- |
+| **/autofix-pr [prompt]** | Start a Claude Code web session that watches the current branch’s PR and pushes fixes for CI failures or review comments; an optional prompt can narrow the work. |
+| **/code-review [level] [--fix] [--comment] [target]** | Review the current diff or a path, branch, or PR. Use **--fix** to apply findings, **--comment** for PR comments, or **ultra** for the cloud review flow. |
+| **/install-github-app** | Set up the Claude GitHub App and optional GitHub Actions workflow. |
+| **/release-notes** | Open the interactive Claude Code changelog. |
+| **/review [level] [--fix] [--comment] [target]** | Alias of /code-review. |
+| **/security-review** | Review the current branch against the origin default branch for security issues such as injection, authentication flaws, and data exposure. |
+| **/ultrareview [PR or branch]** | Run the deep cloud review flow. /code-review ultra is the preferred form. |
+| **/web-setup** | Connect GitHub credentials for Claude Code on the web. |
 
-Skills and slash commands can set `disallowed-tools` in frontmatter to remove tools while that workflow is active.
+### Remote and Cross-Device Commands
 
-On Windows, macOS, and Linux, `ListAgents` can discover other Claude Code sessions and `SendMessage` can contact them across machines. `ListAgents` and `/list-agents` also include live teammates. Type `@` in the prompt to mention a live session by name. `/config` controls whether inbound messages are accepted, held, or refused. Sessions running with bypassed permissions hold inbound messages for approval by default. The optional `notify_when_idle` request asks a recipient session to send one notice when it next goes idle; it is a one-shot option with no polling.
+Use these commands for desktop, browser, mobile, Remote Control, cloud environments, artifacts, voice, and web-session handoff.
 
-### Work Remotely or Across Devices
+| Command | What it does |
+| --- | --- |
+| **/artifacts** | List, attach, open, or copy links to available artifacts. |
+| **/background [prompt]** | Detach the current session and keep it running as a background agent. Alias: /bg. |
+| **/chrome** | Configure Claude in Chrome integration. |
+| **/desktop** | Continue the current session in the Claude Code Desktop app. Alias: /app. |
+| **/design [brief]** | Create UI or graphic design artboards and publish them as an artifact where available. |
+| **/design-login** | Authorize access used by design-system synchronization. |
+| **/design-sync [hint]** | Sync a React design system for use with Claude Design. |
+| **/install-slack-app** | Open the Slack app installation flow. |
+| **/mobile** | Show a QR code for the Claude mobile app. Aliases: /ios, /android. |
+| **/remote-control** | Make the local session available from claude.ai or the Claude app through Remote Control. Alias: **/rc**. |
+| **/remote-env** | Choose the default environment for cloud agents. |
+| **/schedule [description]** | Create, update, list, or run cloud routines. Alias: /routines. |
+| **/teleport** | Pull a Claude Code web session and its conversation into the local terminal. Alias: **/tp**. |
+| **/voice [hold|tap|off]** | Turn voice dictation on, choose hold/tap behavior, or turn it off. |
+| **/web-setup** | Connect GitHub credentials for Claude Code on the web. |
 
-| Command | Purpose | Status |
-|---|---|---|
-| `/chrome` | Open Chrome integration | Public, availability varies |
-| `/desktop` | Hand off to the desktop app | Public |
-| `/ide` | Open or manage IDE integration, including Devin Desktop where available | Public |
-| `/mobile` | Mobile integration or handoff | Leak-based |
-| `/oauth-refresh` | Refresh OAuth tokens | Leak-based |
-| `/onboarding` | Start first-run onboarding | Leak-based |
-| `/rc` | Start Remote Control | Public |
-| `/remote-control` | Full Remote Control command | Public |
-| `/remote-env` | Configure remote environments | Public |
-| `/remote-setup` | Set up a remote session | Leak-based |
-| `/schedule` | Manage cloud scheduled tasks | Public |
-| `/teleport` | Transfer or bridge sessions | Public |
-| `/voice` | Enable push-to-talk voice mode | Public |
+### Usage, Diagnostics, and Account Commands
 
-### Check Usage, Costs, Diagnostics, and UI State
+Use these commands to inspect usage, diagnose problems, report issues, review activity, and manage plan or credit options.
 
-| Command | Purpose | Status |
-|---|---|---|
-| `/cost` | Open cost data plus the current session's prompt-cache hit ratio, misses, re-cached tokens, and warm or cold state | Public alias / shortcut |
-| `/stats` | Shortcut to the stats tab inside `/usage` | Public alias / shortcut |
-| `/usage` | Show limits, quota usage, costs, category breakdowns, and per-loop data; Claude apps gateways with spend limits also show a Spend limit bar | Public |
-| `/usage-credits` | View usage credits or request a higher limit when the organization supports it; `/extra-usage` remains an alias | Public |
-| `/ant-trace` | Internal tracing | Internal / leak-based |
-| `/autofix-pr` | Auto-fix PR issues | Internal / leak-based |
-| `/backfill-sessions` | Backfill session data | Internal / leak-based |
-| `/break-cache` | Invalidate caches | Internal / leak-based |
-| `/ctx_viz` | Debug context visualization | Internal / leak-based |
-| `/debug-tool-call` | Debug a tool call | Internal / leak-based |
-| `/good-claude` | Easter egg command | Leak-based |
-| `/heapdump` | Dump heap for memory analysis | Internal / leak-based |
-| `/mock-limits` | Mock rate limits | Internal / leak-based |
-| `/perf-issue` | Report a performance issue | Internal / leak-based |
-| `/reset-limits` | Reset rate limits | Internal / leak-based |
-| `/statusline` | Customize the status line | Leak-based |
-| `/stickers` | Easter egg or promo command | Public but non-essential |
-| `/thinkback` | Replay or analyze thinking | Internal / leak-based |
-| `/thinkback-play` | Animated thinking replay | Internal / leak-based |
-| `/upgrade` | Run upgrade flow | Leak-based |
-| `/version` | Show Claude Code version | Leak-based |
-| `/x402` | x402 payment-protocol integration | Internal / leak-based |
-| `/buddy` | Temporary April 1st easter egg | Limited / non-essential |
+| Command | What it does |
+| --- | --- |
+| **/bug [report]** | Report a bug or share selected session context. Alias: /share. |
+| **/cost** | Open the Usage view. Alias of /usage. |
+| **/debug [description]** | Enable session debug logging and investigate a runtime problem. |
+| **/doctor** | Run a setup checkup for installation, settings, hooks, skills, plugins, MCP servers, and context overhead, with fixes offered where available. |
+| **/feedback [report]** | Send product feedback or review queued feedback drafts. |
+| **/heapdump** | Write heap diagnostics for investigating high memory use. |
+| **/insights** | Generate an HTML report from recent local Claude Code usage. |
+| **/passes** | Share a free week of Claude Code with friends when the account is eligible. |
+| **/powerup** | Open interactive lessons for Claude Code features. |
+| **/rate-limit-options** | Show options for continuing when a Claude.ai usage limit blocks a request. |
+| **/recap** | Generate a one-line summary of the current session. |
+| **/release-notes** | Open the interactive Claude Code changelog. |
+| **/stats** | Open the Stats tab in /usage. |
+| **/usage** | Show session cost, plan usage limits, and activity statistics; **/cost** and **/stats** open views within the same usage surface. |
+| **/usage-credits** | Open or request usage-credit settings when a limit is reached. |
 
----
+### Interface and Utility Commands
 
-## A-Z Slash Command Index
+These commands control terminal presentation, navigation, and general session utilities.
 
-| Command | Short meaning | Type |
-|---|---|---|
-| `/add-dir <path>` | Add another directory to scope | Public |
-| `/advisor` | Architecture or design advice | Leak-based |
-| `/agents` | Open the in-session subagent manager and custom-agent library | Public |
-| `/ant-trace` | Internal tracing | Internal |
-| `/autofix-pr` | Auto-fix PR issues | Internal / leak-based |
-| `/backfill-sessions` | Backfill session data | Internal / leak-based |
-| `/batch` | Apply one change across many files | Public / workflow |
-| `/branch [name]` | Branch or fork the conversation/workflow | Public |
-| `/break-cache` | Invalidate caches | Internal / leak-based |
-| `/bridge` | Manage IDE or bridge sessions | Leak-based |
-| `/bridge-kick` | Force-restart a bridge connection | Leak-based |
-| `/brief` | Brief output mode | Leak-based |
-| `/btw <question>` | Ask a side question with minimal context | Public |
-| `/buddy` | Temporary April 1st command | Limited / non-essential |
-| `/bug [report]` | Report a bug; alias of `/feedback` | Public alias |
-| `/bughunter` | Bug-finding workflow | Leak-based |
-| `/cd <path>` | Move the session and load the new directory's project configuration | Public |
-| `/checkup` | Alias of `/doctor` | Public alias |
-| `/chrome` | Open Chrome integration | Public |
-| `/claude-api` | Load Claude API or SDK guidance; includes `upgrade` and `cost-optimize` workflows | Built-in skill |
-| `/clear` | Clear conversation context | Public |
-| `/code-review [level] [PR#]` | Review the current diff or a PR; `ultra` runs a deep cloud review | Public |
-| `/color [color]` | Change session accent color | Public |
-| `/commit` | Generate a commit message and commit changes | Community |
-| `/commit-push-pr` | Commit, push, and create a PR | Leak-based / community |
-| `/compact [focus]` | Compact context with optional focus instructions | Public |
-| `/config` | Open settings, including keybinding flavor, spellcheck, output style, and usage-limit continuation; supports `/config key=value` | Public |
-| `/context` | Show context usage breakdown | Public |
-| `/copy [N]` | Copy latest or selected response | Public |
-| `/cost` | Open cost information inside `/usage` | Public alias / shortcut |
-| `/ctx_viz` | Debug context visualization | Internal / leak-based |
-| `/dataviz` | Load chart and dashboard design guidance | Built-in skill |
-| `/debug [desc]` | Run a debugging workflow | Public |
-| `/debug-tool-call` | Debug a tool call | Internal / leak-based |
-| `/desktop` | Hand off to desktop app | Public |
-| `/diff` | Open diff viewer | Public |
-| `/doctor` | Run diagnostics | Public |
-| `/effort [low\|medium\|high\|xhigh\|max\|auto]` | Set reasoning effort | Public |
-| `/env` | Inspect environment settings | Leak-based |
-| `/exit` | Exit Claude Code | Public |
-| `/export [filename]` | Export conversation | Public |
-| `/fast [on\|off]` | Toggle fast mode | Public |
-| `/feedback [report]` | Send feedback or review a Claude-drafted report | Public |
-| `/files` | List files in context | Leak-based |
-| `/fix-pipeline` | Repair failing CI pipelines | Community |
-| `/focus` | Toggle Focus view | Public |
-| `/fork` | Copy the conversation into a new background session and worktree | Public |
-| `/goal` | Set a completion condition; idle goals get up to three background check-ins until the next message | Public |
-| `/good-claude` | Easter egg command | Leak-based |
-| `/heapdump` | Dump heap for memory analysis | Internal / leak-based |
-| `/help` | Show help and available commands | Public |
-| `/hooks` | Manage hook scripts and events | Public |
-| `/ide` | Open or manage IDE integration | Public |
-| `/init` | Create `CLAUDE.md` | Public |
-| `/init-verifiers` | Set up verifier hooks | Leak-based |
-| `/install` | Install/update flow | Internal / leak-based |
-| `/install-github-app` | Set up GitHub App integration | Public |
-| `/insights` | Show usage or session insights | Public |
-| `/issue` | File a GitHub issue | Leak-based |
-| `/keybindings` | Edit keyboard shortcuts | Public |
-| `/less-permission-prompts` | Propose safe read-only allowlist entries | Built-in skill |
-| `/lint` | Run linting commands | Community |
-| `/login` | Sign in, including keyless Anthropic Console account authentication | Public |
-| `/logout` | Sign out | Public |
-| `/loop [interval]` | Run a recurring or self-paced autonomous workflow | Public / workflow |
-| `/mcp` | Manage MCP servers, authentication, and dynamic headers | Public |
-| `/mcp__[server]__[prompt] [args]` | Dynamic MCP prompt command | MCP-generated |
-| `/memory` | Open memory files | Public |
-| `/merge-to-main` | Merge to main | Community |
-| `/mobile` | Mobile integration or handoff | Leak-based |
-| `/mock-limits` | Mock rate limits | Internal / leak-based |
-| `/model [model]` | Switch active model; `ANTHROPIC_DEFAULT_MODEL` sets the startup model and `modelPicker` can curate the picker | Public |
-| `/oauth-refresh` | Refresh OAuth tokens | Leak-based |
-| `/onboarding` | First-run onboarding | Leak-based |
-| `/output-style [style]` | Change response style, including the built-in `Concise` style | Public |
-| `/passes` | Multi-pass workflow | Leak-based |
-| `/perf-issue` | Report performance issue | Internal / leak-based |
-| `/permissions` | Manage permission rules, recent denials, and Auto mode classifier rules | Public |
-| `/plan [desc]` | Enter plan mode | Public |
-| `/plugin` | Manage plugins | Public |
-| `/plugin list` | List installed plugins | Public |
-| `/powerup` | Open interactive lessons | Public |
-| `/pr` | Create a pull request | Community |
-| `/pr-comments [PR]` | Fetch PR review comments | Public |
-| `/pr_comments` | Internal form of `/pr-comments` | Internal |
-| `/privacy-settings` | Open privacy settings | Leak-based |
-| `/push` | Push current branch | Community |
-| `/rate-limit-options` | Open rate-limit options | Leak-based |
-| `/rc` | Start Remote Control | Public |
-| `/release-notes` | View release notes | Public |
-| `/reload-plugins` | Reload plugins | Public |
-| `/reload-skills` | Re-scan skill directories | Public |
-| `/remote-control` | Start or manage Remote Control | Public |
-| `/remote-env` | Configure remote environments | Public |
-| `/remote-setup` | Set up remote session | Leak-based |
-| `/rename [name]` | Rename current session | Public |
-| `/reset-limits` | Reset rate limits | Internal / leak-based |
-| `/resume [session]` | Resume previous session | Public |
-| `/review` | Alias of `/code-review` for the current diff or a PR | Public alias |
-| `/rewind` | Rewind to an earlier checkpoint, including before `/clear` | Public |
-| `/sandbox` | Open sandbox controls and credential/network protections | Public |
-| `/sandbox-toggle` | Internal sandbox toggle | Internal |
-| `/schedule` | Manage scheduled tasks | Public |
-| `/scroll-speed` | Tune mouse wheel scroll speed | Public |
-| `/security-review` | Run security-focused review | Public |
-| `/session` | Session management UI | Leak-based |
-| `/share` | Share the conversation; alias of `/feedback` | Public alias |
-| `/simplify` | Run cleanup-only review and apply fixes | Public |
-| `/skills` | List skills | Public |
-| `/stats` | Open stats tab inside `/usage` | Public alias / shortcut |
-| `/status` | Show session, web GitHub connection, and managed-setting source status | Public |
-| `/statusline` | Customize status line | Leak-based |
-| `/stickers` | Easter egg or promo command | Public but non-essential |
-| `/summary` | Generate session summary | Leak-based |
-| `/subtask <task>` | Start a forked subagent with the current conversation context | Public |
-| `/tag` | Legacy tag command | Removed |
-| `/tasks` | List background tasks with each subagent's model and effort | Public |
-| `/team-onboarding` | Generate teammate onboarding guide | Public |
-| `/teleport` | Bridge or transfer sessions | Public |
-| `/terminal-setup` | Configure terminal integration | Public |
-| `/terminalSetup` | Internal form of `/terminal-setup` | Internal |
-| `/theme` | Change or create themes | Public |
-| `/thinkback` | Replay or analyze thinking | Internal / leak-based |
-| `/thinkback-play` | Animated thinking replay | Internal / leak-based |
-| `/tui` | Switch terminal UI mode | Public |
-| `/ultraplan` | Old detailed planning workflow | Removed |
-| `/ultrareview [PR#]` | Comprehensive cloud code review | Public / workflow |
-| `/upgrade` | Upgrade flow | Leak-based |
-| `/usage` | Show limits, costs, usage breakdowns, and per-loop run and token data | Public |
-| `/usage-credits` | View credits or request a higher supported organization limit | Public |
-| `/version` | Show version | Leak-based |
-| `/vim` | Old Vim-mode command | Removed |
-| `/vitest` | Run Vitest workflows | Community |
-| `/voice` | Enable push-to-talk voice mode | Public |
-| `/workflows` | View dynamic workflow runs | Public |
-| `/x402` | x402 integration | Internal / leak-based |
+| Command | What it does |
+| --- | --- |
+| **/color [color|default]** | Change the prompt bar color for the current session. |
+| **/exit** | Exit Claude Code; in an attached background session, detach without stopping it. Alias: /quit. |
+| **/focus** | Toggle the compact Focus view in fullscreen mode. |
+| **/keybindings** | Open the custom keyboard-shortcuts configuration file. |
+| **/radio** | Open Claude FM lo-fi radio. |
+| **/scroll-speed** | Adjust mouse-wheel speed in fullscreen mode. |
+| **/statusline** | Configure the custom status line. |
+| **/stickers** | Open the Claude Code sticker-ordering flow. |
+| **/terminal-setup** | Configure supported terminals for multiline input and related integration settings. |
+| **/theme** | Choose or create a terminal color theme. |
+| **/tui [default|fullscreen]** | Switch between the standard and fullscreen terminal renderers. |
 
----
+## MCP Slash Commands and Custom Commands
 
-## MCP Commands
+The built-in `/mcp` command manages MCP server connections. MCP servers can also publish prompts that appear as slash commands after the server is connected.
 
-MCP commands are generated dynamically from connected servers.
+### MCP Prompt Command Pattern
 
-Pattern:
-
-```text
+```
 /mcp__[server]__[prompt] [args]
 ```
 
 Examples:
 
-```text
+```
 /mcp__github__list_prs
-/mcp__github__create_pr
-/mcp__jira__create_issue
-/mcp__linear__get_sprint
+/mcp__github__pr_review 456
+/mcp__jira__create_issue "Bug in login flow" high
 ```
 
-Use `/mcp` to connect servers and inspect the commands they expose. Reconnect picks up `.mcp.json` edits without restarting Claude Code. Newer builds also show startup notices when MCP servers need authentication. For HTTP, SSE, or WebSocket servers, `headersHelper` can generate short-lived request headers at connection time. Project-scoped helpers run only after workspace trust is accepted, and helpers from project, plugin, or agent configuration do not inherit credential environment variables.
+MCP prompt commands are discovered dynamically, so there is no fixed universal A-Z list for them. Their names depend on the connected servers and the prompts those servers expose.
 
----
+### Skills, Plugins, and User Commands
 
-## CLI Commands and Flags
+Skills, plugins, and local project configuration can contribute additional slash commands. Type `/` to search the combined command menu in your current installation. Use `/skills` to inspect skills, `/plugin` for plugins, and `/reload-skills` or `/reload-plugins` after changing them during a session.
 
-### Core CLI Commands
+Project and personal commands can be stored as Markdown-based skills or command definitions under Claude Code configuration directories. These custom entries are intentionally excluded from the fixed A-Z table because each installation can have a different set.
 
-| Command | Purpose |
-|---|---|
-| `claude` | Start interactive Claude Code |
-| `claude agents` | Open agent view: running, blocked, and completed Claude Code sessions |
-| `claude agents --json` | List active Claude Code sessions as JSON, including blocked and just-dispatched sessions, with `id` and `state` fields |
-| `claude agents --json --all` | Include completed sessions in the JSON agent list |
-| `claude attach <id>` | Attach this terminal to a background session |
-| `claude logs <id>` | Print recent output from a background session |
-| `claude stop <id>` | Stop a background session; `claude kill` is an alias |
-| `claude respawn <id>` | Restart a running or stopped session and resume its saved conversation |
-| `claude respawn --all` | Restart every running background session on the current Claude Code binary |
-| `claude rm <id>` | Remove a session when its Claude-created worktree is safe to remove; keep its transcript available through `claude --resume` |
-| `claude agents` then `! <command>` | Start a shell command as a background session you can attach to or detach from |
-| `claude "prompt"` | Start with an initial prompt |
-| `claude -p "prompt"` | Run a non-interactive single prompt |
-| `claude --bg --exec '<command>'` | Run a shell command as a background Claude session |
-| `claude -c` | Continue the last conversation |
-| `claude -r "name"` | Resume a named session |
-| `claude remote-control --continue` | Resume the most recent Remote Control server session for the current directory |
-| `claude --teleport <session-id>` | Continue a cloud session in the matching local repository |
-| `claude auto-mode reset [--yes]` | Restore the default auto-mode configuration |
-| `claude self-hosted-runner` | Register a machine or container for Team and Enterprise web, mobile, and desktop sessions |
-| `claude self-hosted-runner --client-label <label>` | Override the label registered by the runner; the default is the hostname |
-| `claude self-hosted-runner --defer-shutdown-max-min <minutes>` | On SIGTERM, keep attached sessions serving, park remaining work after the timeout, then exit |
-| `claude self-hosted-runner --proxy-authorization-command <command>` / `--proxy-authorization-file <path>` | Supply a fresh `Proxy-Authorization` header for each egress connection |
-| `claude update` | Update Claude Code |
-| `claude mcp list` | List MCP servers; disabled servers appear as `⊘ Disabled` without a health check |
-| `claude mcp get <name>` | Show details for one MCP server; disabled servers appear as `⊘ Disabled` without a health check |
-| `claude mcp login <name>` | Authenticate an MCP server from the CLI; supports `--no-browser` for SSH or headless use |
-| `claude mcp logout <name>` | Sign out an MCP server from the CLI |
-| `claude mcp serve` | Run Claude Code as an MCP server |
-| `claude plugin init <name>` | Scaffold a new plugin in `.claude/skills` |
-| `claude plugin install <name> [-y]` | Install a marketplace plugin; print a command-source helper first and use `-y`/`--yes` to skip its confirmation prompt |
-| `claude plugin update <name> [-y]` | Update a plugin; use `-y`/`--yes` to skip the command-source confirmation prompt |
-| `claude plugin details <name>` | Show plugin components and projected per-session token cost |
-| `claude plugin tag` | Create release git tags for plugins with version validation |
-| `claude plugin marketplace remove <name> --scope user\|project\|local` | Remove a marketplace from a selected configuration scope |
+## Claude Code CLI Commands
 
-### Important Flags
+These terminal commands cover the current Claude Code CLI entry points and management subcommands. They run from your shell, not from the in-session slash-command menu.
 
-| Flag | Purpose |
-|---|---|
-| `--add-dir` | Add an extra directory to scope; network paths are refused, so use a mapped drive letter on Windows |
-| `--agent` | Select an agent |
-| `--allowedTools` | Pre-approve tools |
-| `--ax-screen-reader` | Use plain-text rendering for screen readers |
-| `--bare` | Minimal headless mode |
-| `--channels` | Enable channel/MCP push relay |
-| `--chrome` | Enable Chrome integration mode |
-| `--console` | Use Anthropic Console auth |
-| `--dangerously-skip-permissions` | Skip permission prompts |
-| `--effort` | Set reasoning effort for the current session without changing the saved per-model default |
-| `--exclude-dynamic-system-prompt-sections` | Improve print-mode cross-user prompt caching |
-| `--fallback-model` | Continue the session with a configured fallback when the primary model is unavailable |
-| `--forward-subagent-text` | Include subagent text and thinking in stream-json output |
-| `--json-schema` | Request structured output; recent builds avoid repeat `StructuredOutput` calls after a valid result |
-| `--max-budget-usd` | Cap spend |
-| `--max-turns` | Limit turns |
-| `--mcp-config` | Use a specific MCP config for dispatched background sessions |
-| `--model` | Set the model |
-| `-n`, `--name` | Name the session |
-| `--output-format` | Set machine-readable output |
-| `--permission-mode` | Set permission behavior; `manual` is the default mode name |
-| `--plugin-dir` | Use a plugin directory for dispatched background sessions |
-| `--plugin-url <url>` | Fetch a plugin `.zip` archive from a URL for the current session |
-| `-r` | Resume a session |
-| `--remote` | Start a remote/web-backed session |
-| `--remote-control-session-name-prefix` | Prefix Remote Control session names |
-| `--restricted` | Start a shared-machine or evaluation session without command/code tools or WebFetch, confine file tools to working directories, load only managed settings and `--settings`, and refuse `bypassPermissions` |
-| `--safe-mode` | Start Claude Code with customizations disabled for troubleshooting |
-| `--settings` | Load settings for dispatched background sessions |
-| `--tools` | Explicitly allow tools; `Grep` and `Glob` now map to the dedicated native search tools on builds that include embedded search |
-| `--transport http\|stdio\|sse` | Select MCP transport |
-| `--verbose` | Enable verbose output |
-| `-w`, `--worktree` | Use an isolated git worktree; accepts a name, GitHub PR number or URL, or GitLab MR URL |
+| CLI command | What it does |
+| --- | --- |
+| **claude** | Start an interactive Claude Code session. |
+| **claude "query"** | Start an interactive session with an initial prompt. |
+| **claude -p "query"** | Run one non-interactive prompt and exit. |
+| **cat file | claude -p "query"** | Pipe file content into a non-interactive prompt. |
+| **claude -c** | Continue the most recent conversation for the current directory. |
+| **claude -c -p "query"** | Continue the latest conversation non-interactively. |
+| **claude -r "<session>" "query"** | Resume a named or identified session with an optional prompt. |
+| **claude update** | Update Claude Code. |
+| **claude gateway --config <file>** | Start the self-hosted Claude apps gateway with a gateway configuration. |
+| **claude install [version]** | Install or reinstall the native binary, optionally choosing a release channel or version. |
+| **claude auth login** | Sign in; auth-specific flags can select Console or SSO flows. |
+| **claude auth logout** | Sign out from the Anthropic account. |
+| **claude auth status** | Print authentication status. |
+| **claude agents** | Open agent view or print background-session data with its flags. |
+| **claude attach <id>** | Attach the terminal to a background session. |
+| **claude auto-mode defaults** | Print built-in auto-mode classifier rules. |
+| **claude auto-mode config** | Print the effective auto-mode configuration. |
+| **claude auto-mode reset** | Remove the user-level auto-mode configuration and restore defaults. |
+| **claude daemon status** | Show background-session supervisor status. |
+| **claude daemon stop --any** | Stop the on-demand supervisor and, unless preserved, its hosted sessions. |
+| **claude doctor** | Print read-only installation and settings diagnostics. |
+| **claude import [codex|gemini]** | Start an import flow for supported coding-agent configuration. |
+| **claude logs <id>** | Print recent output from a background session. |
+| **claude mcp** | Open MCP configuration commands. |
+| **claude mcp add [options] <name> ...** | Add an MCP server. |
+| **claude mcp add-json <name> '<json>'** | Add an MCP server from JSON configuration. |
+| **claude mcp add-from-claude-desktop** | Import MCP servers from Claude Desktop where supported. |
+| **claude mcp get <name>** | Show one configured MCP server. |
+| **claude mcp list** | List configured MCP servers. |
+| **claude mcp login <name>** | Authenticate a configured MCP server from the terminal. |
+| **claude mcp logout <name>** | Clear stored OAuth credentials for an MCP server. |
+| **claude mcp remove <name>** | Remove an MCP server. |
+| **claude mcp reset-project-choices** | Reset approvals for project-scoped MCP servers. |
+| **claude mcp serve** | Run Claude Code itself as a stdio MCP server. |
+| **claude plugin** | Manage Claude Code plugins. Alias: claude plugins. |
+| **claude project purge [path]** | Delete local Claude Code state for one project or selected projects. |
+| **claude remote-control** | Start a Remote Control server without a local interactive session. |
+| **claude respawn <id>** | Restart a background session with its conversation intact. |
+| **claude rm <id>** | Remove a background session from agent view while keeping its transcript. |
+| **claude self-hosted-runner** | Start or manage a self-hosted environment runner. |
+| **claude setup-token** | Generate a long-lived OAuth token for CI or scripts. |
+| **claude stop <id>** | Stop a background session. Alias: claude kill. |
+| **claude ultrareview [target]** | Run a deep cloud code review non-interactively. |
 
----
+## Claude Code CLI Flags
 
-## Environment Variables
+These are the current top-level Claude Code flags. Some flags only apply to print mode, cloud dispatch, background sessions, or another specific CLI mode.
 
-| Variable | What it does |
-|---|---|
-| `ANTHROPIC_DEFAULT_MODEL` | Sets the model used when new sessions start; a `/model` selection still overrides it and persists across restarts |
-| `CLAUDE_CODE_CERT_STORE=bundled` | Uses bundled CAs only instead of the OS certificate store |
-| `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS` | Hides bundled skills, workflows, and built-in slash commands from the model |
-| `CLAUDE_CODE_ENABLE_FEEDBACK_SURVEY_FOR_OTEL` | Re-enables the session quality survey for enterprises capturing responses through OpenTelemetry |
-| `CLAUDE_CODE_DISABLE_BG_SHELL_PRESSURE_REAP=1` | Disables automatic memory-pressure cleanup for idle background shell commands |
-| `CLAUDE_CODE_DISABLE_1M_CONTEXT=1` | Holds models with a native 1M window to 200K through auto-compaction |
-| `CLAUDE_CODE_DISABLE_MOUSE_CLICKS=1` | Disables click, drag, and hover in fullscreen mode while keeping wheel scrolling |
-| `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` | Restores the legacy task-tracking tools on newer models that no longer expose them by default |
-| `CLAUDE_CODE_FORK_SUBAGENT` | Sets fork mode: `1` enables it in print mode and the Agent SDK; `0` disables it everywhere |
-| `CLAUDE_CODE_SUBAGENT_MODEL` | Sets the default subagent model; agent frontmatter and explicit per-spawn models take precedence |
-| `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` | Forces every subagent to use `CLAUDE_CODE_SUBAGENT_MODEL`, or the main model when it is unset |
-| `CLAUDE_CODE_FORWARD_SUBAGENT_TEXT=1` | Includes subagent text and thinking in stream-json output |
-| `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` | Sets how long background work can keep an active `/goal` waiting; default is 30 minutes and `0` disables check-ins |
-| `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` | Sets the concurrent subagent cap; the default is 20 |
-| `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` | Sets nested subagent depth; the default is 3 |
-| `CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION` | Sets the per-session WebSearch limit; the default is 200 |
-| `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS` | Sets when long MCP calls move to the background, or disables automatic backgrounding |
-| `CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT` | Overrides the idle timeout for remote MCP tool calls that stop responding |
-| `CLAUDE_CODE_TOOL_MEMORY_LIMIT` | Sets an opt-in Linux memory-cgroup limit for Bash tool commands |
-| `CLAUDE_CODE_WEBFETCH_CACHE_TTL_MS` | Sets the WebFetch session URL cache lifetime in milliseconds; the default is 15 minutes |
-| `CLAUDE_CODE_WORKFLOW_PREFIX_STAGGER_MS=0` | Disables the default stagger between same-prefix sibling agents in workflow fan-outs |
-| `CLAUDE_CLIENT_PRESENCE_FILE` | Points to a local marker file that suppresses mobile push notifications while you are at the machine |
-| `CLAUDE_CODE_PERFORCE_MODE=1` | Makes Edit/Write/NotebookEdit fail on read-only Perforce files with a `p4 edit` hint |
-| `CLAUDE_CODE_SAFE_MODE` | Starts Claude Code with customizations disabled for troubleshooting |
-| `CLAUDE_CODE_SCRIPT_CAPS` | Limits per-session script invocations |
-| `CLAUDE_CODE_USE_MANTLE=1` | Enables Amazon Bedrock powered by Mantle |
-| `DISABLE_UPDATES` | Completely blocks all update paths, including manual `claude update`; stricter than `DISABLE_AUTOUPDATER` |
-| `CLAUDE_CODE_SESSION_ID` | Session ID |
-| `CLAUDE_CODE_USE_POWERSHELL_TOOL` | Opts into or out of the PowerShell tool rollout; on Linux and macOS, set it to `1` when `pwsh` is available |
-| `CLAUDE_CODE_FORCE_SYNC_OUTPUT=1` | Forces synchronized output on terminals where auto-detection misses it, such as Emacs eat |
-| `CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1` | Opts out of the fullscreen alternate-screen renderer and keeps the conversation in the terminal's native scrollback |
-| `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE` | Lets Homebrew or WinGet installations run package-manager upgrades in the background, then prompt for restart |
-| `CLAUDE_CODE_PROJECT_DIR_NAME` | With `CLAUDE_CONFIG_DIR`, chooses the directory name used for project transcripts and auto memory |
-| `CLAUDE_CODE_RESTRICTED=1` | Enables the same restricted mode as `--restricted` |
-| `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` | Enables gateway `/v1/models` discovery for the `/model` picker |
-| `OTEL_LOG_ASSISTANT_RESPONSES` | Controls assistant response text in `claude_code.assistant_response` OpenTelemetry logs; when unset, it follows `OTEL_LOG_USER_PROMPTS`; set `0` to keep prompts-only logging or `1` to log response content |
-| `OTEL_LOG_TOOL_DETAILS=1` | Adds tool parameters such as Bash commands and MCP or skill names to tool decision telemetry events |
-| `OTEL_RESOURCE_ATTRIBUTES` | Adds custom labels to OpenTelemetry metric datapoints, such as team or repository labels |
+| Flag | What it does |
+| --- | --- |
+| **--add-dir** | Add one or more working directories to the session. |
+| **--advisor <model>** | Choose an advisor model for the current session. |
+| **--agent** | Start with a specific custom agent. |
+| **--agents** | Define custom subagents from JSON at launch. |
+| **--allow-dangerously-skip-permissions** | Make bypass-permissions mode available in the permission-mode cycle. |
+| **--allowedTools, --allowed-tools** | Pre-approve matching tools or tool calls. |
+| **--append-subagent-system-prompt** | Append text to subagent system prompts in non-interactive runs. |
+| **--append-subagent-system-prompt-file** | Read appended subagent system-prompt text from a file. |
+| **--append-system-prompt** | Append text to Claude Code's default system prompt. |
+| **--append-system-prompt-file** | Append system-prompt text from a file. |
+| **--autocompact <auto|tokens>** | Set the auto-compact window for this invocation. |
+| **--ax-screen-reader** | Use screen-reader friendly terminal output. |
+| **--bare** | Start with most project and user customizations skipped. |
+| **--betas** | Send additional Anthropic beta headers for API-key sessions. |
+| **--bg, --background** | Start the session as a background agent. |
+| **--channels** | Enable selected MCP channel sources for the session. |
+| **--chrome** | Enable Chrome integration. |
+| **--cloud** | Create a cloud session or send a message to an existing web session. |
+| **--continue, -c** | Continue the most recent eligible conversation. |
+| **--dangerously-load-development-channels** | Load development channels that are not on the approved allowlist. |
+| **--dangerously-skip-permissions** | Start with permission prompts bypassed. |
+| **--debug** | Enable debug mode, optionally filtering debug categories. |
+| **--debug-file <path>** | Write debug output to a specific file. |
+| **--disable-slash-commands** | Disable commands and skills for the session. |
+| **--disallowedTools, --disallowed-tools** | Deny matching tools or tool calls. |
+| **--effort** | Choose the reasoning effort level for the session. |
+| **--environment <environment-id>** | Dispatch a cloud session to a self-hosted environment. |
+| **--exclude-dynamic-system-prompt-sections** | Move machine-specific system-prompt sections into the first user message. |
+| **--exec** | Run a shell command as a PTY-backed background job with --bg. |
+| **--fallback-model** | Set one or more fallback models. |
+| **--fork-session** | Create a new session ID when resuming or continuing. |
+| **--forward-subagent-text** | Include subagent text and thinking in stream-json output. |
+| **--from-pr** | Open sessions associated with a pull request or merge request. |
+| **--ide** | Connect to an available IDE at startup. |
+| **--init** | Run Setup hooks with the init matcher before a print-mode session. |
+| **--init-only** | Run setup and SessionStart hooks, then exit. |
+| **--include-hook-events** | Include supported hook lifecycle events in stream-json output. |
+| **--include-partial-messages** | Include partial streaming events in stream-json output. |
+| **--input-format** | Choose text or stream-json input for print mode. |
+| **--json-schema** | Require final structured output that matches a JSON Schema. |
+| **--maintenance** | Run Setup hooks with the maintenance matcher before print mode. |
+| **--max-budget-usd** | Cap API spend for a print-mode run. |
+| **--max-turns** | Cap agentic turns in print mode. |
+| **--mcp-config** | Load MCP configuration from JSON files or inline JSON. |
+| **--model** | Choose the model for the current invocation. |
+| **--name, -n** | Assign a display name to the session. |
+| **--no-chrome** | Disable Chrome integration for the session. |
+| **--no-session-persistence** | Do not save the print-mode session to disk. |
+| **--output-format** | Choose text, json, or stream-json output in print mode. |
+| **--permission-mode** | Choose the starting permission mode. |
+| **--permission-prompt-tool** | Delegate print-mode permission prompts to an MCP tool. |
+| **--permission-prompts** | Choose whether a host can answer print-mode permission prompts. |
+| **--plugin-dir** | Load a plugin directory or zip archive for this session. |
+| **--plugin-url** | Load a plugin zip archive from a URL for this session. |
+| **--print, -p** | Run without the interactive terminal UI. |
+| **--prompt-suggestions** | Emit predicted next-prompt messages in compatible stream-json runs. |
+| **--ref <branch>** | Choose the source ref for a self-hosted environment dispatch. |
+| **--remote** | Deprecated alias for --cloud that remains accepted. |
+| **--remote-control, --rc** | Start an interactive session with Remote Control enabled. |
+| **--remote-control-session-name-prefix <prefix>** | Prefix automatically generated Remote Control session names. |
+| **--replay-user-messages** | Echo stream-json input messages back to stdout. |
+| **--restricted** | Start with a reduced, evaluation-oriented tool and settings surface. |
+| **--resume, -r** | Resume a specific session or open the resume picker. |
+| **--safe-mode** | Start with customizations disabled for troubleshooting. |
+| **--session-id** | Use a specific UUID as the session ID. |
+| **--setting-sources** | Choose which user, project, and local setting sources load. |
+| **--settings** | Load session overrides from a JSON file or inline JSON. |
+| **--strict-mcp-config** | Ignore MCP configurations outside --mcp-config. |
+| **--system-prompt** | Replace the default system prompt with supplied text. |
+| **--system-prompt-file** | Replace the default system prompt with file contents. |
+| **--teleport** | Resume a Claude Code web session locally. |
+| **--teammate-mode** | Choose how agent-team teammates are displayed. |
+| **--tmux** | Create a tmux or compatible pane layout for a worktree session. |
+| **--tools** | Restrict which built-in tools Claude can use. |
+| **--verbose** | Show verbose turn-by-turn output. |
+| **--version, -v** | Print the Claude Code version. |
+| **--worktree, -w** | Start Claude Code in an isolated Git worktree. |
 
-Remote Control, `/schedule`, Claude.ai MCP connectors, and notification preferences are disabled when `ANTHROPIC_API_KEY`, `apiKeyHelper`, or `ANTHROPIC_AUTH_TOKEN` is set.
+### Removed and Replaced CLI Flags
 
----
+| Old flag | Use now |
+| --- | --- |
+| **--enable-auto-mode** | Use **--permission-mode auto**. The older flag was removed. |
 
-## Real Workflows
+## Claude Code Keyboard Shortcuts
+
+Keyboard behavior can vary by terminal and operating system. The tables below keep the shortcuts grouped by where they are used.
+
+### General Keyboard Shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| **Ctrl+C** | Interrupt a running operation; with no operation running, clear the prompt input. |
+| **Ctrl+X Ctrl+K** | Stop all background subagents in the session after confirmation. |
+| **Ctrl+D** | Exit Claude Code; when input contains text, delete the next character. |
+| **Ctrl+G or Ctrl+X Ctrl+E** | Open the current prompt in the default text editor. |
+| **Ctrl+L** | Redraw the terminal screen without losing the conversation. |
+| **Ctrl+O** | Open or close the transcript viewer. |
+| **Ctrl+R** | Search prompt history in reverse. |
+| **Ctrl+V / Cmd+V / Alt+V** | Paste an image from the clipboard, depending on platform and terminal. |
+| **Ctrl+B** | Move a running Bash command or agent to the background. |
+| **Ctrl+T** | Show or hide Claude's task checklist. |
+| **Ctrl+S** | Stash the current prompt, or restore the stashed prompt when the input is empty. |
+| **Ctrl+Z** | Suspend Claude Code on Unix systems. |
+| **Left / Right arrows** | Move between tabs in dialogs and menus. |
+| **Tab** | Accept autocomplete, or open/close a comment field on supported permission prompts. |
+| **Up / Down or Ctrl+P / Ctrl+N** | Move within multiline input, then browse prompt history at the first or last row. |
+| **Esc** | Interrupt Claude or close the current dialog. |
+| **Esc Esc** | Clear and save a draft, or open rewind controls when the input is empty. |
+| **Shift+Tab** | Cycle permission modes; some Windows runtimes use Alt+M. |
+| **Option+P / Alt+P** | Switch model without clearing the prompt. |
+| **Option+T / Alt+T** | Toggle extended thinking where the active model permits it. |
+| **Option+O / Alt+O** | Toggle fast mode. |
+
+### Text Editing Shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| **Ctrl+A** | Move to the start of the current logical line. |
+| **Ctrl+E** | Move to the end of the current logical line. |
+| **Ctrl+K** | Delete from the cursor to the end of the line. |
+| **Ctrl+U** | Delete from the cursor to the start of the line. |
+| **Ctrl+W** | Delete the previous word. |
+| **Ctrl+Y** | Paste text deleted by line or word editing shortcuts. |
+| **Alt+Y** | Cycle through earlier deleted text after Ctrl+Y. |
+| **Alt+B** | Move back one word. |
+| **Alt+F** | Move forward one word. |
+| **Alt+D** | Delete the next word. |
+| **Ctrl+\_ or Ctrl+Shift+-** | Undo the last edit to the prompt input. |
+
+### Multiline Input
+
+| Shortcut | Action |
+| --- | --- |
+| **\ + Enter** | Insert a newline in any terminal. |
+| **Option+Enter** | Insert a newline on macOS terminals configured to send Option as Meta. |
+| **Shift+Enter** | Insert a newline in terminals that expose this key combination. |
+| **Ctrl+J** | Insert a newline without terminal-specific configuration. |
+| **Paste directly** | Insert multiline code, logs, or text as pasted input. |
+
+### Quick Input Commands
+
+| Shortcut | Action |
+| --- | --- |
+| **/ at start** | Open the command and skill menu. |
+| **! at start** | Run a shell command directly and add its output to the session. |
+| **@** | Open file-path autocomplete and, where available, other live-session mentions. |
+| **:** | Open emoji shortcode suggestions. |
+| **? on empty input** | Show or hide the shortcut help panel. |
+
+### Transcript Viewer Shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| **?** | Toggle the transcript-viewer shortcut panel in fullscreen mode. |
+| **{ / }** | Jump to the previous or next user prompt in fullscreen mode. |
+| **Ctrl+E** | Toggle expanded transcript content in the classic renderer. |
+| **[** | Write the conversation into native terminal scrollback in fullscreen mode. |
+| **v** | Open the conversation in the configured external editor. |
+| **q / Ctrl+C / Esc** | Exit transcript view. |
+
+### Voice Input
+
+| Shortcut | Action |
+| --- | --- |
+| **Hold or tap Space** | Record voice input when voice dictation is enabled; tap mode is available through /voice. |
+
+## Claude Code Environment Variables
+
+Claude Code reads environment variables for authentication, model selection, providers, request routing, terminal behavior, MCP, telemetry, automation, and feature controls. The tables below keep the documented variables in the reference rather than selecting only commonly used ones.
+
+<details>
+<summary><strong>Authentication, Models, and Providers</strong></summary>
+
+| Variable | What it controls |
+| --- | --- |
+| **ANTHROPIC\_API\_KEY** | API key used for Anthropic API authentication. |
+| **ANTHROPIC\_AUTH\_TOKEN** | Bearer token used for the Authorization header. |
+| **ANTHROPIC\_AWS\_API\_KEY** | Workspace API key for Claude Platform on AWS. |
+| **ANTHROPIC\_AWS\_BASE\_URL** | Overrides the Claude Platform on AWS endpoint. |
+| **ANTHROPIC\_AWS\_WORKSPACE\_ID** | Sets the Claude Platform on AWS workspace ID. |
+| **ANTHROPIC\_BASE\_URL** | Overrides the Anthropic API base URL for a proxy or gateway. |
+| **ANTHROPIC\_BEDROCK\_BASE\_URL** | Overrides the Amazon Bedrock endpoint. |
+| **ANTHROPIC\_BEDROCK\_MANTLE\_BASE\_URL** | Overrides the Bedrock Mantle endpoint. |
+| **ANTHROPIC\_BEDROCK\_REGION\_PREFIX** | Chooses the preferred cross-region Bedrock inference prefix. |
+| **ANTHROPIC\_BEDROCK\_SERVICE\_TIER** | Sets the Bedrock service tier. |
+| **ANTHROPIC\_BETAS** | Adds Anthropic beta header values to API requests. |
+| **ANTHROPIC\_CUSTOM\_HEADERS** | Adds custom HTTP headers to model requests. |
+| **ANTHROPIC\_CUSTOM\_MODEL\_OPTION** | Adds a custom model ID to the model picker. |
+| **ANTHROPIC\_CUSTOM\_MODEL\_OPTION\_DESCRIPTION** | Sets the model-picker description for the custom model entry. |
+| **ANTHROPIC\_CUSTOM\_MODEL\_OPTION\_NAME** | Sets the model-picker display name for the custom model entry. |
+| **ANTHROPIC\_CUSTOM\_MODEL\_OPTION\_SUPPORTED\_CAPABILITIES** | Declares capabilities supported by the custom model entry. |
+| **ANTHROPIC\_DEFAULT\_FABLE\_MODEL** | Sets the model ID used by the Fable alias. |
+| **ANTHROPIC\_DEFAULT\_FABLE\_MODEL\_DESCRIPTION** | Sets the model-picker description for the pinned Fable model. |
+| **ANTHROPIC\_DEFAULT\_FABLE\_MODEL\_NAME** | Sets the model-picker display name for the pinned Fable model. |
+| **ANTHROPIC\_DEFAULT\_FABLE\_MODEL\_SUPPORTED\_CAPABILITIES** | Declares capabilities supported by the pinned Fable model. |
+| **ANTHROPIC\_DEFAULT\_HAIKU\_MODEL** | Sets the model ID used by the Haiku alias. |
+| **ANTHROPIC\_DEFAULT\_HAIKU\_MODEL\_DESCRIPTION** | Sets the model-picker description for the pinned Haiku model. |
+| **ANTHROPIC\_DEFAULT\_HAIKU\_MODEL\_NAME** | Sets the model-picker display name for the pinned Haiku model. |
+| **ANTHROPIC\_DEFAULT\_HAIKU\_MODEL\_SUPPORTED\_CAPABILITIES** | Declares capabilities supported by the pinned Haiku model. |
+| **ANTHROPIC\_DEFAULT\_MODEL** | Sets the model used for new sessions. |
+| **ANTHROPIC\_DEFAULT\_OPUS\_MODEL** | Sets the model ID used by the Opus alias. |
+| **ANTHROPIC\_DEFAULT\_OPUS\_MODEL\_DESCRIPTION** | Sets the model-picker description for the pinned Opus model. |
+| **ANTHROPIC\_DEFAULT\_OPUS\_MODEL\_NAME** | Sets the model-picker display name for the pinned Opus model. |
+| **ANTHROPIC\_DEFAULT\_OPUS\_MODEL\_SUPPORTED\_CAPABILITIES** | Declares capabilities supported by the pinned Opus model. |
+| **ANTHROPIC\_DEFAULT\_SONNET\_MODEL** | Sets the model ID used by the Sonnet alias. |
+| **ANTHROPIC\_DEFAULT\_SONNET\_MODEL\_DESCRIPTION** | Sets the model-picker description for the pinned Sonnet model. |
+| **ANTHROPIC\_DEFAULT\_SONNET\_MODEL\_NAME** | Sets the model-picker display name for the pinned Sonnet model. |
+| **ANTHROPIC\_DEFAULT\_SONNET\_MODEL\_SUPPORTED\_CAPABILITIES** | Declares capabilities supported by the pinned Sonnet model. |
+| **ANTHROPIC\_FEDERATION\_RULE\_ID** | Configures Anthropic federation rule ID. |
+| **ANTHROPIC\_FOUNDRY\_API\_KEY** | Configures Anthropic foundry API key. |
+| **ANTHROPIC\_FOUNDRY\_AUTH\_TOKEN** | Configures Anthropic foundry auth token. |
+| **ANTHROPIC\_FOUNDRY\_BASE\_URL** | Configures Anthropic foundry base url. |
+| **ANTHROPIC\_FOUNDRY\_RESOURCE** | Configures Anthropic foundry resource. |
+| **ANTHROPIC\_MODEL** | Sets the active model when no higher-priority model choice overrides it. |
+| **ANTHROPIC\_ORGANIZATION\_ID** | Configures Anthropic organization ID. |
+| **ANTHROPIC\_PROFILE** | Selects an Anthropic authentication profile. |
+| **ANTHROPIC\_SMALL\_FAST\_MODEL\_AWS\_REGION** | Configures Anthropic small fast model AWS region. |
+| **ANTHROPIC\_VERTEX\_BASE\_URL** | Overrides the Google Cloud Agent Platform endpoint. |
+| **ANTHROPIC\_VERTEX\_PROJECT\_ID** | Sets the Google Cloud project for Agent Platform requests. |
+| **ANTHROPIC\_WORKSPACE\_ID** | Configures Anthropic workspace ID. |
+| **API\_FORCE\_IDLE\_TIMEOUT** | Overrides or disables the streaming body idle timeout. |
+| **API\_TIMEOUT\_MS** | Sets the API request timeout in milliseconds. |
+| **AWS\_BEARER\_TOKEN\_BEDROCK** | Sets an Amazon Bedrock bearer token. |
+| **FALLBACK\_FOR\_ALL\_PRIMARY\_MODELS** | Applies fallback behavior across primary models. |
+| **VERTEX\_REGION\_CLAUDE\_3\_5\_HAIKU** | Overrides the Google Cloud Agent Platform region for Claude 3 5 Haiku. |
+| **VERTEX\_REGION\_CLAUDE\_3\_5\_SONNET** | Overrides the Google Cloud Agent Platform region for Claude 3 5 Sonnet. |
+| **VERTEX\_REGION\_CLAUDE\_3\_7\_SONNET** | Overrides the Google Cloud Agent Platform region for Claude 3 7 Sonnet. |
+| **VERTEX\_REGION\_CLAUDE\_4\_0\_OPUS** | Overrides the Google Cloud Agent Platform region for Claude 4 0 Opus. |
+| **VERTEX\_REGION\_CLAUDE\_4\_0\_SONNET** | Overrides the Google Cloud Agent Platform region for Claude 4 0 Sonnet. |
+| **VERTEX\_REGION\_CLAUDE\_4\_1\_OPUS** | Overrides the Google Cloud Agent Platform region for Claude 4 1 Opus. |
+| **VERTEX\_REGION\_CLAUDE\_4\_5\_OPUS** | Overrides the Google Cloud Agent Platform region for Claude 4 5 Opus. |
+| **VERTEX\_REGION\_CLAUDE\_4\_5\_SONNET** | Overrides the Google Cloud Agent Platform region for Claude 4 5 Sonnet. |
+| **VERTEX\_REGION\_CLAUDE\_4\_6\_OPUS** | Overrides the Google Cloud Agent Platform region for Claude 4 6 Opus. |
+| **VERTEX\_REGION\_CLAUDE\_4\_6\_SONNET** | Overrides the Google Cloud Agent Platform region for Claude 4 6 Sonnet. |
+| **VERTEX\_REGION\_CLAUDE\_4\_7\_OPUS** | Overrides the Google Cloud Agent Platform region for Claude 4 7 Opus. |
+| **VERTEX\_REGION\_CLAUDE\_4\_8\_OPUS** | Overrides the Google Cloud Agent Platform region for Claude 4 8 Opus. |
+| **VERTEX\_REGION\_CLAUDE\_5\_OPUS** | Overrides the Google Cloud Agent Platform region for Claude 5 Opus. |
+| **VERTEX\_REGION\_CLAUDE\_5\_SONNET** | Overrides the Google Cloud Agent Platform region for Claude 5 Sonnet. |
+| **VERTEX\_REGION\_CLAUDE\_FABLE\_5** | Overrides the Google Cloud Agent Platform region for Claude Fable 5. |
+| **VERTEX\_REGION\_CLAUDE\_FABLE\_5\_1** | Overrides the Google Cloud Agent Platform region for Claude Fable 5 1. |
+| **VERTEX\_REGION\_CLAUDE\_HAIKU\_4\_5** | Overrides the Google Cloud Agent Platform region for Claude Haiku 4 5. |
+
+</details>
+
+<details>
+<summary><strong>Claude Code Runtime and Behavior</strong></summary>
+
+| Variable | What it controls |
+| --- | --- |
+| **CLAUDE\_AFK\_COUNTDOWN\_MS** | Configures afk countdown milliseconds. |
+| **CLAUDE\_AFK\_TIMEOUT\_MS** | Configures afk timeout milliseconds. |
+| **CLAUDE\_AGENT\_SDK\_DISABLE\_BUILTIN\_AGENTS** | Configures agent SDK disable builtin agents. |
+| **CLAUDE\_AGENT\_SDK\_MCP\_NO\_PREFIX** | Configures agent SDK MCP no prefix. |
+| **CLAUDE\_ASYNC\_AGENT\_STALL\_TIMEOUT\_MS** | Configures async agent stall timeout milliseconds. |
+| **CLAUDE\_AUTOCOMPACT\_PCT\_OVERRIDE** | Sets an earlier auto-compaction trigger percentage. |
+| **CLAUDE\_AUTO\_BACKGROUND\_TASKS** | Forces long-running agent tasks to move to the background automatically. |
+| **CLAUDE\_AX\_PREPARK\_MS** | Configures ax prepark milliseconds. |
+| **CLAUDE\_AX\_SCREEN\_READER** | Configures ax screen reader. |
+| **CLAUDE\_AX\_STARTUP\_QUIET\_MS** | Configures ax startup quiet milliseconds. |
+| **CLAUDE\_BASH\_MAINTAIN\_PROJECT\_WORKING\_DIR** | Configures bash maintain project working dir. |
+| **CLAUDE\_BYTE\_STREAM\_IDLE\_TIMEOUT\_MS** | Configures byte stream idle timeout milliseconds. |
+| **CLAUDE\_CLIENT\_PRESENCE\_FILE** | Points to a presence marker that suppresses mobile notifications while the computer is active. |
+| **CLAUDE\_CODE\_ACCESSIBILITY** | Keeps the native terminal cursor visible for accessibility tools. |
+| **CLAUDE\_CODE\_ADDITIONAL\_DIRECTORIES\_CLAUDE\_MD** | Loads CLAUDE.md and related memory files from directories added with --add-dir. |
+| **CLAUDE\_CODE\_ALT\_SCREEN\_FULL\_REPAINT** | Forces full-frame repainting in fullscreen mode. |
+| **CLAUDE\_CODE\_ALWAYS\_ENABLE\_EFFORT** | Sends the effort parameter for compatible custom or gateway model IDs. |
+| **CLAUDE\_CODE\_API\_KEY\_HELPER\_TTL\_MS** | Sets how often apiKeyHelper credentials are refreshed. |
+| **CLAUDE\_CODE\_ARTIFACT\_AUTO\_OPEN** | Configures code artifact auto open. |
+| **CLAUDE\_CODE\_ARTIFACT\_COMMENTS** | Configures code artifact comments. |
+| **CLAUDE\_CODE\_ARTIFACT\_COMMENTS\_AUTOREACT** | Configures code artifact comments autoreact. |
+| **CLAUDE\_CODE\_ATTRIBUTION\_HEADER** | Configures code attribution header. |
+| **CLAUDE\_CODE\_AUTO\_BACKGROUND\_WORKER\_CHECKIN\_SECONDS** | Configures code auto background worker checkin seconds. |
+| **CLAUDE\_CODE\_AUTO\_COMPACT\_WINDOW** | Sets the auto-compact context window in tokens. |
+| **CLAUDE\_CODE\_AUTO\_CONNECT\_IDE** | Overrides automatic IDE connection behavior. |
+| **CLAUDE\_CODE\_AWS\_CHAIN\_RESOLVE\_TIMEOUT\_MS** | Configures code AWS chain resolve timeout milliseconds. |
+| **CLAUDE\_CODE\_BRIDGE\_SESSION\_ID** | Exposes the active Remote Control session ID to subprocesses. |
+| **CLAUDE\_CODE\_BS\_AS\_CTRL\_BACKSPACE** | Configures code bs as ctrl backspace. |
+| **CLAUDE\_CODE\_CERT\_STORE** | Chooses CA certificate stores for TLS connections. |
+| **CLAUDE\_CODE\_CHILD\_SESSION** | Marks subprocesses directly spawned by Claude Code tools or hooks. |
+| **CLAUDE\_CODE\_CLIENT\_CERT** | Sets the client certificate file for mTLS. |
+| **CLAUDE\_CODE\_CLIENT\_KEY** | Sets the client private key file for mTLS. |
+| **CLAUDE\_CODE\_CLIENT\_KEY\_PASSPHRASE** | Sets the passphrase for an encrypted mTLS client key. |
+| **CLAUDE\_CODE\_DEBUG\_LOGS\_DIR** | Overrides the debug log file path. |
+| **CLAUDE\_CODE\_DEBUG\_LOG\_LEVEL** | Sets the minimum debug-log severity. |
+| **CLAUDE\_CODE\_DISABLE\_1M\_CONTEXT** | Disables 1M-context model behavior and variants. |
+| **CLAUDE\_CODE\_DISABLE\_ADAPTIVE\_THINKING** | Disables adaptive thinking. |
+| **CLAUDE\_CODE\_DISABLE\_ADMIN\_ENV\_UNION** | Disables admin env union. |
+| **CLAUDE\_CODE\_DISABLE\_ADVISOR\_TOOL** | Disables advisor tool. |
+| **CLAUDE\_CODE\_DISABLE\_AGENT\_VIEW** | Disables agent view. |
+| **CLAUDE\_CODE\_DISABLE\_ALTERNATE\_SCREEN** | Disables alternate screen. |
+| **CLAUDE\_CODE\_DISABLE\_ARTIFACT** | Disables artifact. |
+| **CLAUDE\_CODE\_DISABLE\_ATTACHMENTS** | Disables attachments. |
+| **CLAUDE\_CODE\_DISABLE\_AUTO\_MEMORY** | Disables auto memory. |
+| **CLAUDE\_CODE\_DISABLE\_BACKGROUND\_TASKS** | Disables background tasks. |
+| **CLAUDE\_CODE\_DISABLE\_BEDROCK\_CONTENT\_TYPE\_DEFAULT** | Disables bedrock content type default. |
+| **CLAUDE\_CODE\_DISABLE\_BEDROCK\_CONTENT\_TYPE\_GUARD** | Disables bedrock content type guard. |
+| **CLAUDE\_CODE\_DISABLE\_BG\_EXIT\_HANDOFF** | Disables background exit handoff. |
+| **CLAUDE\_CODE\_DISABLE\_BG\_SHELL\_PRESSURE\_REAP** | Disables background shell pressure reap. |
+| **CLAUDE\_CODE\_DISABLE\_BUNDLED\_SKILLS** | Disables bundled skills. |
+| **CLAUDE\_CODE\_DISABLE\_CFC\_PROMPT** | Disables CFC prompt. |
+| **CLAUDE\_CODE\_DISABLE\_CLAUDE\_MDS** | Disables Claude mds. |
+| **CLAUDE\_CODE\_DISABLE\_CRON** | Disables cron. |
+| **CLAUDE\_CODE\_DISABLE\_EXPERIMENTAL\_BETAS** | Disables experimental betas. |
+| **CLAUDE\_CODE\_DISABLE\_EXPLORE\_PLAN\_AGENTS** | Disables explore plan agents. |
+| **CLAUDE\_CODE\_DISABLE\_FAST\_MODE** | Disables fast mode. |
+| **CLAUDE\_CODE\_DISABLE\_FEEDBACK\_SURVEY** | Disables feedback survey. |
+| **CLAUDE\_CODE\_DISABLE\_FILE\_CHECKPOINTING** | Disables file checkpointing. |
+| **CLAUDE\_CODE\_DISABLE\_GIT\_INSTRUCTIONS** | Disables Git instructions. |
+| **CLAUDE\_CODE\_DISABLE\_LEGACY\_MODEL\_REMAP** | Disables legacy model remap. |
+| **CLAUDE\_CODE\_DISABLE\_MOUSE** | Disables mouse. |
+| **CLAUDE\_CODE\_DISABLE\_MOUSE\_CLICKS** | Disables mouse clicks. |
+| **CLAUDE\_CODE\_DISABLE\_MTLS\_RELOAD\_ON\_STALE\_CONNECTION** | Disables mTLS reload on stale connection. |
+| **CLAUDE\_CODE\_DISABLE\_NONESSENTIAL\_TRAFFIC** | Disables nonessential traffic. |
+| **CLAUDE\_CODE\_DISABLE\_NONSTREAMING\_FALLBACK** | Disables nonstreaming fallback. |
+| **CLAUDE\_CODE\_DISABLE\_NOTIFICATION\_PRESENCE\_CHECK** | Disables notification presence check. |
+| **CLAUDE\_CODE\_DISABLE\_OFFICIAL\_MARKETPLACE\_AUTOINSTALL** | Disables official marketplace autoinstall. |
+| **CLAUDE\_CODE\_DISABLE\_PERMISSION\_PROMPT\_NOTIFY\_HOOKS** | Disables permission prompt notify hooks. |
+| **CLAUDE\_CODE\_DISABLE\_POLICY\_SKILLS** | Disables policy skills. |
+| **CLAUDE\_CODE\_DISABLE\_TERMINAL\_TITLE** | Disables terminal title. |
+| **CLAUDE\_CODE\_DISABLE\_THINKING** | Disables thinking. |
+| **CLAUDE\_CODE\_DISABLE\_UNKNOWN\_MODEL\_WINDOW\_ENFORCEMENT** | Disables unknown model window enforcement. |
+| **CLAUDE\_CODE\_DISABLE\_VIRTUAL\_SCROLL** | Disables virtual scroll. |
+| **CLAUDE\_CODE\_DISABLE\_WORKFLOWS** | Disables workflows. |
+| **CLAUDE\_CODE\_EFFORT\_LEVEL** | Sets the effort level and takes precedence over command-line and in-session choices. |
+| **CLAUDE\_CODE\_ENABLE\_APPEND\_SUBAGENT\_PROMPT** | Enables append subagent prompt. |
+| **CLAUDE\_CODE\_ENABLE\_AWAY\_SUMMARY** | Enables away summary. |
+| **CLAUDE\_CODE\_ENABLE\_BACKGROUND\_PLUGIN\_REFRESH** | Enables background plugin refresh. |
+| **CLAUDE\_CODE\_ENABLE\_FEEDBACK\_SURVEY\_FOR\_OTEL** | Enables feedback survey for OpenTelemetry. |
+| **CLAUDE\_CODE\_ENABLE\_FINE\_GRAINED\_TOOL\_STREAMING** | Enables fine grained tool streaming. |
+| **CLAUDE\_CODE\_ENABLE\_GATEWAY\_MODEL\_DISCOVERY** | Enables gateway model discovery. |
+| **CLAUDE\_CODE\_ENABLE\_PROMPT\_SUGGESTION** | Enables prompt suggestion. |
+| **CLAUDE\_CODE\_ENABLE\_TASKS** | Enables tasks. |
+| **CLAUDE\_CODE\_ENABLE\_TELEMETRY** | Enables telemetry. |
+| **CLAUDE\_CODE\_ENABLE\_TODO\_TOOLS** | Enables todo tools. |
+| **CLAUDE\_CODE\_EXIT\_AFTER\_STOP\_DELAY** | Configures code exit after stop delay. |
+| **CLAUDE\_CODE\_EXPERIMENTAL\_AGENT\_TEAMS** | Configures code experimental agent teams. |
+| **CLAUDE\_CODE\_EXTRA\_BODY** | Configures code extra body. |
+| **CLAUDE\_CODE\_FILE\_READ\_MAX\_OUTPUT\_TOKENS** | Configures code file read max output tokens. |
+| **CLAUDE\_CODE\_FORCE\_SESSION\_PERSISTENCE** | Forces session persistence behavior. |
+| **CLAUDE\_CODE\_FORCE\_STRIKETHROUGH** | Forces strikethrough behavior. |
+| **CLAUDE\_CODE\_FORWARD\_SUBAGENT\_TEXT** | Includes subagent text and thinking in compatible stream-json output. |
+| **CLAUDE\_CODE\_GIT\_BASH\_PATH** | Sets the Git Bash executable path on Windows. |
+| **CLAUDE\_CODE\_GLOB\_HIDDEN** | Controls whether the Glob tool includes hidden files. |
+| **CLAUDE\_CODE\_GLOB\_NO\_IGNORE** | Controls whether the Glob tool ignores .gitignore rules. |
+| **CLAUDE\_CODE\_GLOB\_TIMEOUT\_SECONDS** | Sets the Glob tool discovery timeout. |
+| **CLAUDE\_CODE\_GOAL\_CHECKIN\_MINUTES** | Sets how often Claude checks on background work tied to an active goal. |
+| **CLAUDE\_CODE\_HIDE\_CWD** | Configures code hide cwd. |
+| **CLAUDE\_CODE\_IDE\_HOST\_OVERRIDE** | Configures code IDE host override. |
+| **CLAUDE\_CODE\_IDE\_SKIP\_AUTO\_INSTALL** | Configures code IDE skip auto install. |
+| **CLAUDE\_CODE\_IDE\_SKIP\_VALID\_CHECK** | Configures code IDE skip valid check. |
+| **CLAUDE\_CODE\_MAX\_CONCURRENT\_SUBAGENTS** | Sets the maximum number of concurrently running subagents. |
+| **CLAUDE\_CODE\_MAX\_CONTEXT\_TOKENS** | Overrides the assumed context-window size for the active model. |
+| **CLAUDE\_CODE\_MAX\_OUTPUT\_TOKENS** | Sets the maximum output tokens for model requests. |
+| **CLAUDE\_CODE\_MAX\_RETRIES** | Sets the API request retry count. |
+| **CLAUDE\_CODE\_MAX\_SUBAGENT\_SPAWN\_DEPTH** | Sets how many nested subagent layers can be created. |
+| **CLAUDE\_CODE\_MAX\_TOOL\_USE\_CONCURRENCY** | Sets the parallel tool and subagent execution limit. |
+| **CLAUDE\_CODE\_MAX\_TURNS** | Sets a default turn cap when no CLI turn limit is supplied. |
+| **CLAUDE\_CODE\_MAX\_WEB\_SEARCHES\_PER\_SESSION** | Caps WebSearch calls in one session. |
+| **CLAUDE\_CODE\_MCP\_ALLOWLIST\_ENV** | Restricts stdio MCP servers to a safe baseline environment plus configured variables. |
+| **CLAUDE\_CODE\_MCP\_AUTO\_BACKGROUND\_MS** | Sets when a long MCP tool call moves to the background. |
+| **CLAUDE\_CODE\_MCP\_TOOL\_IDLE\_TIMEOUT** | Sets the idle timeout for MCP tool calls. |
+| **CLAUDE\_CODE\_MESSAGING\_SOCKET** | Exposes the cross-session inbox socket path to hooks and shell commands. |
+| **CLAUDE\_CODE\_MESSAGING\_TOKEN** | Exposes the per-session inbox authentication token to hooks and shell commands. |
+| **CLAUDE\_CODE\_NATIVE\_CURSOR** | Configures code native cursor. |
+| **CLAUDE\_CODE\_NEW\_INIT** | Configures code new init. |
+| **CLAUDE\_CODE\_NO\_FLICKER** | Configures code no flicker. |
+| **CLAUDE\_CODE\_OAUTH\_REFRESH\_TOKEN** | Configures code OAuth refresh token. |
+| **CLAUDE\_CODE\_OAUTH\_SCOPES** | Configures code OAuth scopes. |
+| **CLAUDE\_CODE\_OAUTH\_TOKEN** | Configures code OAuth token. |
+| **CLAUDE\_CODE\_OTEL\_CONTENT\_MAX\_LENGTH** | Configures Claude Code OpenTelemetry content max length. |
+| **CLAUDE\_CODE\_OTEL\_DIAG\_STDERR** | Configures Claude Code OpenTelemetry diag stderr. |
+| **CLAUDE\_CODE\_OTEL\_FLUSH\_TIMEOUT\_MS** | Configures Claude Code OpenTelemetry flush timeout milliseconds. |
+| **CLAUDE\_CODE\_OTEL\_HEADERS\_HELPER\_DEBOUNCE\_MS** | Configures Claude Code OpenTelemetry headers helper debounce milliseconds. |
+| **CLAUDE\_CODE\_OTEL\_SHUTDOWN\_TIMEOUT\_MS** | Configures Claude Code OpenTelemetry shutdown timeout milliseconds. |
+| **CLAUDE\_CODE\_PACKAGE\_MANAGER\_AUTO\_UPDATE** | Controls package-manager background upgrades for supported installations. |
+| **CLAUDE\_CODE\_PERFORCE\_MODE** | Adds Perforce-aware handling for read-only files. |
+| **CLAUDE\_CODE\_PLUGIN\_CACHE\_DIR** | Configures code plugin cache dir. |
+| **CLAUDE\_CODE\_PLUGIN\_GIT\_TIMEOUT\_MS** | Configures code plugin Git timeout milliseconds. |
+| **CLAUDE\_CODE\_PLUGIN\_KEEP\_MARKETPLACE\_ON\_FAILURE** | Configures code plugin keep marketplace on failure. |
+| **CLAUDE\_CODE\_PLUGIN\_PREFER\_HTTPS** | Configures code plugin prefer HTTPS. |
+| **CLAUDE\_CODE\_PROCESS\_WRAPPER** | Runs Claude Code child processes through a required corporate launcher. |
+| **CLAUDE\_CODE\_PROJECT\_DIR\_NAME** | Overrides the project directory name used under a custom Claude config directory. |
+| **CLAUDE\_CODE\_PROMPT\_CACHE\_TTL** | Sets the main conversation prompt-cache TTL. |
+| **CLAUDE\_CODE\_PROPAGATE\_TRACEPARENT** | Configures code propagate traceparent. |
+| **CLAUDE\_CODE\_PROVIDER\_MANAGED\_BY\_HOST** | Marks the provider as managed by a host platform. |
+| **CLAUDE\_CODE\_REMOTE\_SESSION\_ID** | Exposes the cloud or remote session identifier. |
+| **CLAUDE\_CODE\_RESUME\_PROMPT** | Configures code resume prompt. |
+| **CLAUDE\_CODE\_RETRY\_WATCHDOG** | Uses extended retry behavior for unattended sessions. |
+| **CLAUDE\_CODE\_SAFE\_MODE** | Starts Claude Code with customizations disabled for troubleshooting. |
+| **CLAUDE\_CODE\_SCRIPT\_CAPS** | Sets limits for script invocations. |
+| **CLAUDE\_CODE\_SCROLL\_SPEED** | Sets terminal scroll speed. |
+| **CLAUDE\_CODE\_SEND\_FEEDBACK** | Configures code send feedback. |
+| **CLAUDE\_CODE\_SESSIONEND\_HOOKS\_TIMEOUT\_MS** | Configures code sessionend hooks timeout milliseconds. |
+| **CLAUDE\_CODE\_SESSION\_ID** | Exposes or sets the current session identifier where supported. |
+| **CLAUDE\_CODE\_SIMPLE** | Enables the minimal environment used by bare mode. |
+| **CLAUDE\_CODE\_SIMPLE\_SYSTEM\_PROMPT** | Uses the simplified system-prompt behavior for minimal runs. |
+| **CLAUDE\_CODE\_SKIP\_ANTHROPIC\_AWS\_AUTH** | Skips anthropic AWS auth. |
+| **CLAUDE\_CODE\_SKIP\_AWS\_CRED\_CACHE** | Skips AWS cred cache. |
+| **CLAUDE\_CODE\_SKIP\_BEDROCK\_AUTH** | Skips bedrock auth. |
+| **CLAUDE\_CODE\_SKIP\_FAST\_MODE\_NETWORK\_ERRORS** | Skips fast mode network errors. |
+| **CLAUDE\_CODE\_SKIP\_FAST\_MODE\_ORG\_CHECK** | Skips fast mode org check. |
+| **CLAUDE\_CODE\_SKIP\_FOUNDRY\_AUTH** | Skips foundry auth. |
+| **CLAUDE\_CODE\_SKIP\_MANTLE\_AUTH** | Skips mantle auth. |
+| **CLAUDE\_CODE\_SKIP\_PROMPT\_HISTORY** | Skips prompt history. |
+| **CLAUDE\_CODE\_SKIP\_VERTEX\_AUTH** | Skips vertex auth. |
+| **CLAUDE\_CODE\_STOP\_HOOK\_BLOCK\_CAP** | Caps repeated Stop or SubagentStop hook blocking. |
+| **CLAUDE\_CODE\_SUBAGENT\_MODEL** | Sets the default model for subagents, teammates, and workflow agents. |
+| **CLAUDE\_CODE\_SUBAGENT\_MODEL\_FORCE** | Forces the configured subagent model across agent types. |
+| **CLAUDE\_CODE\_SUBAGENT\_PROMPT\_CACHE\_TTL** | Sets the prompt-cache TTL used by subagents. |
+| **CLAUDE\_CODE\_SUBPROCESS\_ENV\_SCRUB** | Configures code subprocess env scrub. |
+| **CLAUDE\_CODE\_SYNC\_PLUGIN\_INSTALL** | Configures plugin install. |
+| **CLAUDE\_CODE\_SYNC\_PLUGIN\_INSTALL\_TIMEOUT\_MS** | Configures plugin install timeout milliseconds. |
+| **CLAUDE\_CODE\_SYNC\_SKILLS** | Configures skills. |
+| **CLAUDE\_CODE\_SYNC\_SKILLS\_INSTALL\_TIMEOUT\_MS** | Configures skills install timeout milliseconds. |
+| **CLAUDE\_CODE\_SYNC\_SKILLS\_WAIT\_TIMEOUT\_MS** | Configures skills wait timeout milliseconds. |
+| **CLAUDE\_CODE\_SYNTAX\_HIGHLIGHT** | Configures code syntax highlight. |
+| **CLAUDE\_CODE\_TASK\_LIST\_ID** | Shares a task list across Claude Code sessions that use the same ID. |
+| **CLAUDE\_CODE\_TEAM\_TEARDOWN\_PARK\_TIMEOUT\_MS** | Configures code team teardown park timeout milliseconds. |
+| **CLAUDE\_CODE\_TMPDIR** | Overrides Claude Code's internal temporary directory. |
+| **CLAUDE\_CODE\_TMUX\_TRUECOLOR** | Allows 24-bit truecolor output inside tmux. |
+| **CLAUDE\_CODE\_TOOL\_MEMORY\_CGROUP\_EXCLUDE** | Chooses process types excluded from the Linux tool-memory cap. |
+| **CLAUDE\_CODE\_TOOL\_MEMORY\_LIMIT** | Caps tool-process memory on Linux and WSL. |
+| **CLAUDE\_CODE\_USER\_DIALOG\_TIMEOUT\_MS** | Sets a deadline for remote-client dialogs and held-message approvals. |
+| **CLAUDE\_CODE\_USE\_ANTHROPIC\_AWS** | Uses Claude Platform on AWS. |
+| **CLAUDE\_CODE\_USE\_BEDROCK** | Uses Amazon Bedrock. |
+| **CLAUDE\_CODE\_USE\_FOUNDRY** | Uses Microsoft Foundry. |
+| **CLAUDE\_CODE\_USE\_MANTLE** | Uses the Amazon Bedrock Mantle endpoint. |
+| **CLAUDE\_CODE\_USE\_NATIVE\_FILE\_SEARCH** | Uses Node.js file APIs for configuration discovery rather than bundled ripgrep. |
+| **CLAUDE\_CODE\_USE\_POWERSHELL\_TOOL** | Controls availability of the native PowerShell tool. |
+| **CLAUDE\_CODE\_USE\_VERTEX** | Uses Google Cloud's Agent Platform. |
+| **CLAUDE\_CODE\_WEBFETCH\_CACHE\_TTL\_MS** | Sets the WebFetch response-cache lifetime. |
+| **CLAUDE\_CODE\_WORKFLOW\_PREFIX\_STAGGER\_MS** | Sets the maximum stagger for same-prefix workflow agents. |
+| **CLAUDE\_CONFIG\_DIR** | Overrides the default ~/.claude configuration directory. |
+| **CLAUDE\_DISABLE\_ADOPT** | Stops in-flight background work when a session moves to the background rather than carrying that work over. |
+| **CLAUDE\_EFFORT** | Exposes the current effort level to Bash and hook subprocesses. |
+| **CLAUDE\_ENABLE\_BYTE\_WATCHDOG** | Forces the byte-level streaming idle watchdog on or off. |
+| **CLAUDE\_ENABLE\_BYTE\_WATCHDOG\_BEDROCK** | Enables the byte-level streaming watchdog for Bedrock event streams. |
+| **CLAUDE\_ENABLE\_STREAM\_WATCHDOG** | Configures enable stream watchdog. |
+| **CLAUDE\_ENV\_FILE** | Configures env file. |
+| **CLAUDE\_PID** | Configures pid. |
+| **CLAUDE\_REMOTE\_CONTROL\_SESSION\_NAME\_PREFIX** | Prefixes automatically generated Remote Control session names. |
+| **CLAUDE\_STREAM\_FIRST\_BYTE\_TIMEOUT\_MS** | Sets the streaming first-byte timeout. |
+| **CLAUDE\_STREAM\_IDLE\_TIMEOUT\_MS** | Sets the event-level streaming idle timeout. |
+| **CLAUDE\_SUBAGENT\_BG\_SHELL\_MAX\_MS** | Sets the lifetime limit for background shell commands owned by subagents. |
+
+</details>
+
+<details>
+<summary><strong>MCP, Networking, Telemetry, and Other Variables</strong></summary>
+
+| Variable | What it controls |
+| --- | --- |
+| **BASH\_DEFAULT\_TIMEOUT\_MS** | Sets the default Bash command timeout. |
+| **BASH\_MAX\_OUTPUT\_LENGTH** | Sets the maximum Bash output returned to Claude. |
+| **BASH\_MAX\_TIMEOUT\_MS** | Sets the maximum Bash timeout Claude can request. |
+| **BETA\_TRACING\_ENDPOINT** | Sets the OTLP endpoint used for detailed beta tracing. |
+| **CCR\_FORCE\_BUNDLE** | Forces cloud dispatch to bundle and upload the local repository. |
+| **CLAUDECODE** | Marks subprocesses launched from Claude Code or its IDE integrations. |
+| **DEBUG** | Enables debug logging. |
+| **DISABLE\_AUTOUPDATER** | Disables autoupdater. |
+| **DISABLE\_AUTO\_COMPACT** | Disables auto compact. |
+| **DISABLE\_COMPACT** | Disables compact. |
+| **DISABLE\_COST\_WARNINGS** | Disables cost warnings. |
+| **DISABLE\_DOCTOR\_COMMAND** | Disables doctor command. |
+| **DISABLE\_ERROR\_REPORTING** | Disables error reporting. |
+| **DISABLE\_EXTRA\_USAGE\_COMMAND** | Disables extra usage command. |
+| **DISABLE\_FEEDBACK\_COMMAND** | Disables feedback command. |
+| **DISABLE\_GROWTHBOOK** | Disables growthbook. |
+| **DISABLE\_INSTALLATION\_CHECKS** | Disables installation checks. |
+| **DISABLE\_INSTALL\_GITHUB\_APP\_COMMAND** | Disables install github app command. |
+| **DISABLE\_INTERLEAVED\_THINKING** | Disables interleaved thinking. |
+| **DISABLE\_LOGIN\_COMMAND** | Disables login command. |
+| **DISABLE\_LOGOUT\_COMMAND** | Disables logout command. |
+| **DISABLE\_PROMPT\_CACHING** | Disables prompt caching. |
+| **DISABLE\_PROMPT\_CACHING\_FABLE** | Disables prompt caching fable. |
+| **DISABLE\_PROMPT\_CACHING\_HAIKU** | Disables prompt caching haiku. |
+| **DISABLE\_PROMPT\_CACHING\_OPUS** | Disables prompt caching opus. |
+| **DISABLE\_PROMPT\_CACHING\_SONNET** | Disables prompt caching sonnet. |
+| **DISABLE\_TELEMETRY** | Disables telemetry and feature-flag fetching. |
+| **DISABLE\_UPDATES** | Blocks all update paths, including manual updates. |
+| **DISABLE\_UPGRADE\_COMMAND** | Disables upgrade command. |
+| **DO\_NOT\_TRACK** | Opts out of telemetry using the common DO\_NOT\_TRACK convention. |
+| **ENABLE\_BETA\_TRACING\_DETAILED** | Enables detailed beta tracing when a tracing endpoint is configured. |
+| **ENABLE\_CLAUDEAI\_MCP\_SERVERS** | Controls loading of MCP connectors configured in Claude.ai. |
+| **ENABLE\_PROMPT\_CACHING\_1H** | Requests a one-hour prompt-cache TTL. |
+| **ENABLE\_TOOL\_SEARCH** | Controls deferred MCP tool discovery and ToolSearch behavior. |
+| **FORCE\_AUTOUPDATE\_PLUGINS** | Forces autoupdate plugins. |
+| **FORCE\_HYPERLINK** | Forces hyperlink. |
+| **FORCE\_PROMPT\_CACHING\_5M** | Forces prompt caching 5m. |
+| **HTTPS\_PROXY** | Sets the HTTPS proxy. |
+| **HTTP\_PROXY** | Sets the HTTP proxy. |
+| **IS\_DEMO** | Configures is demo. |
+| **MAX\_MCP\_OUTPUT\_TOKENS** | Sets the MCP output-token limit for tools without their own limit. |
+| **MAX\_STRUCTURED\_OUTPUT\_RETRIES** | Sets retries for structured-output validation. |
+| **MAX\_THINKING\_TOKENS** | Sets the fixed thinking-token budget where fixed thinking is used. |
+| **MCP\_CLIENT\_SECRET** | Supplies an MCP OAuth client secret when requested by MCP configuration. |
+| **MCP\_CONNECTION\_NONBLOCKING** | Configures MCP connection nonblocking. |
+| **MCP\_CONNECT\_TIMEOUT\_MS** | Sets the MCP connection timeout. |
+| **MCP\_DISCOVERY\_CACHE** | Configures MCP discovery cache. |
+| **MCP\_DISCOVERY\_CACHE\_MAX\_STALE\_S** | Configures MCP discovery cache max stale s. |
+| **MCP\_DISCOVERY\_CACHE\_STRIKES** | Configures MCP discovery cache strikes. |
+| **MCP\_DISCOVERY\_CACHE\_TTL\_S** | Configures MCP discovery cache TTL s. |
+| **MCP\_OAUTH\_CALLBACK\_PORT** | Sets the local OAuth callback port for MCP authentication. |
+| **MCP\_PROTOCOL\_NEGOTIATION** | Configures MCP protocol negotiation. |
+| **MCP\_REMOTE\_SERVER\_CONNECTION\_BATCH\_SIZE** | Sets parallel startup connections for remote MCP servers. |
+| **MCP\_SDK\_GENERATION** | Chooses the MCP client runtime generation. |
+| **MCP\_SERVER\_CONNECTION\_BATCH\_SIZE** | Sets parallel startup connections for local stdio MCP servers. |
+| **MCP\_TIMEOUT** | Sets the MCP server startup timeout. |
+| **MCP\_TOOL\_TIMEOUT** | Sets the overall MCP tool execution timeout. |
+| **NO\_PROXY** | Lists hosts that bypass configured proxies. |
+| **OTEL\_ATTRIBUTE\_VALUE\_LENGTH\_LIMIT** | Sets the OpenTelemetry attribute-value length limit. |
+| **OTEL\_EXPORTER\_OTLP\_ENDPOINT** | Sets the OpenTelemetry OTLP endpoint. |
+| **OTEL\_EXPORTER\_OTLP\_HEADERS** | Sets headers sent to the OTLP exporter. |
+| **OTEL\_EXPORTER\_OTLP\_PROTOCOL** | Sets the OTLP transport protocol. |
+| **OTEL\_LOGS\_EXPORTER** | Selects the OpenTelemetry logs exporter. |
+| **OTEL\_LOG\_ASSISTANT\_RESPONSES** | Controls logging of assistant response text in OpenTelemetry events. |
+| **OTEL\_LOG\_RAW\_API\_BODIES** | Controls logging of raw API request and response bodies. |
+| **OTEL\_LOG\_TOOL\_CONTENT** | Controls logging of tool input and output content. |
+| **OTEL\_LOG\_TOOL\_DETAILS** | Controls logging of detailed tool metadata. |
+| **OTEL\_LOG\_USER\_PROMPTS** | Controls logging of user prompt text. |
+| **OTEL\_METRICS\_EXPORTER** | Selects the OpenTelemetry metrics exporter. |
+| **OTEL\_METRICS\_INCLUDE\_ACCOUNT\_UUID** | Controls whether account UUID is attached to metrics. |
+| **OTEL\_METRICS\_INCLUDE\_ENTRYPOINT** | Controls whether the session entrypoint is attached to metrics. |
+| **OTEL\_METRICS\_INCLUDE\_RESOURCE\_ATTRIBUTES** | Controls whether OTEL\_RESOURCE\_ATTRIBUTES are copied to metric labels. |
+| **OTEL\_METRICS\_INCLUDE\_SESSION\_ID** | Controls whether session ID is attached to metrics. |
+| **OTEL\_METRICS\_INCLUDE\_VERSION** | Controls whether Claude Code version is attached to metrics. |
+| **OTEL\_METRIC\_EXPORT\_INTERVAL** | Sets the OpenTelemetry metric export interval. |
+| **OTEL\_RESOURCE\_ATTRIBUTES** | Adds resource attributes to OpenTelemetry data. |
+| **SLASH\_COMMAND\_TOOL\_CHAR\_BUDGET** | Sets the metadata character budget exposed to the Skill tool; the legacy name remains accepted. |
+| **TASK\_MAX\_OUTPUT\_LENGTH** | Sets the output limit for subagent results before they are saved to disk. |
+| **USE\_BUILTIN\_RIPGREP** | Chooses bundled ripgrep or a system-installed rg binary. |
+
+</details>
+
+<details>
+<summary><strong>Deprecated or No-Op Environment Variables</strong></summary>
+
+These names can appear in older setup guides or shell profiles. They are kept here for troubleshooting, but they should not be treated as current configuration controls.
+
+| Older variable | Current note |
+| --- | --- |
+| **ANTHROPIC\_SMALL\_FAST\_MODEL** | Deprecated background-model variable; use ANTHROPIC\_DEFAULT\_HAIKU\_MODEL. |
+| **ENABLE\_PROMPT\_CACHING\_1H\_BEDROCK** | Deprecated alias; use ENABLE\_PROMPT\_CACHING\_1H. |
+| **CLAUDE\_CODE\_CONNECT\_TIMEOUT\_MS** | Removed and no longer changes behavior; use API\_TIMEOUT\_MS for request timing. |
+| **CLAUDE\_CODE\_MAX\_SUBAGENTS\_PER\_SESSION** | Removed and no longer changes behavior; current limits use concurrency and spawn-depth controls. |
+| **CLAUDE\_CODE\_ENABLE\_AUTO\_MODE** | Compatibility variable with no current effect; auto mode is available through permission modes. |
+| **CLAUDE\_CODE\_ENABLE\_OPUS\_4\_7\_FAST\_MODE** | Removed fast-mode rollout variable. |
+| **CLAUDE\_CODE\_OPUS\_4\_6\_FAST\_MODE\_OVERRIDE** | No-op compatibility variable from an older fast-mode rollout. |
+
+</details>
+
+## Older, Removed, and Replaced Command Names
+
+Older tutorials and screenshots can mention commands that no longer belong in the current A-Z list. Use the current alternative when one exists.
+
+| Old command | Use now |
+| --- | --- |
+| **/pr-comments [PR]** | Ask Claude directly to inspect pull-request comments, or use the current code-review/GitHub workflow. |
+| **/tag** | Legacy command name; do not rely on it in current installations. |
+| **/ultraplan** | Use Plan Mode through **/plan**. |
+| **/vim** | Set Editor mode through **/config**. |
+
+## Common Workflows
 
 ### Start a New Repository
 
-```text
+```
 /init
 /status
 /model
 ```
 
-### Onboard a New Teammate
-
-```text
-/team-onboarding
-/init
-/memory
-```
+Create project guidance, confirm the environment, and choose the model before starting work.
 
 ### Understand an Unfamiliar Codebase
 
-```text
+```
 /status
 /context
 /plan map the project structure and main entry points
 ```
 
-### Work Toward a Clear Goal
-
-```text
-/goal fix the failing checkout test and stop after tests pass
-/context
-/review
-```
-
-An idle goal can start up to three background check-ins. Your next message allows three more.
+Check the session, inspect loaded context, and plan the investigation before editing.
 
 ### Review a Pull Request
 
-```text
-/review
+```
+/code-review high 123
 /security-review
-/pr-comments
 /diff
 ```
 
+Run a correctness review, check security-sensitive changes, and inspect the final diff.
+
 ### Prepare a Safe Refactor
 
-```text
+```
 /review
 /plan refactor the auth flow without changing behavior
 /diff
 ```
 
+Review the current state, plan the refactor, then inspect the resulting change.
+
 ### Manage a Long Session
 
-```text
+```
 /context
-/compact keep decisions only
-/cost
+/compact keep decisions and unresolved issues
+/usage
 ```
 
-### Run a Multi-File Refactor
+Check what is filling context, compact deliberately, and review current usage.
 
-```text
+### Run a Multi-File Change
+
+```
 /review
 /code-review --fix
 /batch rename OldThing NewThing
 ```
 
-### Fix a Bug in Stages
+Review first, apply review fixes where appropriate, then fan out a large repetitive change.
 
-```text
+### Debug a Failure
+
+```
 /debug trace the failing checkout flow
 /review
 /diff
 ```
 
-### Work With PR Feedback
+Collect debugging information, review the change, and inspect the resulting patch.
 
-```text
-/pr-comments 123
-/review
-/diff
+### Switch Between Tasks
+
+```
+/rename feature-auth
+/clear
+/resume feature-auth
 ```
 
-### Set Up MCP and Use It Immediately
+Name a conversation, start a fresh task, then return to the earlier session later.
 
-```text
+### Set Up and Use MCP
+
+```
 /mcp
 /mcp__github__list_prs
-/mcp__jira__create_issue
 ```
+
+Configure or authenticate the server, then run a prompt published by that server.
 
 ### Work Across Devices
 
-```text
+```
 /remote-control
 /remote-env
 /teleport
 ```
 
-### Switch to Focused Fullscreen Work
+Expose a local session remotely, choose a cloud environment, or pull a web session back to the terminal.
 
-```text
-/tui fullscreen
-/focus
-/context
+### Review Usage and Limits
+
 ```
-
-### Check Usage and Limits
-
-```text
 /usage
 /cost
 /stats
 ```
 
-### View Dynamic Workflows
+Open the usage view and its cost or statistics tabs.
 
-```text
-/workflows
-/context
-/usage
+### Start a Headless One-Off Task
+
 ```
-
-### Inspect Plugin Cost and Components
-
-```text
-claude plugin details plugin-name
-/plugin
-/context
-```
-
-### Run a Headless One-Off Task
-
-```text
 claude -p "review this diff and list risks"
 ```
 
-### Run a Deep Cloud Review
-
-```text
-/code-review ultra
-/pr-comments
-```
+Run one non-interactive task and return the result to the shell.
 
 ### Reduce Repetitive Permission Prompts
 
-```text
-/less-permission-prompts
+```
+/fewer-permission-prompts
 /permissions
 /hooks
 ```
 
----
+Find common read-only calls, adjust rules, and inspect hook behavior.
 
-## Internal, Experimental, Removed, and Community Commands
+### Work Toward a Clear Goal
 
-These commands are preserved for completeness. Do not treat this section as a guarantee that a command works in every public build.
+```
+/goal fix the failing checkout test and stop after tests pass
+/context
+/review
+```
 
-| Command | Category | Typical role |
-|---|---|---|
-| `/advisor` | Leak-based | Architecture or design advice |
-| `/ant-trace` | Internal | Internal tracing |
-| `/autofix-pr` | Internal / leak-based | Auto-fix PR issues |
-| `/backfill-sessions` | Internal / leak-based | Backfill session data |
-| `/brief` | Leak-based | Brief output mode |
-| `/bridge` | Leak-based | IDE or bridge session manager |
-| `/bridge-kick` | Leak-based | Force-restart bridge connection |
-| `/bughunter` | Leak-based | Bug-finding workflow |
-| `/buddy` | Limited / non-essential | Temporary April 1st command |
-| `/commit` | Community | Generate a commit message and commit changes |
-| `/commit-push-pr` | Leak-based / community | Commit, push, and create a PR |
-| `/ctx_viz` | Internal / leak-based | Debug context visualization |
-| `/debug-tool-call` | Internal / leak-based | Debug a tool call |
-| `/env` | Leak-based | Environment inspection |
-| `/files` | Leak-based | List files in current context |
-| `/fix-pipeline` | Community | Repair failing CI pipelines |
-| `/good-claude` | Leak-based | Easter egg command |
-| `/heapdump` | Internal / leak-based | Dump heap for memory analysis |
-| `/init-verifiers` | Leak-based | Set up verifier hooks |
-| `/install` | Internal / leak-based | Install or update flow |
-| `/issue` | Leak-based | File a GitHub issue |
-| `/lint` | Community | Run linting commands |
-| `/merge-to-main` | Community | Merge-to-main workflow |
-| `/mobile` | Leak-based | Mobile integration or handoff |
-| `/mock-limits` | Internal / leak-based | Mock rate limits |
-| `/oauth-refresh` | Leak-based | Refresh OAuth tokens |
-| `/onboarding` | Leak-based | First-run onboarding |
-| `/passes` | Leak-based | Multi-pass workflow |
-| `/perf-issue` | Internal / leak-based | Report performance issue |
-| `/pr` | Community | Create a pull request |
-| `/pr_comments` | Internal | Internal form of `/pr-comments` |
-| `/privacy-settings` | Leak-based | Privacy settings |
-| `/push` | Community | Push current branch |
-| `/rate-limit-options` | Leak-based | Rate-limit options |
-| `/remote-setup` | Leak-based | Remote setup flow |
-| `/reset-limits` | Internal / leak-based | Reset rate limits |
-| `/sandbox-toggle` | Internal | Internal sandbox toggle |
-| `/session` | Leak-based | Session management UI |
-| `/statusline` | Leak-based | Customize status line |
-| `/summary` | Leak-based | Generate a session summary |
-| `/tag` | Removed | Legacy tag command |
-| `/terminalSetup` | Internal | Internal form of `/terminal-setup` |
-| `/thinkback` | Internal / leak-based | Replay or analyze thinking |
-| `/thinkback-play` | Internal / leak-based | Animated thinking replay |
-| `/ultraplan` | Removed | Old detailed planning workflow |
-| `/upgrade` | Leak-based | Upgrade flow |
-| `/version` | Leak-based | Show version |
-| `/vim` | Removed | Old Vim-mode slash command |
-| `/vitest` | Community | Run Vitest-based test workflows |
-| `/x402` | Internal / leak-based | x402 integration |
+Give Claude a completion condition, then monitor context and review the result.
 
----
+## Custom, Community, and Internal Command Names
 
-## Notes
+These names are kept for lookup because they can appear in source-oriented references, custom command packs, community workflows, or older material. They are not part of the current built-in A-Z list.
 
-- `/vim` was removed in `v2.1.92`. Use `/config` for editor mode settings.
-- `/tag` was removed in `v2.1.92`.
-- As of `v2.1.118`, `/cost` and `/stats` are merged into `/usage`; both still work as shortcuts.
-- `/simplify` now runs a cleanup-only review and applies simplification, reuse, efficiency, and structure fixes. Use `/code-review --fix` when you want bug-hunting fixes.
-- `/extra-usage` was renamed `/usage-credits`; the old command remains an alias.
-- The old `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE` path is now a no-op.
-- If you customized the old `modelPicker:setAsDefault` keybinding, rename it to `modelPicker:thisSessionOnly`; the `d` action was replaced by `s`.
-- The dynamic workflow trigger keyword was renamed from `workflow` to `ultracode`; use `/workflows` to view larger background runs.
-- Managed settings can now set `requiredMinimumVersion` and `requiredMaximumVersion` so Claude Code refuses to start outside an approved version range.
-- `disableBundledSkills` and `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS` can hide bundled skills, workflows, and built-in slash commands from the model.
-- `!` bash commands now prompt Claude to respond to the command output automatically and offer live file path autocomplete. Set `respondToBashCommands` to `false` in settings to keep the older context-only behavior.
-- `autoMode.classifyAllShell` routes all Bash and PowerShell commands through the auto-mode classifier instead of only arbitrary-code-execution patterns.
-- `sandbox.credentials` can block sandboxed commands from reading credential files and secret environment variables.
-- `/agents` opens the in-session subagent manager. `claude agents` is the separate terminal view for background Claude Code sessions.
-- `/fork` creates a separate background session and worktree. `/subtask` starts a forked subagent that inherits the current conversation; fork mode is on by default in interactive sessions as of `v2.1.232`.
-- `/review` is now an alias of `/code-review`; `/code-review ultra` runs a deep cloud review.
-- `/ultraplan` was removed in `v2.1.222`.
-- `sandbox.network.strictAllowlist` denies non-allowlisted hosts for sandboxed commands without prompting.
-- Plugins can use an HTTPS zip `archive` source with optional SHA-256 pinning.
-- Plugin marketplaces accept bare GitLab repository URLs. `additionalMarketplaces` and `allowedMarketplaces` are aliases for `extraKnownMarketplaces` and `strictKnownMarketplaces`.
-- `CLAUDE_CODE_RETRY_WATCHDOG` raises the default retry count for non-capacity transient errors to 300 and removes the old cap of 15 on `CLAUDE_CODE_MAX_RETRIES`.
-- `ANTHROPIC_DEFAULT_MODEL` sets the model used by new sessions; a `/model` pick still overrides it and persists across restarts.
-- Claude Fable 5.1 is available as `claude-fable-5-1`. In Claude apps gateway sessions, the `fable` and `best` aliases still resolve to Fable 5 until the gateway supports the newer default, so select Fable 5.1 explicitly.
-- The built-in `Concise` output style was added in `v2.1.237`. Select it under Output style in `/config`; it takes effect after `/clear` or in a new session.
-- The `spellcheck` setting was added in `v2.1.235`, and `keybindingFlavor: "readline"` was added in `v2.1.238`. The latter makes `Ctrl+W` delete back to the previous whitespace.
-- `selection:clear` is available as a keybinding action. `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` controls the first background check-in for `/goal`; later checks back off from 30 minutes to 1 hour and then every 2 hours. An idle goal gets at most three check-ins until your next message, and `0` disables check-ins.
-- `modelPicker` can append to or replace the built-in `/model` list with an ordered, labeled model list. `promptCacheTtl` and `subagentPromptCacheTtl` set prompt-cache lifetimes for the main conversation and subagents. Agent frontmatter can set `experimental.cacheTtl` to `"5m"` or `"1h"` when no subagent TTL setting applies.
-- `timeFormat` and `timeZone` control the turn-end clock and transcript timestamps. Supported choices include 12-hour, 24-hour, UTC, and custom `strftime` formats.
-- `permissions.blockReadsOutsideWorkingDirectories` blocks file reads outside the working directories after the first-read prompt. Project and local settings cannot set `defaultMode` to `auto` or `bypassPermissions`; use user or managed settings, or pass `--permission-mode`.
-- `/effort` now saves a separate default for each model. Press `s` in its picker for a session-only choice; the `--effort` CLI flag is also session-only.
-- `CLAUDE_CODE_SUBAGENT_MODEL` is a default that agent frontmatter and explicit per-spawn choices can override. Set `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` when every subagent must use that model, or the main model if no subagent model is set.
-- Managed deployments can set `modelPricing` so `/cost`, the status line, and telemetry use contracted model rates and an organization discount multiplier. US-only inference workspaces include the 1.1x data-residency premium in cost estimates.
-- `/mcp` and `/plugins` mark claude.ai connectors whose authentication is managed by the organization. Cloud-synced plugins appear as `name@synced` and can be enabled or disabled with that identifier.
-- `headersHelper` can generate short-lived MCP or plugin-marketplace headers. Catalog helpers run during install or update only after the command is shown, and `-y`/`--yes` skips the confirmation prompt for command-source plugins.
-- On macOS, wildcard read-deny rules such as `**/.env` take precedence inside allowed read regions and cannot be bypassed by renaming a matched file.
-- In fullscreen mode, `Ctrl+L` and `Cmd+K` now repaint the screen only; the old double-press `/clear` shortcut was removed.
+| Name | Where it can appear |
+| --- | --- |
+| **/ant-trace** | Internal tracing name seen in source-oriented references. |
+| **/backfill-sessions** | Internal session-data maintenance name. |
+| **/break-cache** | Internal cache-maintenance name. |
+| **/bridge** | Older or internal bridge-session name. |
+| **/bridge-kick** | Older or internal bridge restart name. |
+| **/brief** | Non-standard brief-output command name. |
+| **/bughunter** | Community or experimental bug-finding workflow name. |
+| **/commit** | Common community custom command for generating and creating a commit. |
+| **/commit-push-pr** | Common custom workflow that commits, pushes, and opens a PR. |
+| **/ctx\_viz** | Internal context-debugging name. |
+| **/debug-tool-call** | Internal tool-call debugging name. |
+| **/env** | Non-standard environment-inspection command name. |
+| **/files** | Non-standard context-file listing command name. |
+| **/fix-pipeline** | Community CI repair command name. |
+| **/good-claude** | Easter-egg or experimental name found in source-oriented lists. |
+| **/init-verifiers** | Experimental verifier-setup name. |
+| **/issue** | Community GitHub issue command name. |
+| **/lint** | Common community custom command for lint workflows. |
+| **/merge-to-main** | Community merge workflow name. |
+| **/mock-limits** | Internal rate-limit testing name. |
+| **/oauth-refresh** | Internal or older OAuth refresh name. |
+| **/perf-issue** | Internal performance-reporting name. |
+| **/pr** | Common community custom command for pull-request creation. |
+| **/pr\_comments** | Older internal underscore form associated with the removed /pr-comments command. |
+| **/push** | Common community custom command for pushing the current branch. |
+| **/remote-setup** | Older or experimental remote-session setup name. |
+| **/reset-limits** | Internal rate-limit testing name. |
+| **/session** | Non-standard session-management UI name found in older references. |
+| **/summary** | Non-standard session-summary name found in older references. |
+| **/thinkback** | Internal thinking-analysis name. |
+| **/thinkback-play** | Internal animated thinking-replay name. |
+| **/vitest** | Community custom command for Vitest workflows. |
+| **/x402** | Experimental integration name found in source-oriented lists. |
 
----
+## FAQ
 
-## Sources
+<details>
+<summary><strong>What is the difference between a slash command and a CLI command in Claude Code?</strong></summary>
 
-- [Claude Code changelog through `v2.1.258`](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
-- [Claude Code `v2.1.257` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.257)
-- [Claude Code `v2.1.251` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.251)
-- [Official Claude Code command and CLI references](https://code.claude.com/docs/en/commands)
-- Local command reference notes and leak-based command lists
+A slash command starts with `/` and runs inside an active Claude Code session. A CLI command or flag runs in your shell, such as `claude -p`, `claude update`, or `claude --model sonnet`.
 
----
+</details>
+
+<details>
+<summary><strong>How do I see all commands available in my Claude Code installation?</strong></summary>
+
+Type `/` on an empty prompt and start typing to filter the command menu. The menu reflects commands, skills, plugins, and MCP prompts available in that installation, subject to platform, account, provider, and policy restrictions.
+
+</details>
+
+<details>
+<summary><strong>What is the difference between /clear and /compact?</strong></summary>
+
+`/clear` starts a new conversation with empty conversational context. `/compact` summarizes the current conversation so you can continue the same task with less context pressure.
+
+</details>
+
+<details>
+<summary><strong>What does /plan do?</strong></summary>
+
+`/plan` enters Plan Mode and can take an optional task description. Use it when you want Claude to inspect and plan before making changes.
+
+</details>
+
+<details>
+<summary><strong>How do I create custom commands?</strong></summary>
+
+Create a Claude Code skill or command definition in the appropriate project or user configuration directory. Custom skills can appear in the `/` menu and can accept arguments. Use `/reload-skills` after changing skill files during a running session.
+
+</details>
+
+<details>
+<summary><strong>Can MCP servers add slash commands?</strong></summary>
+
+Yes. MCP servers can publish prompts that appear as commands in the form `/mcp__servername__promptname`. The exact list depends on the servers connected to your installation.
+
+</details>
+
+<details>
+<summary><strong>What is the difference between /doctor and /status?</strong></summary>
+
+`/doctor` runs a diagnostic checkup and can propose fixes. `/status` shows current version, model, account, connectivity, and session information.
+
+</details>
+
+<details>
+<summary><strong>How do I review a pull request now that /pr-comments is gone?</strong></summary>
+
+Ask Claude directly to inspect the pull-request comments, or use `/code-review` or `/review` for the review workflow. Use the GitHub App or GitHub CLI integration when the task needs repository or PR access.
+
+</details>
+
+<details>
+<summary><strong>Can Claude Code run non-interactively in CI or scripts?</strong></summary>
+
+Yes. Use `claude -p "prompt"` for a non-interactive run. Flags such as `--output-format`, `--json-schema`, `--max-turns`, and `--max-budget-usd` control machine-readable and bounded runs.
+
+</details>
+
+<details>
+<summary><strong>How do I change keyboard shortcuts?</strong></summary>
+
+Run `/keybindings` to open the keybindings configuration. Built-in editing and terminal shortcuts can also depend on your terminal, operating system, and editor mode.
+
+</details>
+
+## Maintenance and Sources
+
+Claude Code changes frequently. This reference uses the official Claude Code release notes as the first freshness check for new, changed, renamed, and removed commands. Anthropic's command, CLI, interactive-mode, settings, and environment-variable documentation is used to confirm syntax, behavior, and stable reference details.
+
+No fixed release number or audit date is used as a freshness badge because a newer release can ship without changing the command surface.
+
+### Primary Sources
+
+- [Claude Code Releases](https://github.com/anthropics/claude-code/releases)
+- [Claude Code Changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+- [Claude Code Commands](https://code.claude.com/docs/en/commands)
+- [Claude Code CLI Reference](https://code.claude.com/docs/en/cli-reference)
+- [Claude Code Interactive Mode](https://code.claude.com/docs/en/interactive-mode)
+- [Claude Code Settings](https://code.claude.com/docs/en/settings)
+- [Claude Code Environment Variables](https://code.claude.com/docs/en/env-vars)
+
+### Found an Outdated Entry?
+
+Open an [issue](https://github.com/jqueryscript/Claude-Code-Slash-Commands-Cheatsheet/issues/new) or submit a pull request. Include the command, flag, shortcut, or variable that changed and link the relevant Claude Code release note or Anthropic documentation when available.
 
 ## Related Resources
 
-- [awesome-claude-code](https://github.com/jqueryscript/awesome-claude-code): curated tools, workflows, integrations, and resources for Claude Code users
-- [Anthropic Agent SDK Slash Commands Docs](https://platform.claude.com/docs/en/agent-sdk/slash-commands): official slash command documentation
-- [Claude Code Commands Cheat Sheet (Full Article)](https://www.scriptbyai.com/claude-code-commands-cheat-sheet/): expanded version with explanations and workflows
-- [Best Agent Skills](https://www.scriptbyai.com/best-agent-skills/): useful skills for Claude Code and other AI coding workflows
-- [AI Coding Agents](https://www.scriptbyai.com/best-cli-ai-coding-agents/): comparison of Claude Code and other CLI coding agents
-
-*Last audited: September 2, 2026*
-
+- [Printable PDF](./claude-code-commands-cheat-sheet.pdf)
+- [Claude Code Commands Cheat Sheet on ScriptByAI](https://www.scriptbyai.com/claude-code-commands-cheat-sheet/)
+- [Claude Code Resource List](https://www.scriptbyai.com/claude-code-resource-list/)
+- [Claude Code Timeline](https://www.scriptbyai.com/claude-code-timeline/)
+- [OpenAI Codex Commands Cheat Sheet](https://www.scriptbyai.com/codex-commands-cheat-sheet/)
