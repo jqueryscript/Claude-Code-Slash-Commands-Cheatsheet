@@ -30,7 +30,6 @@ This README is the full GitHub reference. The PDF provides a printable format, a
 - [Common Workflows](#common-workflows)
 - [Custom, Community, and Internal Command Names](#custom-community-and-internal-command-names)
 - [FAQ](#faq)
-- [Maintenance and Sources](#maintenance-and-sources)
 - [Related Resources](#related-resources)
 
 ## Quick Reference
@@ -1276,26 +1275,6 @@ Yes. Use `claude -p "prompt"` for a non-interactive run. Flags such as `--output
 Run `/keybindings` to open the keybindings configuration. Built-in editing and terminal shortcuts can also depend on your terminal, operating system, and editor mode.
 
 </details>
-
-## Maintenance and Sources
-
-Claude Code changes frequently. This reference uses the official Claude Code release notes as the first freshness check for new, changed, renamed, and removed commands. Anthropic's command, CLI, interactive-mode, settings, and environment-variable documentation is used to confirm syntax, behavior, and stable reference details.
-
-No fixed release number or audit date is used as a freshness badge because a newer release can ship without changing the command surface.
-
-### Primary Sources
-
-- [Claude Code Releases](https://github.com/anthropics/claude-code/releases)
-- [Claude Code Changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
-- [Claude Code Commands](https://code.claude.com/docs/en/commands)
-- [Claude Code CLI Reference](https://code.claude.com/docs/en/cli-reference)
-- [Claude Code Interactive Mode](https://code.claude.com/docs/en/interactive-mode)
-- [Claude Code Settings](https://code.claude.com/docs/en/settings)
-- [Claude Code Environment Variables](https://code.claude.com/docs/en/env-vars)
-
-### Found an Outdated Entry?
-
-Open an [issue](https://github.com/jqueryscript/Claude-Code-Slash-Commands-Cheatsheet/issues/new) or submit a pull request. Include the command, flag, shortcut, or variable that changed and link the relevant Claude Code release note or Anthropic documentation when available.
 
 ## Related Resources
 
