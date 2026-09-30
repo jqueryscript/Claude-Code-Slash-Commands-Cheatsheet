@@ -6,7 +6,7 @@ A comprehensive GitHub reference for Claude Code slash commands, CLI commands, f
 
 This README is the full GitHub reference. The PDF provides a printable format, and the [web version](https://www.scriptbyai.com/claude-code-commands-cheat-sheet/) provides the same maintained reference in a browser-friendly layout.
 
-**Last audited: September 26, 2026**
+**Last audited: September 30, 2026**
 
 > Type `/` on an empty prompt inside Claude Code to see the commands available in your installation. Availability can vary by platform, plan, provider, enabled features, plugins, MCP servers, and organization policy.
 
@@ -95,7 +95,7 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | **/code-review [level] [--fix] [--comment] [target]** | Review the current diff or a path, branch, or PR. Use **--fix** to apply findings, **--comment** for PR comments, or **ultra** for the cloud review flow. |
 | **/color [color|default]** | Change the prompt bar color for the current session. |
 | **/compact [instructions]** | Summarize the conversation to free context while keeping the current task. |
-| **/config [key=value ...]** | Open the Settings interface, or pass supported **key=value** pairs to change settings directly. |
+| **/config [key=value ...]** | Open Settings or change supported values with **key=value**. To enable Chrome integration, use the Settings panel; `/config chrome=false` can turn it off. |
 | **/context [all]** | Show context usage, capacity warnings, and optimization suggestions; pass **all** to expand the per-item breakdown. |
 | **/copy [N]** | Copy the latest response or the Nth-latest response; when code blocks exist, the picker can copy an individual block or the full response. |
 | **/cost** | Open the Usage view. Alias of /usage. |
@@ -108,7 +108,7 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | **/desktop** | Continue the current session in the Claude Code Desktop app. Alias: /app. |
 | **/diff** | Review working-tree changes, including edits made by Claude. |
 | **/doctor** | Run setup checks and offer fixes for installation, settings, hooks, skills, plugins, MCP servers, and context overhead. Run `/doctor prompt-audit` (also `/checkup prompt-audit`) to check `CLAUDE.md` files, skills, agents, and commands for prompt patterns written for older models. |
-| **/effort [level|auto|status]** | Set or inspect reasoning effort with model-appropriate levels, **auto**, or **status**. |
+| **/effort [level|auto|status]** | Set or inspect reasoning effort with **auto** or **status**; use `/effort ultracode on|off` to toggle Ultracode independently of the effort level. |
 | **/exit** | Exit Claude Code; in an attached background session, detach without stopping it. Alias: /quit. |
 | **/export [filename]** | Export the current conversation as plain text. |
 | **/fast [on|off]** | Turn fast mode on or off. |
@@ -131,7 +131,7 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | **/login** | Sign in to an Anthropic account. |
 | **/logout** | Sign out from the current Anthropic account. |
 | **/loop [interval] [prompt]** | Repeat a prompt while the session stays open. Alias: /proactive. |
-| **/mcp [subcommand]** | Open MCP management, authenticate servers, reconnect a server, or enable and disable individual servers or all servers. |
+| **/mcp [subcommand]** | Open MCP management, authenticate servers, or enable and disable them. Run `/mcp reconnect all` to retry servers that failed to connect or need authentication. |
 | **/memory** | Edit CLAUDE.md files and manage auto memory. |
 | **/mobile** | Show a QR code for the Claude mobile app. Aliases: /ios, /android. |
 | **/model [model]** | Switch the active model; the picker can save a default for new sessions or apply a model only to the current session. |
@@ -208,9 +208,9 @@ Use these commands for initial project setup, model and permission choices, term
 | **/autocompact [auto|<tokens>]** | Set the auto-compact window with **auto** or a token value such as **500k**; the choice is saved to settings. |
 | **/cd <path>** | Move the current session to another working directory without losing the conversation. |
 | **/color [color|default]** | Change the prompt bar color for the current session. |
-| **/config [key=value ...]** | Open the Settings interface, or pass supported **key=value** pairs to change settings directly. |
+| **/config [key=value ...]** | Open Settings or change supported values with **key=value**. To enable Chrome integration, use the Settings panel; `/config chrome=false` can turn it off. |
 | **/doctor** | Run setup checks and offer fixes for installation, settings, hooks, skills, plugins, MCP servers, and context overhead. Run `/doctor prompt-audit` (also `/checkup prompt-audit`) to check `CLAUDE.md` files, skills, agents, and commands for prompt patterns written for older models. |
-| **/effort [level|auto|status]** | Set or inspect reasoning effort with model-appropriate levels, **auto**, or **status**. |
+| **/effort [level|auto|status]** | Set or inspect reasoning effort with **auto** or **status**; use `/effort ultracode on|off` to toggle Ultracode independently of the effort level. |
 | **/fast [on|off]** | Turn fast mode on or off. |
 | **/help** | Show help and the commands available in the current installation. |
 | **/hooks** | View configured hook events and commands. |
@@ -276,7 +276,7 @@ Use these commands to extend Claude Code with MCP servers, plugins, skills, suba
 | **/fewer-permission-prompts** | Find common read-only tool calls and propose permission allowlist entries. |
 | **/list-agents** | List subagents, agent-team teammates, and other messageable Claude Code sessions. Alias: /peers. |
 | **/loop [interval] [prompt]** | Repeat a prompt while the session stays open. Alias: /proactive. |
-| **/mcp [subcommand]** | Open MCP management, authenticate servers, reconnect a server, or enable and disable individual servers or all servers. |
+| **/mcp [subcommand]** | Open MCP management, authenticate servers, or enable and disable them. Run `/mcp reconnect all` to retry servers that failed to connect or need authentication. |
 | **/plugin [subcommand]** | Open plugin management or run plugin subcommands such as **list**, **install**, **enable**, and **disable**. |
 | **/reload-plugins [--force]** | Reload active plugin components without restarting Claude Code; **--force** permits reloads that would change MCP tools and invalidate prompt cache. |
 | **/reload-skills** | Re-scan skill and command directories during the current session and report which skills were added or removed. |
@@ -421,6 +421,7 @@ These terminal commands cover the current Claude Code CLI entry points and manag
 | **claude "query"** | Start an interactive session with an initial prompt. |
 | **claude -p "query"** | Run one non-interactive prompt and exit. |
 | **cat file | claude -p "query"** | Pipe file content into a non-interactive prompt. |
+| **claude --desktop** | Open Claude Desktop in the current directory; combine with `--continue` or `--resume <id>` to open a session. |
 | **claude -c** | Continue the most recent conversation for the current directory. |
 | **claude -c -p "query"** | Continue the latest conversation non-interactively. |
 | **claude -r "<session>" "query"** | Resume a named or identified session with an optional prompt. |
@@ -452,8 +453,10 @@ These terminal commands cover the current Claude Code CLI entry points and manag
 | **claude mcp reset-project-choices** | Reset approvals for project-scoped MCP servers. |
 | **claude mcp serve** | Run Claude Code itself as a stdio MCP server. |
 | **claude plugin** | Manage Claude Code plugins. Alias: claude plugins. |
+| **claude plugin configure <plugin> [--values-stdin]** | Show a plugin's options and unset values; pass `--values-stdin` to save values from standard input. |
 | **claude plugin eval** | Run a plugin eval suite and produce scored JSON and HTML reports. |
 | **claude plugin install <plugin> --marketplace <source>** | Add a marketplace when needed, then install a plugin from it. |
+| **claude plugin install <plugin> --config <server>.<key>=<value>** | Set a bundled MCP server option while installing the plugin. |
 | **claude plugin install/update ... --accept-command <sha256>** | Accept the exact setup command shown by an earlier JSON preview. |
 | **claude plugin validate --json** | Validate a plugin and print a machine-readable report; checks include `.mcp.json` entries that would not load, undeclared `user_config` references, and insecure URLs. |
 | **claude project purge [path]** | Delete local Claude Code state for one project or selected projects. |
@@ -496,6 +499,7 @@ These are the current top-level Claude Code flags. Some flags only apply to prin
 | **--dangerously-skip-permissions** | Start with permission prompts bypassed. |
 | **--debug** | Enable debug mode, optionally filtering debug categories. |
 | **--debug-file <path>** | Write debug output to a specific file. |
+| **--desktop** | Open Claude Desktop for the current directory or a session selected with `--continue` or `--resume`. |
 | **--disable-slash-commands** | Disable commands and skills for the session. |
 | **--disallowedTools, --disallowed-tools** | Deny matching tools or tool calls. |
 | **--effort** | Choose the reasoning effort level for the session. |
@@ -560,10 +564,11 @@ These are the current top-level Claude Code flags. Some flags only apply to prin
 
 ## Claude Code Settings
 
-These settings cover reader-relevant additions from the latest releases. Add them to the applicable user, project, local, or managed settings file.
+These settings cover reader-relevant additions from the latest releases. Add them to the applicable user, project, local, or managed settings file. Interactive terminal and VS Code sessions start in Auto mode when no permission mode is configured; set `permissions.defaultMode` to choose a different default.
 
 | Setting | What it controls |
 | --- | --- |
+| **allowedProviders** | Managed setting that restricts which API providers Claude Code can use. |
 | **allowClaudeInChromeWithManagedMcp** | Managed setting that lets `claude --chrome` run alongside an exclusive `managed-mcp.json`. |
 | **attribution** | Set to `false` to hide commit and pull request attribution. |
 | **availableModelsMatch** | Managed setting; set to `exact` so each `availableModels` entry allows only the model version it names. |
@@ -821,6 +826,7 @@ Claude Code reads environment variables for authentication, model selection, pro
 | **CLAUDE\_CODE\_DISABLE\_UNKNOWN\_MODEL\_WINDOW\_ENFORCEMENT** | Disables unknown model window enforcement. |
 | **CLAUDE\_CODE\_DISABLE\_VIRTUAL\_SCROLL** | Disables virtual scroll. |
 | **CLAUDE\_CODE\_DISABLE\_WORKFLOWS** | Disables workflows. |
+| **CLAUDE\_CODE\_DISABLE\_WEB\_FETCH** | Disables the WebFetch tool. |
 | **CLAUDE\_CODE\_EFFORT\_LEVEL** | Sets the effort level and takes precedence over command-line and in-session choices. |
 | **CLAUDE\_CODE\_ENABLE\_APPEND\_SUBAGENT\_PROMPT** | Enables append subagent prompt. |
 | **CLAUDE\_CODE\_ENABLE\_AWAY\_SUMMARY** | Enables away summary. |
@@ -867,6 +873,7 @@ Claude Code reads environment variables for authentication, model selection, pro
 | **CLAUDE\_CODE\_MESSAGING\_TOKEN** | Exposes the per-session inbox authentication token to hooks and shell commands. |
 | **CLAUDE\_CODE\_NATIVE\_CURSOR** | Configures code native cursor. |
 | **CLAUDE\_CODE\_NEW\_INIT** | Configures code new init. |
+| **CLAUDE\_CODE\_NONSTREAMING\_TIMEOUT\_RETRIES** | Caps retries after a non-streaming fallback request times out. |
 | **CLAUDE\_CODE\_NO\_FLICKER** | Configures code no flicker. |
 | **CLAUDE\_CODE\_OAUTH\_REFRESH\_TOKEN** | Configures code OAuth refresh token. |
 | **CLAUDE\_CODE\_OAUTH\_SCOPES** | Configures code OAuth scopes. |
