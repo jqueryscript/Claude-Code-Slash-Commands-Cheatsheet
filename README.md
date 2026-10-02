@@ -6,7 +6,7 @@ A comprehensive GitHub reference for Claude Code slash commands, CLI commands, f
 
 This README is the full GitHub reference. The PDF provides a printable format, and the [web version](https://www.scriptbyai.com/claude-code-commands-cheat-sheet/) provides the same maintained reference in a browser-friendly layout.
 
-**Last audited: September 30, 2026**
+**Last audited: October 2, 2026**
 
 > Type `/` on an empty prompt inside Claude Code to see the commands available in your installation. Availability can vary by platform, plan, provider, enabled features, plugins, MCP servers, and organization policy.
 
@@ -70,8 +70,6 @@ Slash commands run inside an active Claude Code session. CLI commands and flags 
 
 ## Slash Commands A-Z
 
-The main A-Z table contains current built-in slash commands. If a command appears here, it is intended to be available in current Claude Code installations where the relevant feature, plan, provider, or policy permits it.
-
 This A-Z index lists the current built-in commands, bundled skills, and bundled workflows. If a command appears here, it is part of the current Claude Code command reference, though account, platform, provider, or policy restrictions can hide individual commands in a particular installation.
 
 | Command | What it does |
@@ -132,7 +130,7 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | **/logout** | Sign out from the current Anthropic account. |
 | **/loop [interval] [prompt]** | Repeat a prompt while the session stays open. Alias: /proactive. |
 | **/mcp [subcommand]** | Open MCP management, authenticate servers, or enable and disable them. Run `/mcp reconnect all` to retry servers that failed to connect or need authentication. |
-| **/memory** | Edit CLAUDE.md files and manage auto memory. |
+| **/memory** | Edit CLAUDE.md files and manage auto memory; background sessions can turn Auto-memory off but cannot turn it on. |
 | **/mobile** | Show a QR code for the Claude mobile app. Aliases: /ios, /android. |
 | **/model [model]** | Switch the active model; the picker can save a default for new sessions or apply a model only to the current session. |
 | **/output-style [name]** | List available output styles or switch to a named style. |
@@ -220,7 +218,7 @@ Use these commands for initial project setup, model and permission choices, term
 | **/keybindings** | Open the custom keyboard-shortcuts configuration file. |
 | **/login** | Sign in to an Anthropic account. |
 | **/logout** | Sign out from the current Anthropic account. |
-| **/memory** | Edit CLAUDE.md files and manage auto memory. |
+| **/memory** | Edit CLAUDE.md files and manage auto memory; background sessions can turn Auto-memory off but cannot turn it on. |
 | **/model [model]** | Switch the active model; the picker can save a default for new sessions or apply a model only to the current session. |
 | **/permissions** | Manage allow, ask, and deny rules, working directories, recent denials, and auto-mode classifier rules. |
 | **/privacy-settings** | View and update privacy settings on eligible plans. |
@@ -405,11 +403,15 @@ Examples:
 
 MCP prompt commands are discovered dynamically, so there is no fixed universal A-Z list for them. Their names depend on the connected servers and the prompts those servers expose.
 
+For MCP connection failures after updating, add `"bareElicitationCapability": true` to the affected server configuration. `alwaysLoad: false` defers all server tools to tool search.
+
 ### Skills, Plugins, and User Commands
 
 Skills, plugins, and local project configuration can contribute additional slash commands. Type `/` to search the combined command menu in your current installation. Use `/skills` to inspect skills, `/plugin` for plugins, and `/reload-skills` or `/reload-plugins` after changing them during a session.
 
 Project and personal commands can be stored as Markdown-based skills or command definitions under Claude Code configuration directories. These custom entries are intentionally excluded from the fixed A-Z table because each installation can have a different set.
+
+Claude Mods let plugins change deeper behavior. Enable the built-in You should know side agent with `/plugin enable cc-plugin-you-should-know@builtin`. It flags possible oversights and requires a first-party session with telemetry enabled.
 
 ## Claude Code CLI Commands
 
@@ -431,7 +433,7 @@ These terminal commands cover the current Claude Code CLI entry points and manag
 | **claude auth login** | Sign in; auth-specific flags can select Console or SSO flows. |
 | **claude auth logout** | Sign out from the Anthropic account. |
 | **claude auth status** | Print authentication status. |
-| **claude agents** | Open agent view or print background-session data with its flags. |
+| **claude agents** | Open agent view or print background-session data; filter names and tasks with n:text. Replies are queued; slash commands sent mid-turn wait, except /stop. |
 | **claude attach <id>** | Attach the terminal to a background session. |
 | **claude auto-mode defaults** | Print built-in auto-mode classifier rules. |
 | **claude auto-mode config** | Print the effective auto-mode configuration. |
@@ -488,7 +490,7 @@ These are the current top-level Claude Code flags. Some flags only apply to prin
 | **--append-system-prompt-file** | Append file contents to Claude Code's default system prompt; it can be combined with `--append-system-prompt`, with file contents first. |
 | **--autocompact <auto|tokens>** | Set the auto-compact window for this invocation. |
 | **--ax-screen-reader** | Use screen-reader friendly terminal output. |
-| **--bare** | Start with most project and user customizations skipped. |
+| **--bare** | Skip most customizations, connect only command-line MCP servers, omit system reminders, and disable background tasks; timed-out shell commands stop. |
 | **--betas** | Send additional Anthropic beta headers for API-key sessions. |
 | **--bg, --background** | Start the session as a background agent. |
 | **--channels** | Enable selected MCP channel sources for the session. |
@@ -539,7 +541,7 @@ These are the current top-level Claude Code flags. Some flags only apply to prin
 | **--remote-control-session-name-prefix <prefix>** | Prefix automatically generated Remote Control session names. |
 | **--replay-user-messages** | Echo stream-json input messages back to stdout. |
 | **--restricted** | Start with a reduced, evaluation-oriented tool and settings surface. |
-| **--resume, -r** | Resume a specific session or open the resume picker. |
+| **--resume, -r** | Resume a specific session or open the resume picker; a running background session opens directly, and a supplied prompt becomes its next turn. |
 | **--safe-mode** | Start with customizations disabled for troubleshooting. |
 | **--session-id** | Use a specific UUID as the session ID. |
 | **--setting-sources** | Choose which user, project, and local setting sources load. |
@@ -564,7 +566,9 @@ These are the current top-level Claude Code flags. Some flags only apply to prin
 
 ## Claude Code Settings
 
-These settings cover reader-relevant additions from the latest releases. Add them to the applicable user, project, local, or managed settings file. Interactive terminal and VS Code sessions start in Auto mode when no permission mode is configured; set `permissions.defaultMode` to choose a different default.
+With a custom `ANTHROPIC_BASE_URL`, supported models use 1M context. Run `/autocompact 200k` if the gateway supports only 200K.
+
+These settings cover reader-relevant additions from the latest releases. Add them to the applicable user, project, local, or managed settings file. Interactive terminal, VS Code, and print-mode sessions start in Auto mode when no permission mode is configured; set `permissions.defaultMode` to choose a different default.
 
 | Setting | What it controls |
 | --- | --- |
@@ -757,7 +761,7 @@ Claude Code reads environment variables for authentication, model selection, pro
 | **CLAUDE\_ASYNC\_AGENT\_STALL\_TIMEOUT\_MS** | Configures async agent stall timeout milliseconds. |
 | **CLAUDE\_AUTOCOMPACT\_PCT\_OVERRIDE** | Sets an earlier auto-compaction trigger percentage. |
 | **CLAUDE\_AUTO\_BACKGROUND\_TASKS** | Forces long-running agent tasks to move to the background automatically. |
-| **CLAUDE\_AX\_PREPARK\_MS** | Configures ax prepark milliseconds. |
+| **CLAUDE\_AX\_PREPARK\_MS** | Set to 50 to restore the screen reader cursor pause before changed lines. |
 | **CLAUDE\_AX\_SCREEN\_READER** | Configures ax screen reader. |
 | **CLAUDE\_AX\_STARTUP\_QUIET\_MS** | Configures ax startup quiet milliseconds. |
 | **CLAUDE\_BASH\_MAINTAIN\_PROJECT\_WORKING\_DIR** | Configures bash maintain project working dir. |
@@ -787,7 +791,7 @@ Claude Code reads environment variables for authentication, model selection, pro
 | **CLAUDE\_CODE\_CLIENT\_KEY\_PASSPHRASE** | Sets the passphrase for an encrypted mTLS client key. |
 | **CLAUDE\_CODE\_DEBUG\_LOGS\_DIR** | Overrides the debug log file path. |
 | **CLAUDE\_CODE\_DEBUG\_LOG\_LEVEL** | Sets the minimum debug-log severity. |
-| **CLAUDE\_CODE\_DISABLE\_1M\_CONTEXT** | Disables 1M-context model behavior and variants. |
+| **CLAUDE\_CODE\_DISABLE\_1M\_CONTEXT** | Set to 1 to keep 200K context for Opus 4.7+ and Fable on Bedrock, Vertex, Foundry, and the Claude apps gateway; these use 1M by default without a [1m] suffix. |
 | **CLAUDE\_CODE\_DISABLE\_ADAPTIVE\_THINKING** | Disables adaptive thinking. |
 | **CLAUDE\_CODE\_DISABLE\_ADMIN\_ENV\_UNION** | Disables admin env union. |
 | **CLAUDE\_CODE\_DISABLE\_ADVISOR\_TOOL** | Disables advisor tool. |
