@@ -6,7 +6,7 @@ A comprehensive GitHub reference for Claude Code slash commands, CLI commands, f
 
 This README is the full GitHub reference. The PDF provides a printable format, and the [web version](https://www.scriptbyai.com/claude-code-commands-cheat-sheet/) provides the same maintained reference in a browser-friendly layout.
 
-**Last audited: October 8, 2026**
+**Last audited: November 10, 2026**
 
 > Type `/` on an empty prompt inside Claude Code to see the commands available in your installation. Availability can vary by platform, plan, provider, enabled features, plugins, MCP servers, and organization policy.
 
@@ -75,7 +75,7 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | Command | What it does |
 | --- | --- |
 | **/add-dir <path>** | Add another working directory to the current session. |
-| **/advisor [model|off]** | Turn the advisor tool on or off, optionally choosing its model. |
+| **/advisor [model|off]** | Turn the advisor tool on or off, optionally choosing its model. Also available on Claude Platform on AWS. |
 | **/agents** | Point you to Claude-managed subagent creation or the agent files in `.claude/agents/` and `~/.claude/agents/`. |
 | **/artifacts** | List, attach, open, or copy links to available artifacts. |
 | **/auto-mode-setup** | Draft auto-mode environment rules from the project and recent sessions. |
@@ -89,6 +89,9 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | **/cd <path>** | Move the current session to another working directory without losing the conversation. |
 | **/chrome** | Configure Claude in Chrome integration. |
 | **/claude-api [subcommand]** | Load Claude API and Managed Agents guidance. Run `/claude-api managed-agents-onboard <url\|quickstart-name>` to build a Managed Agents setup with the `ant` CLI. |
+| **/claude-api api-version** | Update Claude API code to API version 2026-10-21. |
+| **/claude-api latency-optimize** | Find sources of latency in Claude API code and test faster settings against your evaluation. |
+| **/claude-api managed-agents-secure** | Check a Managed Agents agent’s settings against Anthropic’s security guidance. |
 | **/clear [name]** | Start a new conversation with empty conversational context while keeping project memory; an optional name labels the previous conversation for later resume. |
 | **/code-review [level] [--fix] [--comment] [--max-findings N] [target]** | Review the current diff or a path, branch, or PR. Use **--fix** to apply findings, **--comment** for PR comments, or **ultra** for the cloud review flow. Use `--max-findings N` or `--max-findings all` to set the finding limit; `--max-findings default` resets the saved choice. |
 | **/color [color|default]** | Change the prompt bar color for the current session. |
@@ -102,14 +105,14 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | **/deep-research <question>** | Run a multi-source research workflow and synthesize a cited report. |
 | **/design [brief]** | Create UI or graphic design artboards and publish them as an artifact where available. |
 | **/design-login** | Authorize access used by design-system synchronization. |
-| **/design-sync [hint]** | Sync a React design system for use with Claude Design. |
+| **/design-sync [hint]** | Sync a React design system for use with Claude Design. Standalone Claude Design is scheduled to close by December 14, 2026. |
 | **/desktop** | Continue the current session in the Claude Code Desktop app. Alias: /app. |
 | **/diff** | Review working-tree changes, including edits made by Claude. |
 | **/doctor** | Run setup checks and offer fixes for installation, settings, hooks, skills, plugins, MCP servers, and context overhead. Run `/doctor prompt-audit` (also `/checkup prompt-audit`) to check `CLAUDE.md` files, skills, agents, and commands for prompt patterns written for older models. |
 | **/effort [level|auto|status]** | Set or inspect reasoning effort with **auto** or **status**; use `/effort ultracode on|off` to toggle Ultracode independently of the effort level. |
 | **/exit** | Exit Claude Code; in an attached background session, detach without stopping it. Alias: /quit. |
 | **/export [filename]** | Export the current conversation as plain text. |
-| **/fast [on|off]** | Turn fast mode on or off. |
+| **/fast [on|off]** | Toggle fast mode for a supported model. Vertex supports it in the global, US, and EU regions. For fast mode after November 30, 2026, migrate from Opus 4.8 to Opus 5.5. |
 | **/feedback [report]** | Send product feedback or review queued feedback drafts. |
 | **/fewer-permission-prompts** | Find common read-only tool calls and propose permission allowlist entries. |
 | **/focus** | Toggle the compact Focus view in fullscreen mode. |
@@ -118,7 +121,7 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | **/heapdump** | Write heap diagnostics for investigating high memory use. |
 | **/help** | Show help and the commands available in the current installation. |
 | **/hooks** | View configured hook events and commands. |
-| **/ide** | Manage IDE integrations and connection status. |
+| **/ide** | Manage IDE integrations and connection status. Install or update the extension from your editor or run /ide from a terminal outside the IDE. |
 | **/import [codex|gemini] [--dry-run] [--yes]** | Import supported configuration from Codex or Gemini CLI. |
 | **/init** | Create or initialize project instructions. Claude Code uses `CLAUDE.md`, or `AGENTS.md` when a project has no `CLAUDE.md`. |
 | **/insights** | Generate an HTML report from recent local Claude Code usage, including an estimate of how many permission prompts Auto mode could have handled. |
@@ -128,11 +131,11 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | **/list-agents** | List subagents, agent-team teammates, and other messageable Claude Code sessions. Alias: /peers. |
 | **/login** | Sign in to an Anthropic account. |
 | **/logout** | Sign out from the current Anthropic account. |
-| **/loop [interval] [prompt]** | Repeat a prompt while the session stays open. Alias: /proactive. |
+| **/loop [interval] [prompt]** | Repeat a prompt on a fixed interval or let Claude choose when to run again. A self-paced loop ends when Claude finishes a turn without scheduling another. Alias: /proactive. |
 | **/mcp [subcommand]** | Open MCP management, authenticate servers, or enable and disable them. Run `/mcp reconnect all` to retry servers that failed to connect or need authentication. |
 | **/memory** | Edit CLAUDE.md files and manage auto memory; background sessions can turn Auto-memory off but cannot turn it on. |
 | **/mobile** | Show a QR code for the Claude mobile app. Aliases: /ios, /android. |
-| **/model [model]** | Switch the active model; the picker can save a default for new sessions or apply a model only to the current session. |
+| **/model [model]** | Switch the active model. The picker can save a default for new sessions or apply a model only to the current session. On the Anthropic API, fable selects Claude Fable 5.2 and haiku selects Claude Haiku 5.5. |
 | **/output-style [name]** | List available output styles or switch to a named style. |
 | **/passes** | Share a free week of Claude Code with friends when the account is eligible. |
 | **/permissions** | Manage allow, ask, and deny rules, working directories, recent denials, and auto-mode classifier rules. |
@@ -145,13 +148,13 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | **/recap** | Generate a one-line summary of the current session. |
 | **/release-notes** | Open the interactive Claude Code changelog. |
 | **/reload-plugins [--force]** | Reload active plugin components without restarting Claude Code; **--force** permits reloads that would change MCP tools and invalidate prompt cache. |
-| **/reload-skills** | Re-scan skill and command directories during the current session and report which skills were added or removed. |
+| **/reload-skills** | Re-scan skill and command directories in the current session. Only new or changed skills are sent to Claude. |
 | **/remote-control** | Make the local session available from claude.ai or the Claude app through Remote Control. Alias: **/rc**. |
 | **/remote-env** | Choose the default environment for cloud agents. |
 | **/rename [name]** | Rename the current session. |
 | **/resume [session]** | Resume a previous conversation by ID or name, or open the session picker. Alias: /continue. |
 | **/review [level] [--fix] [--comment] [--max-findings N] [target]** | Alias of /code-review. |
-| **/rewind** | Restore or summarize an earlier checkpoint. Aliases: /checkpoint, /undo. |
+| **/rewind** | Restore or summarize an earlier checkpoint. Shell edits, including sed -i, are outside checkpoint restoration. Aliases: /checkpoint, /undo. |
 | **/run** | Build and run the project so Claude can observe a change working. |
 | **/run-skill-generator** | Create project guidance that teaches /run and /verify how to launch the app. |
 | **/sandbox** | Toggle sandbox mode on supported platforms. |
@@ -169,13 +172,13 @@ This A-Z index lists the current built-in commands, bundled skills, and bundled 
 | **/stickers** | Open the Claude Code sticker-ordering flow. |
 | **/stop** | Stop the current attached background session while keeping its transcript and worktree. |
 | **/subtask <task>** | Start a forked subagent that inherits the current conversation, works in the background, and reports its result back to this session. |
-| **/tasks** | View and manage background work in the current session. Alias: /bashes. |
+| **/tasks** | Manage background work. Open “Earlier in this session” to revisit or message a finished subagent, even after restarting. Alias: /bashes. |
 | **/team-onboarding** | Generate a team onboarding guide from recent Claude Code usage. |
 | **/teleport** | Pull a Claude Code web session and its conversation into the local terminal. Alias: **/tp**. |
 | **/terminal-setup** | Configure supported terminals for multiline input and related integration settings. |
 | **/theme** | Choose or create a terminal color theme. |
 | **/tui [default|fullscreen]** | Switch between the standard and fullscreen terminal renderers. |
-| **/ultrareview [PR or branch]** | Run the deep cloud review flow. /code-review ultra is the preferred form. |
+| **/ultrareview [PR or branch]** | Run the deep cloud review flow in a trusted workspace. /code-review ultra is the preferred form. |
 | **/upgrade** | Open the plan upgrade flow. |
 | **/usage** | Show session cost, plan usage limits, and activity statistics; **/cost** and **/stats** open views within the same usage surface. |
 | **/usage-credits** | Open or request usage-credit settings when a limit is reached. |
@@ -209,17 +212,17 @@ Use these commands for initial project setup, model and permission choices, term
 | **/config [key=value ...]** | Open Settings or change supported values with **key=value**. To enable Chrome integration, use the Settings panel; `/config chrome=false` can turn it off. |
 | **/doctor** | Run setup checks and offer fixes for installation, settings, hooks, skills, plugins, MCP servers, and context overhead. Run `/doctor prompt-audit` (also `/checkup prompt-audit`) to check `CLAUDE.md` files, skills, agents, and commands for prompt patterns written for older models. |
 | **/effort [level|auto|status]** | Set or inspect reasoning effort with **auto** or **status**; use `/effort ultracode on|off` to toggle Ultracode independently of the effort level. |
-| **/fast [on|off]** | Turn fast mode on or off. |
+| **/fast [on|off]** | Toggle fast mode for a supported model. Vertex supports it in the global, US, and EU regions. For fast mode after November 30, 2026, migrate from Opus 4.8 to Opus 5.5. |
 | **/help** | Show help and the commands available in the current installation. |
 | **/hooks** | View configured hook events and commands. |
-| **/ide** | Manage IDE integrations and connection status. |
+| **/ide** | Manage IDE integrations and connection status. Install or update the extension from your editor or run /ide from a terminal outside the IDE. |
 | **/import [codex|gemini] [--dry-run] [--yes]** | Import supported configuration from Codex or Gemini CLI. |
 | **/init** | Create project instructions; projects without `CLAUDE.md` can use `AGENTS.md`. |
 | **/keybindings** | Open the custom keyboard-shortcuts configuration file. |
 | **/login** | Sign in to an Anthropic account. |
 | **/logout** | Sign out from the current Anthropic account. |
 | **/memory** | Edit CLAUDE.md files and manage auto memory; background sessions can turn Auto-memory off but cannot turn it on. |
-| **/model [model]** | Switch the active model; the picker can save a default for new sessions or apply a model only to the current session. |
+| **/model [model]** | Switch the active model. The picker can save a default for new sessions or apply a model only to the current session. On the Anthropic API, fable selects Claude Fable 5.2 and haiku selects Claude Haiku 5.5. |
 | **/permissions** | Manage allow, ask, and deny rules, working directories, recent denials, and auto-mode classifier rules. |
 | **/privacy-settings** | View and update privacy settings on eligible plans. |
 | **/sandbox** | Toggle sandbox mode on supported platforms. |
@@ -252,12 +255,12 @@ These commands manage context size, conversation state, checkpoints, background 
 | **/recap** | Generate a one-line summary of the current session. |
 | **/rename [name]** | Rename the current session. |
 | **/resume [session]** | Resume a previous conversation by ID or name, or open the session picker. Alias: /continue. |
-| **/rewind** | Restore or summarize an earlier checkpoint. Aliases: /checkpoint, /undo. |
+| **/rewind** | Restore or summarize an earlier checkpoint. Shell edits, including sed -i, are outside checkpoint restoration. Aliases: /checkpoint, /undo. |
 | **/stats** | Open the Stats tab in /usage. |
 | **/status** | Show version, model, account, connectivity, session status, the active Auto mode classifier, and notices about telemetry variables that were ignored or disabled telemetry. |
 | **/stop** | Stop the current attached background session while keeping its transcript and worktree. |
 | **/subtask <task>** | Start a forked subagent that inherits the current conversation, works in the background, and reports its result back to this session. |
-| **/tasks** | View and manage background work in the current session. Alias: /bashes. |
+| **/tasks** | Manage background work. Open “Earlier in this session” to revisit or message a finished subagent, even after restarting. Alias: /bashes. |
 | **/usage** | Show session cost, plan usage limits, and activity statistics; **/cost** and **/stats** open views within the same usage surface. |
 
 ### MCP, Plugins, Skills, and Agents
@@ -269,15 +272,18 @@ Use these commands to extend Claude Code with MCP servers, plugins, skills, suba
 | **/agents** | Point you to Claude-managed subagent creation or the agent files in `.claude/agents/` and `~/.claude/agents/`. |
 | **/batch <instruction>** | Break a large codebase change into parallel worktree tasks. |
 | **/claude-api [subcommand]** | Load Claude API and Managed Agents guidance. Run `/claude-api managed-agents-onboard <url\|quickstart-name>` to build a Managed Agents setup with the `ant` CLI. |
+| **/claude-api api-version** | Update Claude API code to API version 2026-10-21. |
+| **/claude-api latency-optimize** | Find sources of latency in Claude API code and test faster settings against your evaluation. |
+| **/claude-api managed-agents-secure** | Check a Managed Agents agent’s settings against Anthropic’s security guidance. |
 | **/dataviz [request]** | Load bundled chart, graph, and dashboard design guidance. |
 | **/deep-research <question>** | Run a multi-source research workflow and synthesize a cited report. |
 | **/fewer-permission-prompts** | Find common read-only tool calls and propose permission allowlist entries. |
 | **/list-agents** | List subagents, agent-team teammates, and other messageable Claude Code sessions. Alias: /peers. |
-| **/loop [interval] [prompt]** | Repeat a prompt while the session stays open. Alias: /proactive. |
+| **/loop [interval] [prompt]** | Repeat a prompt on a fixed interval or let Claude choose when to run again. A self-paced loop ends when Claude finishes a turn without scheduling another. Alias: /proactive. |
 | **/mcp [subcommand]** | Open MCP management, authenticate servers, or enable and disable them. Run `/mcp reconnect all` to retry servers that failed to connect or need authentication. |
 | **/plugin [subcommand]** | Open plugin management or run plugin subcommands such as **list**, **install**, **enable**, and **disable**. |
 | **/reload-plugins [--force]** | Reload active plugin components without restarting Claude Code; **--force** permits reloads that would change MCP tools and invalidate prompt cache. |
-| **/reload-skills** | Re-scan skill and command directories during the current session and report which skills were added or removed. |
+| **/reload-skills** | Re-scan skill and command directories in the current session. Only new or changed skills are sent to Claude. |
 | **/run-skill-generator** | Create project guidance that teaches /run and /verify how to launch the app. |
 | **/skill-doctor** | Show each skill’s context cost and usage frequency to identify skills that consume context without being used. |
 | **/skills** | List skills, filter by name, description, or source, sort by token count, and manage visibility where the skill can be toggled. |
@@ -291,7 +297,7 @@ These commands help plan changes, inspect diffs, review code, debug failures, ve
 
 | Command | What it does |
 | --- | --- |
-| **/advisor [model|off]** | Turn the advisor tool on or off, optionally choosing its model. |
+| **/advisor [model|off]** | Turn the advisor tool on or off, optionally choosing its model. Also available on Claude Platform on AWS. |
 | **/autofix-pr [prompt]** | Start a Claude Code web session that watches the current branch’s PR and pushes fixes for CI failures or review comments; an optional prompt can narrow the work. |
 | **/batch <instruction>** | Break a large codebase change into parallel worktree tasks. |
 | **/code-review [level] [--fix] [--comment] [--max-findings N] [target]** | Review the current diff or a path, branch, or PR. Use **--fix** to apply findings, **--comment** for PR comments, or **ultra** for the cloud review flow. Use `--max-findings N` or `--max-findings all` to set the finding limit; `--max-findings default` resets the saved choice. |
@@ -302,7 +308,7 @@ These commands help plan changes, inspect diffs, review code, debug failures, ve
 | **/run** | Build and run the project so Claude can observe a change working. |
 | **/security-review** | Review the current branch against the origin default branch for security issues such as injection, authentication flaws, and data exposure. |
 | **/simplify [target]** | Review changed code for reuse, simplicity, efficiency, and abstraction issues, then apply cleanup fixes; use code review when you want correctness bugs checked too. |
-| **/ultrareview [PR or branch]** | Run the deep cloud review flow. /code-review ultra is the preferred form. |
+| **/ultrareview [PR or branch]** | Run the deep cloud review flow in a trusted workspace. /code-review ultra is the preferred form. |
 | **/verify** | Build and run the project to confirm a code change works in the actual app. |
 
 ### GitHub, PR, and Release Workflows
@@ -317,7 +323,7 @@ These commands handle pull-request review, GitHub integration, cloud autofix wor
 | **/release-notes** | Open the interactive Claude Code changelog. |
 | **/review [level] [--fix] [--comment] [--max-findings N] [target]** | Alias of /code-review. |
 | **/security-review** | Review the current branch against the origin default branch for security issues such as injection, authentication flaws, and data exposure. |
-| **/ultrareview [PR or branch]** | Run the deep cloud review flow. /code-review ultra is the preferred form. |
+| **/ultrareview [PR or branch]** | Run the deep cloud review flow in a trusted workspace. /code-review ultra is the preferred form. |
 | **/web-setup** | Connect GitHub credentials for Claude Code on the web. |
 
 ### Remote and Cross-Device Commands
@@ -332,7 +338,7 @@ Use these commands for desktop, browser, mobile, Remote Control, cloud environme
 | **/desktop** | Continue the current session in the Claude Code Desktop app. Alias: /app. |
 | **/design [brief]** | Create UI or graphic design artboards and publish them as an artifact where available. |
 | **/design-login** | Authorize access used by design-system synchronization. |
-| **/design-sync [hint]** | Sync a React design system for use with Claude Design. |
+| **/design-sync [hint]** | Sync a React design system for use with Claude Design. Standalone Claude Design is scheduled to close by December 14, 2026. |
 | **/install-slack-app** | Open the Slack app installation flow. |
 | **/mobile** | Show a QR code for the Claude mobile app. Aliases: /ios, /android. |
 | **/remote-control** | Make the local session available from claude.ai or the Claude app through Remote Control. Alias: **/rc**. |
@@ -434,7 +440,7 @@ These terminal commands cover the current Claude Code CLI entry points and manag
 | **claude install [version]** | Install or reinstall the native binary, optionally choosing a release channel or version. |
 | **claude auth login** | Sign in; auth-specific flags can select Console or SSO flows. |
 | **claude auth logout** | Sign out from the Anthropic account. |
-| **claude auth status** | Print authentication status. |
+| **claude auth status** | Print authentication status. JSON includes loginExpiresAt when a stored claude.ai sign-in has an expiration date. |
 | **claude agents** | Open agent view or print background-session data; filter names and tasks with n:text. Replies are queued; slash commands sent mid-turn wait, except /stop. |
 | **claude attach <id\|name>** | Attach the terminal to a background session by ID or a matching part of its name. |
 | **claude auto-mode defaults** | Print built-in auto-mode classifier rules. |
@@ -458,13 +464,13 @@ These terminal commands cover the current Claude Code CLI entry points and manag
 | **claude mcp serve** | Run Claude Code itself as a stdio MCP server. |
 | **claude plugin** | Manage Claude Code plugins. Alias: claude plugins. |
 | **claude plugin configure <plugin> [--values-stdin]** | Show a plugin's options and unset values; pass `--values-stdin` to save values from standard input. |
-| **claude plugin eval** | Run a plugin eval suite and produce scored JSON and HTML reports. |
+| **claude plugin eval** | Run a plugin eval suite and produce scored JSON and HTML reports. Use --disallow-tools or the case field disallowed_tools to exclude specific built-in tools. |
 | **claude plugin install <plugin> --marketplace <source>** | Add a marketplace when needed, then install a plugin from it under the same policy checks as claude plugin marketplace add. |
 | **claude plugin install <plugin> --config <server>.<key>=<value>** | Set a bundled MCP server option while installing the plugin. |
 | **claude plugin install/update ... --accept-command <sha256>** | Accept the exact setup command shown by an earlier JSON preview. |
 | **claude plugin validate --json** | Validate a plugin and print a machine-readable report; checks include `.mcp.json` entries that would not load, undeclared `user_config` references, and insecure URLs. |
 | **claude purge [path]** | Delete local Claude Code state for one project or selected projects. The older claude project purge name remains accepted. |
-| **claude remote-control** | Start a Remote Control server without a local interactive session. |
+| **claude remote-control** | Start a Remote Control server. Pass `--settings <file>` to apply one settings file to each new session. Restart the server after changing the file to start new sessions. |
 | **claude respawn <id>** | Restart a background session with its conversation intact. |
 | **claude rm <id>** | Remove a background session from agent view while keeping its transcript. |
 | **claude self-hosted-runner** | Start or manage a self-hosted environment runner. |
@@ -472,7 +478,7 @@ These terminal commands cover the current Claude Code CLI entry points and manag
 | **claude self-hosted-runner --remove-session-state** | Delete each runner session's local state directory after the session ends. |
 | **claude setup-token** | Generate a long-lived OAuth token for CI or scripts. |
 | **claude stop <id>** | Stop a background session. Alias: claude kill. |
-| **claude ultrareview [target]** | Run a deep cloud code review non-interactively. |
+| **claude ultrareview [target]** | Run a deep cloud code review. The command requires workspace trust. In scripts, put the target before the value-free --trust-workspace flag. |
 
 ## Claude Code CLI Flags
 
@@ -567,25 +573,30 @@ These are the current top-level Claude Code flags. Some flags only apply to prin
 | Old flag | Use now |
 | --- | --- |
 | **--enable-auto-mode** | Use **--permission-mode auto**. The older flag was removed. |
+| **--sandbox and --no-sandbox (remote-control)** | Removed from claude remote-control. Set sandbox.enabled in the settings file for hosted sessions. |
 
 ## Claude Code Settings
 
 With a custom `ANTHROPIC_BASE_URL`, supported models use 1M context. Run `/autocompact 200k` if the gateway supports only 200K.
 
-These settings cover reader-relevant additions from the latest releases. Add them to the applicable user, project, local, or managed settings file. Interactive terminal, VS Code, and print-mode sessions start in Auto mode when no permission mode is configured; set `permissions.defaultMode` to choose a different default.
+These settings cover reader-relevant additions from the latest releases. Add them to the applicable user, project, local, or managed settings file. Interactive terminal and VS Code sessions can default to Auto mode. On a fresh install, with telemetry off, or on a third-party provider, print mode and Agent SDK sessions start in default permission mode unless you select another. Set `permissions.defaultMode` to choose a different default.
 
 | Setting | What it controls |
 | --- | --- |
 | **allowedProviders** | Managed setting that restricts which API providers Claude Code can use. |
+| **autoCompactWindow (subagent)** | Set a lower auto-compaction window in subagent frontmatter or a --agents definition. It cannot raise the main session’s window. |
 | **allowClaudeInChromeWithManagedMcp** | Managed setting that lets `claude --chrome` run alongside an exclusive `managed-mcp.json`. |
 | **attribution** | Set to `false` to hide commit and pull request attribution. |
 | **availableModelsMatch** | Managed setting; set to `exact` so each `availableModels` entry allows only the model version it names. |
 | **bashEditDiffEnabled** | Includes a diff in the Bash tool result when a Bash command edits files. |
 | **bashOutputMaxChars** | Raises the inline Bash output limit, up to 128K characters, before output is saved to a file. |
 | **deniedModels** | Managed setting that blocks named models even when `availableModels` allows them. |
+| **idleCompaction** | Set to false to turn off idle compaction. In the terminal, idle compaction summarizes long idle sessions before the prompt cache expires. You can also toggle it in /config. |
 | **managedMcpServers** | Lets an organization provide HTTP or SSE MCP servers to every user. |
 | **maxEffortLevel** | Caps the maximum reasoning effort globally or for individual models. |
 | **maxProseWidth** | Caps Claude prose width in wide terminals while tables and code blocks keep the full width. |
+| **permissions.blockWritesOutsideWorkingDirectories** | Block Write, Edit, and NotebookEdit outside the working directories in every permission mode. |
+| **permissions.denyInsteadOfPrompting** | Deny tool calls that would wait for permission and continue the turn. Applies to terminal sessions, subagents, and teammates. |
 | **subagentStatusLine** | Configures a custom subagent status line; its JSON payload includes `agentType` to distinguish custom subagent types. |
 | **syncClaudeAiPlugins** | Set to `false` to stop plugins enabled on the signed-in claude.ai account from syncing to terminal sessions. |
 | **syncClaudeAiSkills** | Set to `false` to stop skills enabled on the signed-in claude.ai account from syncing to terminal sessions. |
@@ -793,13 +804,14 @@ Claude Code reads environment variables for authentication, model selection, pro
 | **CLAUDE\_CODE\_AUTO\_BACKGROUND\_WORKER\_CHECKIN\_SECONDS** | Configures code auto background worker checkin seconds. |
 | **CLAUDE\_CODE\_AUTO\_COMPACT\_WINDOW** | Sets the auto-compact context window in tokens. |
 | **CLAUDE\_CODE\_AUTO\_CONNECT\_IDE** | Overrides automatic IDE connection behavior. |
-| **CLAUDE\_CODE\_AUTO\_MODE\_SERVER** | Controls server-side auto-mode review. Set to `0` to use Claude Code’s own classifier instead. |
+| **CLAUDE\_CODE\_AUTO\_MODE\_SERVER** | Set to 0 to use the built-in classifier. With telemetry or feature flags off, affected installs otherwise prompt for or deny calls the server cannot check. Bedrock, Vertex, and Foundry keep their existing behavior. |
 | **CLAUDE\_CODE\_AWS\_CHAIN\_RESOLVE\_TIMEOUT\_MS** | Configures code AWS chain resolve timeout milliseconds. |
 | **CLAUDE\_CODE\_BRIDGE\_SESSION\_ID** | Exposes the active Remote Control session ID to subprocesses. |
 | **CLAUDE\_CODE\_BG\_TASKS\_REPORT\_RUNNING** | Controls whether remote and headless sessions report that background agents are still running. |
 | **CLAUDE\_CODE\_BS\_AS\_CTRL\_BACKSPACE** | Configures code bs as ctrl backspace. |
 | **CLAUDE\_CODE\_CERT\_STORE** | Chooses CA certificate stores for TLS connections. |
 | **CLAUDE\_CODE\_CHILD\_SESSION** | Marks subprocesses directly spawned by Claude Code tools or hooks. |
+| **CLAUDE\_CODE\_AUTO\_MODE\_MODEL** | Select the model for the client-side Auto mode classifier. |
 | **CLAUDE\_CODE\_CLIENT\_CERT** | Sets the client certificate file for mTLS. |
 | **CLAUDE\_CODE\_CLIENT\_KEY** | Sets the client private key file for mTLS. |
 | **CLAUDE\_CODE\_CLIENT\_KEY\_PASSPHRASE** | Sets the passphrase for an encrypted mTLS client key. |
@@ -826,6 +838,15 @@ Claude Code reads environment variables for authentication, model selection, pro
 | **CLAUDE\_CODE\_DISABLE\_EXPERIMENTAL\_BETAS** | Disables experimental betas. |
 | **CLAUDE\_CODE\_DISABLE\_EXPLORE\_PLAN\_AGENTS** | Disables explore plan agents. |
 | **CLAUDE\_CODE\_DISABLE\_FAST\_MODE** | Disables fast mode. |
+| **CLAUDE\_CODE\_DISABLE\_FEATURE\_FLAGS** | Stop fetching feature flags and use built-in defaults. Telemetry is controlled separately. |
+| **CLAUDE\_CODE\_DISABLE\_FILE\_MENTIONS** | Send the paths from @ file mentions so Claude can read the files as needed. |
+| **CLAUDE\_CODE\_DISABLE\_MCP\_TASK\_BACKGROUND** | Wait for MCP tasks inside the tool call. By default, the terminal runs MCP tasks in the background and reports their results when they finish. |
+| **CLAUDE\_CODE\_DISABLE\_MCP\_TASKS** | Set to 1 to turn off MCP task support. |
+| **CLAUDE\_CODE\_DISABLE\_ULTRATHINK** | Disable the ultrathink keyword. In the interactive terminal on supported Anthropic API models, ultrathink raises effort to xhigh for the turn. |
+| **CLAUDE\_CODE\_IDLE\_COMPACT\_MIN\_TOKENS** | Override the default 200,000-token minimum for idle compaction. |
+| **CLAUDE\_CODE\_LOOP\_KEEPALIVE** | Set to 1 to keep self-paced loops alive with a fallback wakeup when Claude finishes a turn without rescheduling. |
+| **CLAUDE\_CODE\_SUBAGENT\_EFFORT** | Set the fallback effort level for subagents. |
+| **CLAUDE\_CODE\_WORKFLOW\_SUBAGENT\_MODEL** | Set the model for workflow agents independently of other subagents. |
 | **CLAUDE\_CODE\_DISABLE\_FEEDBACK\_SURVEY** | Disables feedback survey. |
 | **CLAUDE\_CODE\_DISABLE\_FILE\_CHECKPOINTING** | Disables file checkpointing. |
 | **CLAUDE\_CODE\_DISABLE\_GIT\_INSTRUCTIONS** | Disables Git instructions. |
